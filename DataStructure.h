@@ -61,5 +61,6 @@ struct SchoolYear {
 	Class* ListClass;               //Danh sách các lớp 
 };
 
-
+SchoolYear CurrentYear;                 //Biến để đánh dấu năm học hiện tại
+Semester CurrentSemester;		//Học kỳ hiện tại
 #endif
