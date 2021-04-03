@@ -1,6 +1,6 @@
 #ifndef _DATASTRUCTURE_H_
 #define _DATASTRUCTURE_H_
-
+#pragma warning(disable : 4996)
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -10,6 +10,16 @@ using namespace std;
 //Kiểu dữ liệu ngày tháng (ngày sinh, ngày kết thúc học kỳ,...)
 struct DateTime{
 	int day, month, year;
+};
+
+//Đối tượng sinh viên
+struct Student {
+	int no;					//Số thứ tự trong lớp
+	string SID;				//MSSV
+	string firstName, lastName;
+	string gender;
+	string socialID;				//Số CMND
+	string DateOfBirth;
 };
 
 //Thông tin về môn học
@@ -31,24 +41,13 @@ struct CourseForEachStudent {
 	float midterm, final, total, otherMark;  //Điểm số
 };
 
-//Đối tượng sinh viên
-struct Student {
-	int no;					//Số thứ tự trong lớp
-	int SID;				//MSSV
-	string firstName, lastName;
-	enum gender { male, female };
-	int socialID;				//Số CMND
-	DateTime DateOfBirth;
-};
-
-
 struct Class {
 	string className;			//Tên lớp, ví dụ 20CTT2
 	string formTeacherName;			//Tên giảng viên chủ nhiệm
-	Student* ListStudent;			//Danh sách sinh viên trong lớp
+	Student** ListStudent;			//Danh sách sinh viên trong lớp
 };
 
-struct Semeseter {
+struct Semester {
 	DateTime startDate;			//Ngày bắt đầu học kỳ
 	DateTime endDate;			//Ngày kết thúc
 	int schoolYear;					
@@ -56,10 +55,14 @@ struct Semeseter {
 };
 
 struct SchoolYear {
-	Semeseter semester1, semester2, semester3;
+	Semester semester1, semester2, semester3;
 	Class* ListClass;               	//Danh sách các lớp 
 };
 
-SchoolYear CurrentYear;                 	//Biến để đánh dấu năm học hiện tại
-Semester CurrentSemester;			//Học kỳ hiện tại
+//SchoolYear CurrentYear;                 	//Biến để đánh dấu năm học hiện tại
+//Semester CurrentSemester;			//Học kỳ hiện tại
+
+//Hàm đọc file CSV
+void inputCSV(string path, Student** ListStudent);
+
 #endif
