@@ -7,6 +7,11 @@
 
 using namespace std;
 
+//Kiểu dữ liệu ngày tháng (ngày sinh, ngày kết thúc học kỳ,...)
+struct DateTime{
+	int day, month, year;
+};
+
 //Thông tin về môn học
 struct CourseDetail {
 	int courseID;
@@ -28,39 +33,33 @@ struct CourseForEachStudent {
 
 //Đối tượng sinh viên
 struct Student {
-	int no;							//Số thứ tự trong lớp
-	int SID;						//MSSV
+	int no;					//Số thứ tự trong lớp
+	int SID;				//MSSV
 	string firstName, lastName;
 	enum gender { male, female };
-	int socialID;					//Số CMND
-	struct DateOfBirth {
-		int day, month, year;
-	};
+	int socialID;				//Số CMND
+	DateTime DateOfBirth;
 };
 
 
 struct Class {
-	string className;				//Tên lớp, ví dụ 20CTT2
+	string className;			//Tên lớp, ví dụ 20CTT2
 	string formTeacherName;			//Tên giảng viên chủ nhiệm
 	Student* ListStudent;			//Danh sách sinh viên trong lớp
 };
 
 struct Semeseter {
-	struct startDate {
-		int day, month, year;
-	};								//Ngày bắt đầu học kỳ
-	struct endDate {
-		int day, month, year;
-	};								//Ngày kết thúc
+	DateTime startDate;			//Ngày bắt đầu học kỳ
+	DateTime endDate;			//Ngày kết thúc
 	int schoolYear;					
-	CourseDetail* ListCourse;       //Danh sách môn học trong học kỳ này
+	CourseDetail* ListCourse;       	//Danh sách môn học trong học kỳ này
 };
 
 struct SchoolYear {
 	Semeseter semester1, semester2, semester3;
-	Class* ListClass;               //Danh sách các lớp 
+	Class* ListClass;               	//Danh sách các lớp 
 };
 
-SchoolYear CurrentYear;                 //Biến để đánh dấu năm học hiện tại
-Semester CurrentSemester;		//Học kỳ hiện tại
+SchoolYear CurrentYear;                 	//Biến để đánh dấu năm học hiện tại
+Semester CurrentSemester;			//Học kỳ hiện tại
 #endif
