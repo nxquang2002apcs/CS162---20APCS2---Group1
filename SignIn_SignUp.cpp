@@ -111,7 +111,6 @@ void signup(ifstream& in, ofstream& out)
 				cout << "Username(username is your Student ID): ";
 				getline(cin, username);
 
-				cout << username << endl;
 				check = checkStringofStu(username);
 
 				if (!check)
