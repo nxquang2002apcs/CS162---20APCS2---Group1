@@ -8,7 +8,7 @@
 using namespace std;
 
 //Kiểu dữ liệu ngày tháng (ngày sinh, ngày kết thúc học kỳ,...)
-struct DateTime{
+struct DateTime {
 	int day, month, year;
 };
 
@@ -43,26 +43,45 @@ struct CourseForEachStudent {
 
 struct Class {
 	string className;			//Tên lớp, ví dụ 20CTT2
+	int classSize;				//Số sinh viên
 	string formTeacherName;			//Tên giảng viên chủ nhiệm
-	Student** ListStudent;			//Danh sách sinh viên trong lớp
+	Student* ListStudent;			//Danh sách sinh viên trong lớp
+	Class* pNext;
+	Class* pPrev;
 };
 
 struct Semester {
 	DateTime startDate;			//Ngày bắt đầu học kỳ
-	DateTime endDate;			//Ngày kết thúc
-	int schoolYear;					
+	DateTime endDate;			//Ngày kết thúc				
 	CourseDetail* ListCourse;       	//Danh sách môn học trong học kỳ này
 };
 
 struct SchoolYear {
+	int schoolYear;
 	Semester semester1, semester2, semester3;
-	Class* ListClass;               	//Danh sách các lớp 
+	Class* ListClass;               	//Danh sách các lớp
+	SchoolYear* pPrev;
+	SchoolYear* pNext;
 };
 
-//SchoolYear CurrentYear;                 	//Biến để đánh dấu năm học hiện tại
-//Semester CurrentSemester;			//Học kỳ hiện tại
+
+static SchoolYear* CurrentYear = nullptr;                 	//Pointer để đánh dấu năm học hiện tại
+static Semester CurrentSemester;			//Học kỳ hiện tại
+static SchoolYear* HeadYear = nullptr;			// Vai trò như pHead cho list các năm học
+
 
 //Hàm đọc file CSV
-void inputCSV(string path, Student** ListStudent);
+void inputCSV(string path, Student* ListStudent, int& size);
+
+//Các hàm làm khởi tạo năm học và học kỳ
+void create_a_new_school_year(int start_year, int end_year);		// Hàm tạo năm học mới
+void input_school_year();						// Hàm để staff nhập năm học mới
+void input_classes_for_current_year();				// Hàm tạo lớp cho năm học hiện tại
+void create_a_semester_for_year(int start_year, int end_year, DateTime start_date, DateTime end_date, int semester_n);	// Hàm tạo học kỳ cho năm học (start_year - end_year)
+void enter_a_semester();						// Hàm để staff nhập học kỳ mới
+void delete_year_and_class();						// Hàm xóa danh sách năm học và danh sách các lớp
+void display_school_year_list();					// Hàm hiển thị danh sách các năm học
+void display_classes_list_of_school_year(int start_year, int end_year);	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
 
 #endif
+
