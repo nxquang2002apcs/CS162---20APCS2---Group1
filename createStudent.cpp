@@ -1,7 +1,7 @@
 #include "DataStructure.h"
 
 void inputListOfStudent(int &sizeOfStudent, Student* &student){
-    cout <<"Pls input your number of student: ";    //Khởi tạo số lượng học sinh
+    cout <<"Pls input the number of students: ";    //Khởi tạo số lượng học sinh
     cin >> sizeOfStudent;                              
 
     student = new Student[sizeOfStudent];           //Khởi tạo mảng động
