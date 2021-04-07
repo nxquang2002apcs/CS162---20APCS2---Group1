@@ -1,8 +1,9 @@
 #include "DataStructure.h"
 
 // Function to take valid username from user and their password. Then take password from username file to compare
-void Read_Name_Pass(ifstream& in, string& username, string& password, string& userfile, string& passfile)
+void Read_Name_Pass(ifstream& in, string& username, string& password)
 {
+	string userfile, passfile;
 	string path;
 
 	in.open("notexist.txt");
@@ -40,12 +41,16 @@ void Read_Name_Pass(ifstream& in, string& username, string& password, string& us
 
 // Function to log in
 // Function will run until logging in sucessfully
-void login(ifstream& in)
+void login(ifstream& in, int& role)
 {
 	string username, password;	
-	string userfile, passfile;
 
-	Read_Name_Pass(in, username, password, userfile, passfile);
+	Read_Name_Pass(in, username, password);
+	
+	if ((int)username[0] >= 48 && (int)username[0] <= 57)
+		role = 1;
+	else
+		role = 2;
 
 	cout << "Log in successfully!" << endl;
 }
@@ -155,15 +160,16 @@ void signup(ifstream& in, ofstream& out)
 	out << username << endl;
 	out << password << endl;
 	out.close();
+	
+	cout << "Sign up successfully! << endl;
 }
 
 // Function to change password
 void changePassword(ifstream& in, ofstream& out)
 {
 	string username, password, newpassword;
-	string userfile, passfile;
 
-	Read_Name_Pass(in, username, password, userfile, passfile);
+	Read_Name_Pass(in, username, password);
 
 	cout << "New password: ";
 	getline(cin, newpassword);
