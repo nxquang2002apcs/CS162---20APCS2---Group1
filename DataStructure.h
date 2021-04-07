@@ -39,7 +39,8 @@ struct CourseDetail {
 	int courseID;
 	string courseName, teacherName;
 	int credits;
-
+	int numberStudent;
+	int enrolledStudent;
 	/// 2 tiết mỗi tuần
 	/// MON / TUE / WED / THU / FRI / SAT, S1 (07:30), S2 (09:30), S3(13:30) and S4 (15:30)
 	string session1, session2;		//Ví dụ: MONS1 - Monday 7h30
@@ -54,6 +55,7 @@ struct CourseDetail {
 
 struct CourseForEachStudent {
 	CourseDetail detail;
+	int numberCourse;
 	float midterm, final, total, otherMark;  //Điểm số
 
 	CourseForEachStudent* pNext;
@@ -130,6 +132,7 @@ void delete_a_course_in_the_list(CourseDetail*& HeadCourse, CourseDetail*& delet
 
 //Băng Trinh
 void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse);  //Thêm Course vào ds môn học của sinh viên (student), set các loại điểm về 0
+bool check(Student* student, string ses1, string ses2);
 
 //Gia Khánh
 void view_list_of_enrolled_course(Student* student);					//In ra danh sách môn học của student: student->Head_of_enrolled_course->courseDetail
