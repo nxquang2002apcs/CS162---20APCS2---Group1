@@ -36,7 +36,7 @@ struct Student {
 
 //Thông tin về môn học
 struct CourseDetail {
-	int courseID;
+	string courseID;
 	string courseName, teacherName;
 	int credits;
 	int numberStudent;
