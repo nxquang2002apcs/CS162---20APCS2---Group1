@@ -74,13 +74,14 @@ struct Class {
 };
 
 struct Semester {
+	bool isAvailable; 		//Nếu học kỳ chưa được tạo thì isAvailable = false, ngược lại thì true
 	DateTime startDate;				//Ngày bắt đầu học kỳ
 	DateTime endDate;				//Ngày kết thúc				
 	CourseDetail* HeadCourse;       //pHead cảu danh sách môn học trong học kỳ này
 };
 
 struct SchoolYear {
-	int schoolYear;
+	int startYear, endYear;		//2019-2020: startYear = 2019, endYear = 2020	
 	Semester semester1, semester2, semester3;
 	Class* HeadClass;               //Danh sách các lớp, HeadClass là pHead trong danh sách
 
