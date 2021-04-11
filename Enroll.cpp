@@ -3,7 +3,7 @@
 //hàm check có bị trùng lịch học không
 bool check(Student* student, string ses1, string ses2) {
 
-	if (!student->Head_of_enrolled_course)
+	if (student->Head_of_enrolled_course == nullptr)
 		return true;
 
 	CourseForEachStudent* tmp = student->Head_of_enrolled_course;
@@ -18,6 +18,8 @@ bool check(Student* student, string ses1, string ses2) {
 }
 
 void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
+
+	int numberDefaultCourse = 5;
 	//node chạy course system
 	CourseDetail* tmpCourse = enrolledCourse;	
 
@@ -35,104 +37,114 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 		cout << "Number of Credits: " << tmpCourse->credits << endl;
 		cout << "Number of Students: " << tmpCourse->numberStudent << endl;
 		cout << "Number of Enrolled Students: " << tmpCourse->enrolledStudent << endl;
-		cout << "Session : " << tmpCourse->session1 << endl << tmpCourse->session2 << endl;
+		cout << "Session : " << tmpCourse->session1 << endl << tmpCourse->session2 << endl << endl << endl;
+		tmpCourse = tmpCourse->pNext;
 	}
-
-	int id;
+	int i = 0;
 	do {
-		cout << "Please enter Course ID to enroll: ";
-		cin >> id;
-		tmpCourse = enrolledCourse;
-
+		char c;
 		
+		//Check có muốn đăng kí tiếp khóa học không
+		cout << "You want to enroll a course? (Y/N): ";
+		cin >> c;
+		if (c == 'N' || c == 'n')
+			break;
 
-		while (tmpCourse) {
+		else if (c == 'Y' || c == 'y') {
+			cout << "Please enter Course ID to enroll: ";
+			string id;
+			cin.ignore();
+			getline(cin, id);
+			
+			tmpCourse = enrolledCourse;
 
-			//check có trùng ID không
-			if (tmpCourse->courseID == id) {
+			while (tmpCourse) {
 
-				//check course còn slot không
-				if (tmpCourse->enrolledStudent < tmpCourse->numberStudent) {
-					
-					//check có bị trùng ca học không
-					if (check(student, tmpCourse->session1, tmpCourse->session2)) {
+				//check có trùng ID không
+				if (tmpCourse->courseID.compare(id) == 0) {
 
-						if (student->Head_of_enrolled_course == nullptr) {
+					//check course còn slot không
+					if (tmpCourse->enrolledStudent < tmpCourse->numberStudent) {
 
-							student->Head_of_enrolled_course = new CourseForEachStudent;
-							tmpEach = student->Head_of_enrolled_course;
-							tmpEach->pPrev = nullptr;
+						//check có bị trùng ca học không
+						if (check(student, tmpCourse->session1, tmpCourse->session2)) {
 
-						}
-						else {
-							//đảm bảo đang ở node cuối
-							while (tmpEach->pNext)
+							if (student->Head_of_enrolled_course == nullptr) {
+
+								student->Head_of_enrolled_course = new CourseForEachStudent;
+								tmpEach = student->Head_of_enrolled_course;
+								tmpEach->numberCourse = 1;
+								tmpEach->pPrev = nullptr;
+
+							}
+							else {
+								tmpEach->pNext = new CourseForEachStudent;
+								tmpEach->pNext->pPrev = tmpEach;
 								tmpEach = tmpEach->pNext;
+								tmpEach->numberCourse++;
+							}
 
-							tmpEach->pNext = new CourseForEachStudent;
-							tmpEach->pNext->pPrev = tmpEach;
-							tmpEach = tmpEach->pNext;
-						}
-
-						//thêm khóa học cho sinh viên
-						tmpEach->detail.courseID = tmpCourse->courseID;
-						tmpEach->detail.courseName = tmpCourse->courseName;
-						tmpEach->detail.credits = tmpCourse->credits;
-						tmpEach->detail.session1 = tmpCourse->session1;
-						tmpEach->detail.session2 = tmpCourse->session2;
-						tmpEach->numberCourse++;
-						tmpEach->final = 0;
-						tmpEach->midterm = 0;
-						tmpEach->otherMark = 0;
-						tmpEach->total = 0;
-
-						//tăng số lượng sinh viên đã enrol thành công khóa học
-						tmpCourse->enrolledStudent++;
-
+							//thêm khóa học cho sinh viên
+							tmpEach->detail.courseID = tmpCourse->courseID;
+							tmpEach->detail.courseName = tmpCourse->courseName;
+							tmpEach->detail.credits = tmpCourse->credits;
+							tmpEach->detail.session1 = tmpCourse->session1;
+							tmpEach->detail.session2 = tmpCourse->session2;
 						
+							tmpEach->final = 0;
+							tmpEach->midterm = 0;
+							tmpEach->otherMark = 0;
+							tmpEach->total = 0;
 
-						//thêm danh sách sinh viên tham gia khóa học
-						if (tmpCourse->ListStudent == nullptr) {
-							tmpCourse->ListStudent = new Student;
-							tmpCourseList = tmpCourse->ListStudent;
-							tmpCourseList->pPrev = nullptr;
+							//tăng số lượng sinh viên đã enrol thành công khóa học
+							tmpCourse->enrolledStudent++;
+
+							//thêm danh sách sinh viên tham gia khóa học
+							if (tmpCourse->ListStudent == nullptr) {
+								tmpCourse->ListStudent = new Student;
+								tmpCourseList = tmpCourse->ListStudent;
+								tmpCourseList->no = 1;
+								tmpCourseList->pPrev = nullptr;
+							}
+							else {
+								tmpCourseList->pNext = new Student;
+								tmpCourseList->pNext->pPrev = tmpCourseList;
+								tmpCourseList->no++;
+								tmpCourseList = tmpCourseList->pNext;
+							}
+
+							tmpCourseList->firstName = student->firstName;
+							tmpCourseList->lastName = student->lastName;
+							tmpCourseList->gender = student->gender;
+							tmpCourseList->SID = student->SID;
+							tmpCourseList->DateOfBirth = student->DateOfBirth;
+							tmpCourseList->pNext = nullptr;
+
+
+							tmpEach->pNext = nullptr;
+
+							cout << "Enroll Successfully." << endl;
+							cout << "You have enrolled in " << tmpEach->numberCourse << " course(s)." << endl;
+							i++;
+							break;
 						}
 						else {
-							//đảm bảo đang ở node cuối
-							while (tmpCourseList->pNext)
-								tmpCourseList = tmpCourseList->pNext;
-
-							tmpCourseList->pNext = new Student;
-							tmpCourseList->pNext->pPrev = tmpCourseList;
-							tmpCourseList = tmpCourseList->pNext;
+							cout << "Session conflicted! Try Again!" << endl;
+							break;
 						}
-
-						tmpCourseList->no++;
-						tmpCourseList->firstName = student->firstName;
-						tmpCourseList->lastName = student->lastName;
-						tmpCourseList->gender = student->gender;
-						tmpCourseList->SID = student->SID;
-						tmpCourseList->DateOfBirth = student->DateOfBirth;
-						tmpCourseList->pNext = nullptr;
-
-
-						tmpEach->pNext = nullptr;
-
-						cout << "Enroll Successfully." << endl;
-						continue;
 					}
 					else {
-						cout << "Session conflicted! Try Again!" << endl;
-						continue;
+						cout << "The course is full. Try other course!" << endl;
+						break;
 					}
 				}
-				else {
-					cout << "The course is full. Try other course!" << endl;
-					continue;
-				}
+				tmpCourse = tmpCourse->pNext;
 			}
-			tmpCourse = tmpCourse->pNext;
 		}
-	} while (tmpEach->numberCourse <= 5);
-	cout << "You have already enrolled in 5 courses." << endl;
+
+		//Nếu nhập sai thì hỏi lại
+		else
+			continue;
+	} while (i < numberDefaultCourse);
+	
 }
