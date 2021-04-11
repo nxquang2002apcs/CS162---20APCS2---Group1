@@ -4,6 +4,7 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<iomanip>
 
 using namespace std;
 
@@ -95,7 +96,7 @@ static SchoolYear* HeadYear = nullptr;			// Vai trò như pHead cho list các n�
 /// <summary>
 /// Đăng nhập/Đăng ký, đăng xuất, đổi mật khẩu
 /// </summary>
-void Read_Name_Pass(ifstream& in, string& username, string& password, string& userfile, string& passfile);
+void Read_Name_Pass(ifstream& in, string& username, string& password);
 void login(ifstream& in, int& role);
 void signup(ifstream& in, ofstream& out, int& role);  //Role là biến quản lý vai trò người dùng: 1. student; 2. staff
 void changePassword(ifstream& in, ofstream& out);
@@ -136,7 +137,7 @@ bool check(Student* student, string ses1, string ses2);
 
 //Gia Khánh
 void view_list_of_enrolled_course(Student* student);					//In ra danh sách môn học của student: student->Head_of_enrolled_course->courseDetail
-void remove_an_enrolled_course(CourseForEachStudent*& Head_of_enrolled_course, int courseID);  //Truyền vào Danh sách môn học, courseID là ID của môn muốn xóa.
+void remove_an_enrolled_course(CourseForEachStudent*& Head_of_enrolled_course, string courseID);  //Truyền vào Danh sách môn học, courseID là ID của môn muốn xóa.
 
 
 #endif
