@@ -140,26 +140,88 @@ void enter_a_semester ()			// Hàm để staff nhập ngày, tháng, năm bắt 
 	create_a_semester_for_year ( start_year, end_year, start_date, end_date, semester_n );
 }
 
-void delete_year_and_class ()
+void delete_everything ()
 {
-	SchoolYear* year_delete = nullptr;
-	Class* class_delete = nullptr;
-
 	SchoolYear* pCur_year = HeadYear;
-	Class* pCur_class = pCur_year -> ListClass;
-
 	while ( pCur_year != nullptr )
 	{
+//------------ DELETE NHÁNH CLASS CỦA SCHOOLYEAR --------------
+
+		Class* pCur_class = pCur_year -> HeadClass;
 		while ( pCur_class != nullptr )
 		{
-			class_delete = pCur_class;
+			Student* pCur_student = pCur_class -> HeadStudent;	// delete student trong class
+			while ( pCur_student != nullptr )	
+			{
+				CourseForEachStudent* pCur_enrolled_course = pCur_student -> Head_of_enrolled_course;	// delete enrolled course của student
+				while ( pCur_enrolled_course != nullptr )	
+				{
+					CourseForEachStudent* delete_enrolled_course = pCur_enrolled_course;
+					pCur_enrolled_course = pCur_enrolled_course -> pNext;
+					delete delete_enrolled_course;
+				}
+
+				Student* delete_student = pCur_student;
+				pCur_student = pCur_student -> pNext;
+				delete delete_student;
+			}
+
+			Class* delete_class = pCur_class;
 			pCur_class = pCur_class -> pNext;
-			delete class_delete;
+			delete delete_class;
 		}
 
-		year_delete = pCur_year;
-		pCur_year = pCur_year -> pNext;
-		delete year_delete;
+//---------------------------------------------------------
+
+//--------- DELETE NHÁNH SEMESTER CỦA SCHOOLYEAR -----------
+
+		CourseDetail* pCur_course = pCur_year -> semester1.HeadCourse;  // Xóa các course của học kỳ 1
+		while ( pCur_course != nullptr )	
+		{
+			Student* pCur_enrolled_student = pCur_course -> ListStudent;	// Xóa danh sách student đã đăng ký course này
+			while ( pCur_enrolled_student != nullptr )	
+			{
+				Student* delete_enrolled_student = pCur_enrolled_student;
+				pCur_enrolled_student = pCur_enrolled_student -> pNext;
+				delete delete_enrolled_student;
+			}
+
+			CourseDetail* delete_course = pCur_course;
+			pCur_course = pCur_course -> pNext;
+			delete delete_course;
+		}
+
+		pCur_course = pCur_year -> semester2.HeadCourse;	// Của học kỳ 2, copy-paste
+		while ( pCur_course != nullptr )	
+		{
+			Student* pCur_enrolled_student = pCur_course -> ListStudent;
+			while ( pCur_enrolled_student != nullptr )	
+			{
+				Student* delete_enrolled_student = pCur_enrolled_student;
+				pCur_enrolled_student = pCur_enrolled_student -> pNext;
+				delete delete_enrolled_student;
+			}
+
+			CourseDetail* delete_course = pCur_course;
+			pCur_course = pCur_course -> pNext;
+			delete delete_course;
+		}
+
+		pCur_course = pCur_year -> semester3.HeadCourse;	// Và học kỳ 3
+		while ( pCur_course != nullptr )	//
+		{
+			Student* pCur_enrolled_student = pCur_course -> ListStudent;
+			while ( pCur_enrolled_student != nullptr )
+			{
+				Student* delete_enrolled_student = pCur_enrolled_student;
+				pCur_enrolled_student = pCur_enrolled_student -> pNext;
+				delete delete_enrolled_student;
+			}
+
+			CourseDetail* delete_course = pCur_course;
+			pCur_course = pCur_course -> pNext;
+			delete delete_course;
+		}
 	}
 }
 
