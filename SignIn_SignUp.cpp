@@ -84,7 +84,7 @@ bool checkStringofStaff(string s)
 }
 
 // Function to register
-void signup(ifstream& in, ofstream& out)
+void signup(ifstream& in, ofstream& out, int& role)
 {
 	string username, password;
 	string path;
@@ -100,6 +100,8 @@ void signup(ifstream& in, ofstream& out)
 		cout << "Enter your choice (1 or 2): ";
 		cin >> choice;
 	} while (choice != 1 && choice != 2);
+	
+	role = choice;
 	
 	cin.ignore();
 
