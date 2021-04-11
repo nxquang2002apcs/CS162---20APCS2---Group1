@@ -89,7 +89,7 @@ struct SchoolYear {
 };
 
 static SchoolYear* CurrentYear = nullptr;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
-static Semester CurrentSemester;				//Học kỳ hiện tại
+static Semester* CurrentSemester = nullptr;				//Học kỳ hiện tại
 static SchoolYear* HeadYear = nullptr;			// Vai trò như pHead cho list các năm học
 //static Student* CurrentStudent = nullptr;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
 
@@ -119,7 +119,7 @@ void delete_year_and_class();						// Hàm xóa danh sách năm học và danh s
 void display_school_year_list();					// Hàm hiển thị danh sách các năm học
 void display_classes_list_of_school_year(int start_year, int end_year);	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
 void inputListOfStudent(int& sizeOfStudent, Student*& student);      //Hàm nhập thủ công danh sách sinh viên trong một lớp
-
+void delete_everything ();
 /// <summary>
 /// Dự định
 /// </summary>
