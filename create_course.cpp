@@ -1,3 +1,5 @@
+#include "DataStructure.h"
+
 void create_a_list_of_courses_for_currentSemester ()	
 {
 	int want_more = 1;
