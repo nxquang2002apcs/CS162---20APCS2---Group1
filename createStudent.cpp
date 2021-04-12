@@ -217,7 +217,7 @@ void update_course_detail(CourseDetail*& HeadCourse, string courseID){
             cout <<"0. NO\t\t" <<"1. YES\n";
             cout <<"Choose: ";
             cin >> check;
-            if(check != 0 && check != 1) cout <<"Unidentified. Please try again...\n";
+            if(check != 0 && check != 1) cout <<"Unidentified. Please try again\n";
         } while(check != 0 && check != 1);
     }
     

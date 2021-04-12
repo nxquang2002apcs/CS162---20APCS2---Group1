@@ -129,8 +129,8 @@ void create_a_list_of_courses_for_currentSemester();
 void input_course_detail(CourseDetail*& HeadCourse);					//Input là nhập cả ds course, HeadCourse là pHead của list
 
 //Hoàng Huy
-void update_course_detail(CourseDetail*& HeadCourse, int courseID);		//HeadCourse là pHead, yêu cầu đổi thông tin của course có ID cần đổi
-void delete_a_course_in_the_list(CourseDetail*& HeadCourse, CourseDetail*& deletedCourse); //deletedCourse là node muốn xóa khỏi danh sách
+void update_course_detail(CourseDetail*& HeadCourse, string courseID);		//HeadCourse là pHead, yêu cầu đổi thông tin của course có ID cần đổi
+void delete_a_course_in_the_list(CourseDetail*& HeadCourse, string courseID); //deletedCourse là node muốn xóa khỏi danh sách
 
 //Băng Trinh
 void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse);  //Thêm Course vào ds môn học của sinh viên (student), set các loại điểm về 0
