@@ -90,7 +90,7 @@ struct SchoolYear {
 };
 
 static SchoolYear* CurrentYear = nullptr;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
-static Semester* CurrentSemester = nullptr;				//Học kỳ hiện tại
+static Semester CurrentSemester;				//Học kỳ hiện tại
 static SchoolYear* HeadYear = nullptr;			// Vai trò như pHead cho list các năm học
 //static Student* CurrentStudent = nullptr;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
 
