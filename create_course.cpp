@@ -3,7 +3,7 @@
 void create_a_list_of_courses_for_currentSemester ()	
 {
 	int want_more = 1;
-	CourseDetail* pCur = CurrentSemester -> HeadCourse;
+	CourseDetail* pCur = CurrentSemester.HeadCourse;
 
 	while ( want_more == 1 )
 	{
@@ -14,7 +14,7 @@ void create_a_list_of_courses_for_currentSemester ()
 		}
 		else 
 		{
-		        pCur -> pNext = new CourseDetail;
+			pCur -> pNext = new CourseDetail;
 			pCur -> pNext -> pPrev = pCur;
 			pCur = pCur -> pNext;
 		}
@@ -32,7 +32,6 @@ void create_a_list_of_courses_for_currentSemester ()
 		cout << "Enter the course's 2nd session: ";				cin >> pCur -> session2;		cout << endl;
 
 		cout << "Add one more course?		1. Yes		2.No	\n";
-		cout << "Your choice: ";			
-                cin >> want_more;
+		cout << "Your choice: ";		cin >> want_more;
 	}
 }
