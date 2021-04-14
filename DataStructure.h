@@ -1,11 +1,9 @@
 #ifndef _DATASTRUCTURE_H_
 #define _DATASTRUCTURE_H_
 #pragma warning(disable : 4996)
+#include<string>
 #include<iostream>
 #include<fstream>
-#include<string>
-#include<iomanip>
-
 using namespace std;
 
 struct CourseForEachStudent;
@@ -74,15 +72,15 @@ struct Class {
 };
 
 struct Semester {
-	bool isAvailable; 		//Nếu học kỳ chưa được tạo thì isAvailable = false, ngược lại thì true
+	bool isAvailable;				//Nếu học kỳ chưa được tạo thì isAvailable = false, ngược lại thì true
 	DateTime startDate;				//Ngày bắt đầu học kỳ
 	DateTime endDate;				//Ngày kết thúc				
 	CourseDetail* HeadCourse;       //pHead cảu danh sách môn học trong học kỳ này
 };
 
 struct SchoolYear {
-	int startYear, endYear;		//2019-2020: startYear = 2019, endYear = 2020	
-	Semester semester1, semester2, semester3;
+	int startYear, endYear;			//2019-2020. startYear = 2019, endYear = 2020.
+	Semester *semester1, *semester2, *semester3;
 	Class* HeadClass;               //Danh sách các lớp, HeadClass là pHead trong danh sách
 
 	SchoolYear* pPrev;
@@ -90,14 +88,16 @@ struct SchoolYear {
 };
 
 static SchoolYear* CurrentYear = nullptr;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
-static Semester* CurrentSemester = nullptr;				//Học kỳ hiện tại
+static Semester* CurrentSemester;				//Học kỳ hiện tại
 static SchoolYear* HeadYear = nullptr;			// Vai trò như pHead cho list các năm học
+static SchoolYear* ThisYear = nullptr;			//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
+static Semester* ThisSemester;					//Học kỳ mà người dùng đang truy cập đến	
 //static Student* CurrentStudent = nullptr;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
 
 /// <summary>
 /// Đăng nhập/Đăng ký, đăng xuất, đổi mật khẩu
 /// </summary>
-void Read_Name_Pass(ifstream& in, string& username, string& password);
+void Read_Name_Pass(ifstream& in, string& username, string& password, string& userfile, string& passfile);
 void login(ifstream& in, int& role);
 void signup(ifstream& in, ofstream& out, int& role);  //Role là biến quản lý vai trò người dùng: 1. student; 2. staff
 void changePassword(ifstream& in, ofstream& out);
@@ -114,18 +114,18 @@ void inputCSV(string path, Student* ListStudent, int& size);		//Nhập ds sinh v
 void create_a_new_school_year(int start_year, int end_year);		// Hàm tạo năm học mới
 void input_school_year();							// Hàm để staff nhập năm học mới
 void input_classes_for_current_year();				// Hàm tạo lớp cho năm học hiện tại
-void create_a_semester_for_year(int start_year, int end_year, DateTime start_date, DateTime end_date, int semester_n);	// Hàm tạo học kỳ cho năm học (start_year - end_year)
+void create_a_semester_for_year(SchoolYear*& Year, DateTime start_date, DateTime end_date, int semester_n);	// Hàm tạo học kỳ cho năm học (start_year - end_year)
 void enter_a_semester();							// Hàm để staff nhập học kỳ mới
 void delete_year_and_class();						// Hàm xóa danh sách năm học và danh sách các lớp
 void display_school_year_list();					// Hàm hiển thị danh sách các năm học
-void display_classes_list_of_school_year(int start_year, int end_year);	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
+void display_classes_list_of_school_year();	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
 void inputListOfStudent(int& sizeOfStudent, Student*& student);      //Hàm nhập thủ công danh sách sinh viên trong một lớp
-void delete_everything ();
+
 /// <summary>
 /// Dự định
 /// </summary>
 //Nhật Quang
-void create_a_list_of_courses_for_currentSemester();				
+void create_a_list_of_courses_for_currentSemester();
 void input_course_detail(CourseDetail*& HeadCourse);					//Input là nhập cả ds course, HeadCourse là pHead của list
 
 //Hoàng Huy
@@ -138,7 +138,18 @@ bool check(Student* student, string ses1, string ses2);
 
 //Gia Khánh
 void view_list_of_enrolled_course(Student* student);					//In ra danh sách môn học của student: student->Head_of_enrolled_course->courseDetail
-void remove_an_enrolled_course(CourseForEachStudent*& Head_of_enrolled_course, string courseID);  //Truyền vào Danh sách môn học, courseID là ID của môn muốn xóa.
+void remove_an_enrolled_course(CourseForEachStudent*& Head_of_enrolled_course, int courseID);  //Truyền vào Danh sách môn học, courseID là ID của môn muốn xóa.
+
+//Xuân Quang
+void StaffInterface();     //Giao diện làm việc của staff.
+	
+
+
+//Gia Khánh
+void view_list_of_student_course(Student* student);
+void view_list_of_students_in_class(Class* Cls);
+void view_list_of_courses(Semester* semester);
+void view_list_of_student_in_course(CourseDetail* course);
 
 
 #endif
