@@ -3,7 +3,7 @@
 void create_a_list_of_courses_for_currentSemester ()	
 {
 	int want_more = 1;
-	CourseDetail* pCur = CurrentSemester.HeadCourse;
+	CourseDetail* pCur = CurrentSemester -> HeadCourse;
 
 	while ( want_more == 1 )
 	{
