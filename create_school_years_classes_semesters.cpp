@@ -2,30 +2,36 @@
 
 void create_a_new_school_year ( int start_year, int end_year )		// Hàm tạo năm học mới với start_year là năm bắt đầu, end_year là năm kết thúc.
 {
-	if ( HeadYear == nullptr )										// Nếu chưa có năm học nào
+	if ( HeadYear == nullptr )					// Nếu chưa có năm học nào
 	{
-		HeadYear = new SchoolYear;									// thì tạo mới
+		HeadYear = new SchoolYear;				// thì tạo mới
 		CurrentYear = HeadYear;										
 		CurrentYear -> pPrev = nullptr;								
 	}
-	else															// Nếu có rồi
+	else								// Nếu có rồi
 	{
-		CurrentYear -> pNext = new SchoolYear;						// tạo năm học mới nối đuôi với năm trước đó
+		CurrentYear -> pNext = new SchoolYear;			// tạo năm học mới nối đuôi với năm trước đó
 		CurrentYear -> pNext -> pPrev = CurrentYear;
-		CurrentYear = CurrentYear -> pNext;							// năm được tạo mới là năm hiện tại
+		CurrentYear = CurrentYear -> pNext;			// năm được tạo mới là năm hiện tại
 	}
 
-	CurrentYear -> schoolYear = start_year + end_year;
+	CurrentYear -> startYear = start_year;
+    	CurrentYear -> endYear = end_year;
 
-	CurrentYear -> ListClass = nullptr;								// Năm học mới chưa tạo danh sách lớp
+	CurrentYear -> HeadClass = nullptr;				// Năm học mới chưa tạo danh sách lớp
 
 	// --- Năm học mới chưa tạo học kỳ ---------
 	CurrentYear -> semester1.startDate = {};						
 	CurrentYear -> semester1.endDate = {};
+   	 CurrentYear -> semester1.isAvailable = 0;
+
 	CurrentYear -> semester2.startDate = {};
 	CurrentYear -> semester2.endDate = {};
+    	CurrentYear -> semester2.isAvailable = 0;
+
 	CurrentYear -> semester3.startDate = {};
 	CurrentYear -> semester3.endDate = {};
+   	CurrentYear -> semester3.isAvailable = 0;
 	//-------------------------------------------
 
 	CurrentYear -> pNext = nullptr;
@@ -51,10 +57,10 @@ void input_classes_for_current_year ( )		// Hàm tạo danh sách các lớp h�
 
 	while ( class_name_temp != "0" )						
 	{
-		if ( CurrentYear -> ListClass == nullptr )					// Nếu chưa có lớp nào
+		if ( CurrentYear -> HeadClass == nullptr )		// Nếu chưa có lớp nào
 		{
-			CurrentYear -> ListClass = new Class;					    // thì tạo lớp mới, ListClass làm vai trò như pHead cho danh sách các lớp
-			pCur = CurrentYear -> ListClass;						
+			CurrentYear -> HeadClass = new Class;		// thì tạo lớp mới, ListClass làm vai trò như pHead cho danh sách các lớp
+			pCur = CurrentYear -> HeadClass;						
 			pCur -> pPrev = nullptr;
 		}
 		else 													
@@ -64,8 +70,8 @@ void input_classes_for_current_year ( )		// Hàm tạo danh sách các lớp h�
 			pCur = pCur -> pNext; 
 		}
 
-		pCur -> className = class_name_temp;						    // Tên của lớp
-		pCur -> ListStudent = nullptr;								      // Lớp mới tạo chưa có danh sách học sinh
+		pCur -> className = class_name_temp;			// Tên của lớp
+		pCur -> HeadStudent = nullptr;				// Lớp mới tạo chưa có danh sách học sinh
 
 		pCur -> pNext = nullptr;
 
@@ -74,50 +80,46 @@ void input_classes_for_current_year ( )		// Hàm tạo danh sách các lớp h�
 	}
 }
 
-void create_a_semester_for_year ( int start_year, int end_year, DateTime start_date, DateTime end_date, int semester_n )
+void create_a_semester_for_year ( DateTime start_date, DateTime end_date, int semester_n )
 {
-	SchoolYear* pCur = HeadYear;
-
-	while ( pCur != nullptr && pCur -> schoolYear != start_year + end_year )	// Tìm đến năm học cần thêm học kỳ
-		pCur = pCur -> pNext;
-
-	if ( pCur -> schoolYear == start_year + end_year )							          // Nếu tìm thấy
+	switch ( semester_n )												                          
 	{
-		switch ( semester_n )												                          	// Thêm học kỳ mấy?
+		case 1:		// Học kỳ 1
 		{
-			case 1:		// Học kỳ 1
-			{
-				pCur -> semester1.startDate = start_date;						                // ngày bắt đầu	
-				pCur -> semester1.endDate = end_date;							                  // ngày kết thúc
-				pCur -> semester1.ListCourse = nullptr;							                // Học kỳ mới chưa tạo danh sách các môn học
-				break;
-			}
-			case 2:		// Học kỳ 2
-			{
-				pCur -> semester2.startDate = start_date;
-				pCur -> semester2.endDate = end_date;
-				pCur -> semester2.ListCourse = nullptr;
-				break;
-			}
-			case 3:		// Học kỳ 3
-			{
-				pCur -> semester3.startDate = start_date;
-				pCur -> semester3.endDate = end_date;
-				pCur -> semester3.ListCourse = nullptr;
-				break;
-			}
+			CurrentYear -> semester1.startDate = start_date;	// ngày bắt đầu	
+			CurrentYear -> semester1.endDate = end_date;		// ngày kết thúc
+			CurrentYear -> semester1.HeadCourse = nullptr;		// Học kỳ mới chưa tạo danh sách các môn học
+            CurrentYear -> semester1.isAvailable = true;        		// Học kỳ mới tạo được gọi là có sẵn
+            CurrentSemester = & ( CurrentYear -> semester1 );         		// Học kỳ mới tạo là học kì hiện tại
+			CurrentSemester -> HeadCourse = nullptr;
+			break;
+		}
+		case 2:		// Học kỳ 2
+		{
+			CurrentYear -> semester2.startDate = start_date;
+			CurrentYear -> semester2.endDate = end_date;
+			CurrentYear -> semester2.HeadCourse = nullptr;
+            CurrentYear -> semester2.isAvailable = true;
+            CurrentSemester = & ( CurrentYear -> semester2 );
+			CurrentSemester -> HeadCourse = nullptr;
+			break;
+		}
+		case 3:		// Học kỳ 3
+		{
+			CurrentYear -> semester3.startDate = start_date;
+			CurrentYear -> semester3.endDate = end_date;
+			CurrentYear -> semester3.HeadCourse = nullptr;
+            CurrentYear -> semester3.isAvailable = true;
+            CurrentSemester = & ( CurrentYear -> semester3 );
+			CurrentSemester -> HeadCourse = nullptr;
+			break;
 		}
 	}
 }
 
 void enter_a_semester ()			// Hàm để staff nhập ngày, tháng, năm bắt đầu và kết thúc học kỳ
 {
-	int start_year, end_year;
 	int semester_n;
-
-	cout << "Enter school year which this semester belongs to: " << endl;
-	cout << "start year: "; 	cin >> start_year;		cout << endl;
-	cout << "end year: ";		cin >> end_year;		cout << endl;
 
 	cout << "Choose a semester: " << endl;
 	cout << "1. Semester 1." << endl;
@@ -137,7 +139,7 @@ void enter_a_semester ()			// Hàm để staff nhập ngày, tháng, năm bắt 
 	cout << "Month: ";			cin >> end_date.month;			cout << endl;
 	cout << "Year: ";			cin >> end_date.year;			cout << endl;
 
-	create_a_semester_for_year ( start_year, end_year, start_date, end_date, semester_n );
+	create_a_semester_for_year ( start_date, end_date, semester_n );
 }
 
 void delete_everything ()
@@ -222,6 +224,11 @@ void delete_everything ()
 			pCur_course = pCur_course -> pNext;
 			delete delete_course;
 		}
+	
+	SchoolYear* delete_year = pCur_year;
+	pCur_year = pCur_year -> pNext;
+	delete delete_year;
+
 	}
 }
 
@@ -231,7 +238,7 @@ void display_school_year_list ()
 	while ( pCur != nullptr )
 	{
 		cout << "This is the list of school year: " << endl;
-		cout << pCur -> schoolYear / 2 << "-" << pCur -> schoolYear / 2 + 1 << ", ";
+		cout << pCur -> startYear << "-" << pCur -> endYear << ", ";
 		pCur = pCur -> pNext;
 	}
 	cout << endl;
@@ -241,13 +248,13 @@ void display_classes_list_of_school_year ( int start_year, int end_year )
 {
 	SchoolYear* pCur_year = HeadYear;
 
-	while ( pCur_year != nullptr && pCur_year -> schoolYear != start_year + end_year )
+	while ( pCur_year != nullptr && pCur_year -> startYear != start_year )
 		pCur_year = pCur_year -> pNext;
 
-	if ( pCur_year -> schoolYear == start_year + end_year )
+	if ( pCur_year -> startYear == start_year )
 	{
 		cout << "This is the classes list of " << start_year << "-" << end_year << " school year:" << endl;
-		Class* pCur_class = pCur_year -> ListClass;
+		Class* pCur_class = pCur_year -> HeadClass;
 		while ( pCur_class != nullptr )
 		{
 			cout << pCur_class -> className << ", ";
@@ -255,17 +262,18 @@ void display_classes_list_of_school_year ( int start_year, int end_year )
 		}
 		cout << endl;
 	}
-	else cout << "Year is not found" << endl;
+
+	else cout << "Year is not found." << endl;
 }
 
 void display_semesters_of_school_year ( int start_year, int end_year )
 {
 	SchoolYear* pCur_year = HeadYear;
 
-	while ( pCur_year != nullptr && pCur_year -> schoolYear != start_year + end_year )
+	while ( pCur_year != nullptr && pCur_year -> startYear != start_year )
 		pCur_year = pCur_year -> pNext;
 
-	if ( pCur_year -> schoolYear == start_year + end_year )
+	if ( pCur_year -> startYear == start_year )
 	{
 		cout << "Semester 1:" << endl;
 		cout << pCur_year -> semester1.startDate.day << " / " << pCur_year -> semester1.startDate.month << " / " << pCur_year -> semester1.startDate.year;

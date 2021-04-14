@@ -1,7 +1,5 @@
 ﻿#include "DataStructure.h"
 
-#include "DataStructure.h"
-
 void View_list_of_year();
 bool go_to_detail_of_a_year(int startYear);
 bool delete_a_schoolyear(int startYear);
