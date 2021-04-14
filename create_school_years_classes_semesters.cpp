@@ -2,23 +2,23 @@
 
 void create_a_new_school_year ( int start_year, int end_year )		// Hàm tạo năm học mới với start_year là năm bắt đầu, end_year là năm kết thúc.
 {
-	if ( HeadYear == nullptr )										// Nếu chưa có năm học nào
+	if ( HeadYear == nullptr )					// Nếu chưa có năm học nào
 	{
-		HeadYear = new SchoolYear;									// thì tạo mới
+		HeadYear = new SchoolYear;				// thì tạo mới
 		CurrentYear = HeadYear;										
 		CurrentYear -> pPrev = nullptr;								
 	}
-	else															// Nếu có rồi
+	else								// Nếu có rồi
 	{
-		CurrentYear -> pNext = new SchoolYear;						// tạo năm học mới nối đuôi với năm trước đó
+		CurrentYear -> pNext = new SchoolYear;			// tạo năm học mới nối đuôi với năm trước đó
 		CurrentYear -> pNext -> pPrev = CurrentYear;
-		CurrentYear = CurrentYear -> pNext;							// năm được tạo mới là năm hiện tại
+		CurrentYear = CurrentYear -> pNext;			// năm được tạo mới là năm hiện tại
 	}
 
 	CurrentYear -> startYear = start_year;
     	CurrentYear -> endYear = end_year;
 
-	CurrentYear -> HeadClass = nullptr;								// Năm học mới chưa tạo danh sách lớp
+	CurrentYear -> HeadClass = nullptr;				// Năm học mới chưa tạo danh sách lớp
 
 	// --- Năm học mới chưa tạo học kỳ ---------
 	CurrentYear -> semester1.startDate = {};						
@@ -224,6 +224,11 @@ void delete_everything ()
 			pCur_course = pCur_course -> pNext;
 			delete delete_course;
 		}
+	
+	SchoolYear* delete_year = pCur_year;
+	pCur_year = pCur_year -> pNext;
+	delete delete_year;
+
 	}
 }
 
