@@ -80,7 +80,7 @@ struct Semester {
 
 struct SchoolYear {
 	int startYear, endYear;			//2019-2020. startYear = 2019, endYear = 2020.
-	Semester *semester1, *semester2, *semester3;
+	Semester semester1, semester2, semester3;
 	Class* HeadClass;               //Danh sách các lớp, HeadClass là pHead trong danh sách
 
 	SchoolYear* pPrev;
