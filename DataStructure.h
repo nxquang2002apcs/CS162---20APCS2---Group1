@@ -25,7 +25,7 @@ struct Student {
 	string firstName, lastName;
 	string gender;
 	string socialID;				//Số CMND
-	string DateOfBirth;
+	DateTime DateOfBirth;
 
 	CourseForEachStudent* Head_of_enrolled_course;   //Linked List
 
