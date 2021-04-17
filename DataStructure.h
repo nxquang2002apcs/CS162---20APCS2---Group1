@@ -150,6 +150,7 @@ void view_list_of_student_course(Student* student);
 void view_list_of_students_in_class(Class* Cls);
 void view_list_of_courses(Semester* semester);
 void view_list_of_student_in_course(CourseDetail* course);
+void view_list_of_class(SchoolYear* year);
 
 
 #endif
