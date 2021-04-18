@@ -141,7 +141,9 @@ void create_course_scores_list ( CourseDetail* & Course )	// Tạm thời hàm c
 				break;
 
 			pCur_year = pCur_year -> pNext;
-		} 
+		}
+
+		pCur_Student = pCur_Student -> pNext;
 	}
 }
 
