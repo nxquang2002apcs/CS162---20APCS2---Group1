@@ -18,6 +18,23 @@ struct DateTime {
 	int day, month, year;
 };
 
+struct Student_CourseScores {	// Dùng để lưu, cập nhật, in điểm của một Student trong một Course
+	int no;			// Số thứ tự trong lớp
+	string SID;		// MSSV
+	string firstName, lastName;
+	string gender;
+	string socialID;	// Số CMND
+	string DateOfBirth;
+
+	float midterm, final, total, otherMark;
+
+	Student_CourseScores* pNext;
+	Student_CourseScores* pPrev;
+
+	CourseForEachStudent* point_to_an_enrolled_course_of_a_student_in_a_class;	// Trỏ tới và cập nhật điểm của một trong các course của CourseForEachStudent của một Student trong một Class.
+};
+
+
 //Đối tượng sinh viên
 struct Student {
 	int no;					//Số thứ tự trong lớp
