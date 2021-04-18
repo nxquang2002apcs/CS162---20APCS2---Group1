@@ -23,7 +23,7 @@ void create_a_new_school_year ( int start_year, int end_year )		// Hàm tạo n�
 	// --- Năm học mới chưa tạo học kỳ ---------
 	CurrentYear -> semester1.startDate = {};						
 	CurrentYear -> semester1.endDate = {};
-   	 CurrentYear -> semester1.isAvailable = 0;
+   	CurrentYear -> semester1.isAvailable = 0;
 
 	CurrentYear -> semester2.startDate = {};
 	CurrentYear -> semester2.endDate = {};
@@ -94,8 +94,8 @@ void create_a_semester_for_year ( DateTime start_date, DateTime end_date, int se
 			CurrentYear -> semester1.startDate = start_date;	// ngày bắt đầu	
 			CurrentYear -> semester1.endDate = end_date;		// ngày kết thúc
 			CurrentYear -> semester1.HeadCourse = nullptr;		// Học kỳ mới chưa tạo danh sách các môn học
-            CurrentYear -> semester1.isAvailable = true;        		// Học kỳ mới tạo được gọi là có sẵn
-            CurrentSemester = & ( CurrentYear -> semester1 );         		// Học kỳ mới tạo là học kì hiện tại
+            		CurrentYear -> semester1.isAvailable = true;        	// Học kỳ mới tạo được gọi là có sẵn
+            		CurrentSemester = & ( CurrentYear -> semester1 );       // Học kỳ mới tạo là học kì hiện tại
 			CurrentSemester -> HeadCourse = nullptr;
 			break;
 		}
@@ -104,8 +104,8 @@ void create_a_semester_for_year ( DateTime start_date, DateTime end_date, int se
 			CurrentYear -> semester2.startDate = start_date;
 			CurrentYear -> semester2.endDate = end_date;
 			CurrentYear -> semester2.HeadCourse = nullptr;
-            CurrentYear -> semester2.isAvailable = true;
-            CurrentSemester = & ( CurrentYear -> semester2 );
+            		CurrentYear -> semester2.isAvailable = true;
+            		CurrentSemester = & ( CurrentYear -> semester2 );
 			CurrentSemester -> HeadCourse = nullptr;
 			break;
 		}
@@ -114,8 +114,8 @@ void create_a_semester_for_year ( DateTime start_date, DateTime end_date, int se
 			CurrentYear -> semester3.startDate = start_date;
 			CurrentYear -> semester3.endDate = end_date;
 			CurrentYear -> semester3.HeadCourse = nullptr;
-            CurrentYear -> semester3.isAvailable = true;
-            CurrentSemester = & ( CurrentYear -> semester3 );
+            		CurrentYear -> semester3.isAvailable = true;
+            		CurrentSemester = & ( CurrentYear -> semester3 );
 			CurrentSemester -> HeadCourse = nullptr;
 			break;
 		}
