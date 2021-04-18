@@ -51,6 +51,7 @@ void create_a_list_of_courses_for_currentSemester ()
 
 		pCur -> ListStudent = nullptr;		// Môn học mới tạo chưa có người đăng ký
 		pCur -> enrolledStudent = 0;
+		pCur -> Head_Student_CourseScores = nullptr;	// Danh sách điểm chưa có
 
 		pCur -> courseID = check_id;
 		cout << "Enter the course's name: ";					getline ( cin, pCur -> courseName );		cout << endl;
