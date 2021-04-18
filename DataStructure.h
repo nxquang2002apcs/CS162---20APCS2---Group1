@@ -44,7 +44,7 @@ struct Student {
 	string socialID;				//Số CMND
 	DateTime DateOfBirth;
 
-	CourseForEachStudent* Head_of_enrolled_course;   //Linked List
+	CourseForEachStudent* Head_of_enrolled_course = nullptr;   //Linked List
 
 	Student* pNext;
 	Student* pPrev;
@@ -61,7 +61,7 @@ struct CourseDetail {
 	/// MON / TUE / WED / THU / FRI / SAT, S1 (07:30), S2 (09:30), S3(13:30) and S4 (15:30)
 	string session1, session2;		//Ví dụ: MONS1 - Monday 7h30
 
-	Student* ListStudent;			//Danh sách sinh viên đã đăng ký môn học
+	Student* ListStudent = nullptr;			//Danh sách sinh viên đã đăng ký môn học
 
 	CourseDetail* pNext;
 	CourseDetail* pPrev;
@@ -82,23 +82,23 @@ struct Class {
 	string className;				//Tên lớp, ví dụ 20CTT2
 	int classSize;					//Số sinh viên
 	string formTeacherName;			//Tên giảng viên chủ nhiệm
-	Student* HeadStudent;			//pHead trong Linked List student
+	Student* HeadStudent = nullptr;			//pHead trong Linked List student
 
 	Class* pNext;
 	Class* pPrev;
 };
 
 struct Semester {
-	bool isAvailable;				//Nếu học kỳ chưa được tạo thì isAvailable = false, ngược lại thì true
+	bool isAvailable = false;				//Nếu học kỳ chưa được tạo thì isAvailable = false, ngược lại thì true
 	DateTime startDate;				//Ngày bắt đầu học kỳ
 	DateTime endDate;				//Ngày kết thúc				
-	CourseDetail* HeadCourse;       //pHead cảu danh sách môn học trong học kỳ này
+	CourseDetail* HeadCourse = nullptr;       //pHead cảu danh sách môn học trong học kỳ này
 };
 
 struct SchoolYear {
 	int startYear, endYear;			//2019-2020. startYear = 2019, endYear = 2020.
 	Semester semester1, semester2, semester3;
-	Class* HeadClass;               //Danh sách các lớp, HeadClass là pHead trong danh sách
+	Class* HeadClass = nullptr;               //Danh sách các lớp, HeadClass là pHead trong danh sách
 
 	SchoolYear* pPrev;
 	SchoolYear* pNext;
@@ -137,6 +137,16 @@ void delete_year_and_class();						// Hàm xóa danh sách năm học và danh s
 void display_school_year_list();					// Hàm hiển thị danh sách các năm học
 void display_classes_list_of_school_year();	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
 void inputListOfStudent(int& sizeOfStudent, Student*& student);      //Hàm nhập thủ công danh sách sinh viên trong một lớp
+void readListStudentCourse(string path, Student* HeadStudent);
+void readCourseInfo(string path, CourseDetail* CurrentCourse);
+void readCourse(string path, string course, Semester sem);
+void readSemester(string path, Semester sem);
+void readYear(string path, SchoolYear* CurrentYear);
+void readClassInfo(string path, Class* CurrentClass);
+void readListStudentClass(string path, string s, Student* HeadStudent);
+void readClass(string path, string s, Class* CurrentClass);
+void readListClass(string path, string s, Class* HeadClass);
+void readAll();
 
 /// <summary>
 /// Dự định
