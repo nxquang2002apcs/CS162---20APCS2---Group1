@@ -183,7 +183,7 @@ void delete_everything ()
 //--------- DELETE NHÁNH SEMESTER CỦA SCHOOLYEAR -----------
 
 		CourseDetail* pCur_course = pCur_year -> semester1.HeadCourse;  // Xóa các course của học kỳ 1
-		while ( pCur_course != nullptr )	
+		while ( pCur_course != nullptr )
 		{
 			Student* pCur_enrolled_student = pCur_course -> ListStudent;	// Xóa danh sách student đã đăng ký course này
 			while ( pCur_enrolled_student != nullptr )	
@@ -191,6 +191,14 @@ void delete_everything ()
 				Student* delete_enrolled_student = pCur_enrolled_student;
 				pCur_enrolled_student = pCur_enrolled_student -> pNext;
 				delete delete_enrolled_student;
+			}
+
+			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;	// Xóa danh sách điểm của course này
+			while ( pCur_Student_CourseScores != nullptr )
+			{
+				Student_CourseScores* delete_Student_CourseScores = pCur_Student_CourseScores;
+				pCur_Student_CourseScores = pCur_Student_CourseScores -> pNext;
+				delete delete_Student_CourseScores;
 			}
 
 			CourseDetail* delete_course = pCur_course;
@@ -209,13 +217,21 @@ void delete_everything ()
 				delete delete_enrolled_student;
 			}
 
+			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;
+			while ( pCur_Student_CourseScores != nullptr )
+			{
+				Student_CourseScores* delete_Student_CourseScores = pCur_Student_CourseScores;
+				pCur_Student_CourseScores = pCur_Student_CourseScores -> pNext;
+				delete delete_Student_CourseScores;
+			}
+
 			CourseDetail* delete_course = pCur_course;
 			pCur_course = pCur_course -> pNext;
 			delete delete_course;
 		}
 
 		pCur_course = pCur_year -> semester3.HeadCourse;	// Và học kỳ 3
-		while ( pCur_course != nullptr )	//
+		while ( pCur_course != nullptr )
 		{
 			Student* pCur_enrolled_student = pCur_course -> ListStudent;
 			while ( pCur_enrolled_student != nullptr )
@@ -223,6 +239,14 @@ void delete_everything ()
 				Student* delete_enrolled_student = pCur_enrolled_student;
 				pCur_enrolled_student = pCur_enrolled_student -> pNext;
 				delete delete_enrolled_student;
+			}
+
+			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;
+			while ( pCur_Student_CourseScores != nullptr )
+			{
+				Student_CourseScores* delete_Student_CourseScores = pCur_Student_CourseScores;
+				pCur_Student_CourseScores = pCur_Student_CourseScores -> pNext;
+				delete delete_Student_CourseScores;
 			}
 
 			CourseDetail* delete_course = pCur_course;
