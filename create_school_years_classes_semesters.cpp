@@ -23,7 +23,7 @@ void create_a_new_school_year ( int start_year, int end_year )		// Hàm tạo n�
 	// --- Năm học mới chưa tạo học kỳ ---------
 	CurrentYear -> semester1.startDate = {};						
 	CurrentYear -> semester1.endDate = {};
-   	 CurrentYear -> semester1.isAvailable = 0;
+   	CurrentYear -> semester1.isAvailable = 0;
 
 	CurrentYear -> semester2.startDate = {};
 	CurrentYear -> semester2.endDate = {};
@@ -49,34 +49,39 @@ void input_school_year ( )		// Hàm để staff nhập năm học mới
 
 void input_classes_for_current_year ( )		// Hàm tạo danh sách các lớp học cho năm hiện tại
 {
-	Class* pCur = nullptr;
-	string class_name_temp;
+	Class* pCur_class = nullptr;
 
-	cout << "PLease enter the class name (0 to stop): ";
-	cin >> class_name_temp;
+	int stop_condition = 1; // 1: tiếp tục nhập,  2: dừng nhập.
 
-	while ( class_name_temp != "0" )						
+	while ( stop_condition == 1 )
 	{
-		if ( CurrentYear -> HeadClass == nullptr )		// Nếu chưa có lớp nào
+		if ( CurrentYear -> HeadClass == nullptr )			// Nếu chưa có lớp nào
 		{
-			CurrentYear -> HeadClass = new Class;		// thì tạo lớp mới, ListClass làm vai trò như pHead cho danh sách các lớp
-			pCur = CurrentYear -> HeadClass;						
-			pCur -> pPrev = nullptr;
+			CurrentYear -> HeadClass = new Class;			// thì tạo lớp mới, ListClass làm vai trò như pHead cho danh sách các lớp
+			pCur_class = CurrentYear -> HeadClass;
+			pCur_class -> pPrev = nullptr;
 		}
-		else 													
+		else
 		{
-			pCur -> pNext = new Class;								
-			pCur -> pNext -> pPrev = pCur;
-			pCur = pCur -> pNext; 
+			pCur_class -> pNext = new Class;								
+			pCur_class -> pNext -> pPrev = pCur_class;
+			pCur_class = pCur_class -> pNext; 
 		}
 
-		pCur -> className = class_name_temp;			// Tên của lớp
-		pCur -> HeadStudent = nullptr;				// Lớp mới tạo chưa có danh sách học sinh
+		cin.get();
+		cout << "Please enter the class's name: ";			getline ( cin, pCur_class -> className );	
+		cout << "Please enter the class's number of students: ";	cin >> pCur_class -> classSize;
+		cin.get();
+		cout << "Please enter the class's form teacher name: ";		getline ( cin, pCur_class -> formTeacherName );
 
-		pCur -> pNext = nullptr;
+		pCur_class -> HeadStudent = nullptr;				// Lớp mới tạo chưa có danh sách học sinh
 
-		cout << "PLease enter the class name (0 to stop): ";
-		cin >> class_name_temp;
+		pCur_class -> pNext = nullptr;
+
+		cout << "Do you want to add more class?" << endl;
+		cout << "1. Yes				2.No" << endl;
+		cout << "Your choice: ";
+		cin >> stop_condition;
 	}
 }
 
@@ -89,8 +94,8 @@ void create_a_semester_for_year ( DateTime start_date, DateTime end_date, int se
 			CurrentYear -> semester1.startDate = start_date;	// ngày bắt đầu	
 			CurrentYear -> semester1.endDate = end_date;		// ngày kết thúc
 			CurrentYear -> semester1.HeadCourse = nullptr;		// Học kỳ mới chưa tạo danh sách các môn học
-            CurrentYear -> semester1.isAvailable = true;        		// Học kỳ mới tạo được gọi là có sẵn
-            CurrentSemester = & ( CurrentYear -> semester1 );         		// Học kỳ mới tạo là học kì hiện tại
+            		CurrentYear -> semester1.isAvailable = true;        	// Học kỳ mới tạo được gọi là có sẵn
+            		CurrentSemester = & ( CurrentYear -> semester1 );       // Học kỳ mới tạo là học kì hiện tại
 			CurrentSemester -> HeadCourse = nullptr;
 			break;
 		}
@@ -99,8 +104,8 @@ void create_a_semester_for_year ( DateTime start_date, DateTime end_date, int se
 			CurrentYear -> semester2.startDate = start_date;
 			CurrentYear -> semester2.endDate = end_date;
 			CurrentYear -> semester2.HeadCourse = nullptr;
-            CurrentYear -> semester2.isAvailable = true;
-            CurrentSemester = & ( CurrentYear -> semester2 );
+            		CurrentYear -> semester2.isAvailable = true;
+            		CurrentSemester = & ( CurrentYear -> semester2 );
 			CurrentSemester -> HeadCourse = nullptr;
 			break;
 		}
@@ -109,8 +114,8 @@ void create_a_semester_for_year ( DateTime start_date, DateTime end_date, int se
 			CurrentYear -> semester3.startDate = start_date;
 			CurrentYear -> semester3.endDate = end_date;
 			CurrentYear -> semester3.HeadCourse = nullptr;
-            CurrentYear -> semester3.isAvailable = true;
-            CurrentSemester = & ( CurrentYear -> semester3 );
+            		CurrentYear -> semester3.isAvailable = true;
+            		CurrentSemester = & ( CurrentYear -> semester3 );
 			CurrentSemester -> HeadCourse = nullptr;
 			break;
 		}
@@ -178,7 +183,7 @@ void delete_everything ()
 //--------- DELETE NHÁNH SEMESTER CỦA SCHOOLYEAR -----------
 
 		CourseDetail* pCur_course = pCur_year -> semester1.HeadCourse;  // Xóa các course của học kỳ 1
-		while ( pCur_course != nullptr )	
+		while ( pCur_course != nullptr )
 		{
 			Student* pCur_enrolled_student = pCur_course -> ListStudent;	// Xóa danh sách student đã đăng ký course này
 			while ( pCur_enrolled_student != nullptr )	
@@ -186,6 +191,14 @@ void delete_everything ()
 				Student* delete_enrolled_student = pCur_enrolled_student;
 				pCur_enrolled_student = pCur_enrolled_student -> pNext;
 				delete delete_enrolled_student;
+			}
+
+			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;	// Xóa danh sách điểm của course này
+			while ( pCur_Student_CourseScores != nullptr )
+			{
+				Student_CourseScores* delete_Student_CourseScores = pCur_Student_CourseScores;
+				pCur_Student_CourseScores = pCur_Student_CourseScores -> pNext;
+				delete delete_Student_CourseScores;
 			}
 
 			CourseDetail* delete_course = pCur_course;
@@ -204,13 +217,21 @@ void delete_everything ()
 				delete delete_enrolled_student;
 			}
 
+			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;
+			while ( pCur_Student_CourseScores != nullptr )
+			{
+				Student_CourseScores* delete_Student_CourseScores = pCur_Student_CourseScores;
+				pCur_Student_CourseScores = pCur_Student_CourseScores -> pNext;
+				delete delete_Student_CourseScores;
+			}
+
 			CourseDetail* delete_course = pCur_course;
 			pCur_course = pCur_course -> pNext;
 			delete delete_course;
 		}
 
 		pCur_course = pCur_year -> semester3.HeadCourse;	// Và học kỳ 3
-		while ( pCur_course != nullptr )	//
+		while ( pCur_course != nullptr )
 		{
 			Student* pCur_enrolled_student = pCur_course -> ListStudent;
 			while ( pCur_enrolled_student != nullptr )
@@ -218,6 +239,14 @@ void delete_everything ()
 				Student* delete_enrolled_student = pCur_enrolled_student;
 				pCur_enrolled_student = pCur_enrolled_student -> pNext;
 				delete delete_enrolled_student;
+			}
+
+			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;
+			while ( pCur_Student_CourseScores != nullptr )
+			{
+				Student_CourseScores* delete_Student_CourseScores = pCur_Student_CourseScores;
+				pCur_Student_CourseScores = pCur_Student_CourseScores -> pNext;
+				delete delete_Student_CourseScores;
 			}
 
 			CourseDetail* delete_course = pCur_course;
