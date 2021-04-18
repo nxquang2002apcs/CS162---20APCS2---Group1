@@ -49,34 +49,39 @@ void input_school_year ( )		// Hàm để staff nhập năm học mới
 
 void input_classes_for_current_year ( )		// Hàm tạo danh sách các lớp học cho năm hiện tại
 {
-	Class* pCur = nullptr;
-	string class_name_temp;
+	Class* pCur_class = nullptr;
 
-	cout << "PLease enter the class name (0 to stop): ";
-	cin >> class_name_temp;
+	int stop_condition = 1; // 1: tiếp tục nhập,  2: dừng nhập.
 
-	while ( class_name_temp != "0" )						
+	while ( stop_condition == 1 )
 	{
-		if ( CurrentYear -> HeadClass == nullptr )		// Nếu chưa có lớp nào
+		if ( CurrentYear -> HeadClass == nullptr )			// Nếu chưa có lớp nào
 		{
-			CurrentYear -> HeadClass = new Class;		// thì tạo lớp mới, ListClass làm vai trò như pHead cho danh sách các lớp
-			pCur = CurrentYear -> HeadClass;						
-			pCur -> pPrev = nullptr;
+			CurrentYear -> HeadClass = new Class;			// thì tạo lớp mới, ListClass làm vai trò như pHead cho danh sách các lớp
+			pCur_class = CurrentYear -> HeadClass;
+			pCur_class -> pPrev = nullptr;
 		}
-		else 													
+		else
 		{
-			pCur -> pNext = new Class;								
-			pCur -> pNext -> pPrev = pCur;
-			pCur = pCur -> pNext; 
+			pCur_class -> pNext = new Class;								
+			pCur_class -> pNext -> pPrev = pCur_class;
+			pCur_class = pCur_class -> pNext; 
 		}
 
-		pCur -> className = class_name_temp;			// Tên của lớp
-		pCur -> HeadStudent = nullptr;				// Lớp mới tạo chưa có danh sách học sinh
+		cin.get();
+		cout << "Please enter the class's name: ";			getline ( cin, pCur_class -> className );	
+		cout << "Please enter the class's number of students: ";	cin >> pCur_class -> classSize;
+		cin.get();
+		cout << "Please enter the class's form teacher name: ";		getline ( cin, pCur_class -> formTeacherName );
 
-		pCur -> pNext = nullptr;
+		pCur_class -> HeadStudent = nullptr;				// Lớp mới tạo chưa có danh sách học sinh
 
-		cout << "PLease enter the class name (0 to stop): ";
-		cin >> class_name_temp;
+		pCur_class -> pNext = nullptr;
+
+		cout << "Do you want to add more class?" << endl;
+		cout << "1. Yes				2.No" << endl;
+		cout << "Your choice: ";
+		cin >> stop_condition;
 	}
 }
 
