@@ -39,6 +39,8 @@ struct Student_CourseScores {	// Dùng để lưu, cập nhật, in điểm củ
 struct Student {
 	int no;					//Số thứ tự trong lớp
 	string SID;				//MSSV
+	string className;			//Lớp học mà sv đó đang học
+	int FirstYear;				//Năm học mà sv bắt đầu nhập học
 	string firstName, lastName;
 	string gender;
 	string socialID;				//Số CMND
