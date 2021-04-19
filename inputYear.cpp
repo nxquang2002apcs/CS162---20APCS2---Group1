@@ -327,6 +327,8 @@ void readStudentInfo(string path, Student* CurrentStudent) {
 			getline(f, data);
 			CurrentStudent->SID = data;
 			getline(f, data);
+			CurrentStudent->FirstYear = stoi(data);
+			getline(f, data);
 			CurrentStudent->className = data;
 			getline(f, data);
 			CurrentStudent->gender = data;
