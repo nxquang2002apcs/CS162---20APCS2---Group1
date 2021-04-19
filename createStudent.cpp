@@ -41,8 +41,9 @@ void inputListOfStudent(int& sizeOfStudent, Student*& student){
         fflush(stdin);
 
         cout <<"Please input your Date of Birth: ";    //DateOfBirth
-        getline(cin, pCur->DateOfBirth);
-        fflush(stdin);
+        cout <<"Day:";      cin >> pCur->DateOfBirth.day;
+        cout <<"Month: ";   cin >> pCur->DateOfBirth.month;
+        cout <<"Year: ";    cin >> pCur->DateOfBirth.year;
 
         cout <<"Please input your Social ID: ";        //socialID
         getline(cin, pCur->socialID);
@@ -110,8 +111,8 @@ void update_course_detail(CourseDetail*& HeadCourse, string courseID){
                 do{
                     Cur = HeadCourse;
                     string courseName;
-                    cout <<"New course name: ";
                     fflush(stdin);
+                    cout <<"New course name: ";
                     getline(cin,courseName);
                     fflush(stdin);
                     while(Cur != nullptr && Cur->courseName != courseName){
