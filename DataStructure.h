@@ -25,6 +25,7 @@ struct Student_CourseScores {	// Dùng để lưu, cập nhật, in điểm củ
 	string gender;
 	string socialID;	// Số CMND
 	string DateOfBirth;
+	string className;
 
 	float midterm, final, total, otherMark;
 
@@ -43,7 +44,8 @@ struct Student {
 	int FirstYear;				//Năm học mà sv bắt đầu nhập học
 	string firstName, lastName;
 	string gender;
-	string socialID;				//Số CMND
+	string socialID;	//Số CMND
+	float gpa;
 	DateTime DateOfBirth;
 
 	CourseForEachStudent* Head_of_enrolled_course = nullptr;   //Linked List
@@ -63,8 +65,8 @@ struct CourseDetail {
 	/// MON / TUE / WED / THU / FRI / SAT, S1 (07:30), S2 (09:30), S3(13:30) and S4 (15:30)
 	string session1, session2;		//Ví dụ: MONS1 - Monday 7h30
 
-	Student* ListStudent = nullptr;			//Danh sách sinh viên đã đăng ký môn học
-
+	//Student* ListStudent = nullptr;			//Danh sách sinh viên đã đăng ký môn học
+	Student_CourseScores* HeadStudent = nullptr;
 	CourseDetail* pNext;
 	CourseDetail* pPrev;
 
@@ -106,12 +108,12 @@ struct SchoolYear {
 	SchoolYear* pNext;
 };
 
-static SchoolYear* CurrentYear = nullptr;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
-static Semester* CurrentSemester = nullptr;		//Học kỳ hiện tại
-static SchoolYear* HeadYear = nullptr;			// Vai trò như pHead cho list các năm học
-static SchoolYear* ThisYear = nullptr;			//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
-static Semester* ThisSemester = nullptr;		//Học kỳ mà người dùng đang truy cập đến	
-//static Student* CurrentStudent = nullptr;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
+static SchoolYear* CurrentYear;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
+static Semester* CurrentSemester;		//Học kỳ hiện tại
+static SchoolYear* HeadYear;			// Vai trò như pHead cho list các năm học
+static SchoolYear* ThisYear;			//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
+static Semester* ThisSemester;		//Học kỳ mà người dùng đang truy cập đến	
+static Student* CurrentStudent;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
 
 /// <summary>
 /// Đăng nhập/Đăng ký, đăng xuất, đổi mật khẩu
@@ -139,16 +141,22 @@ void delete_year_and_class();						// Hàm xóa danh sách năm học và danh s
 void display_school_year_list();					// Hàm hiển thị danh sách các năm học
 void display_classes_list_of_school_year();	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
 void inputListOfStudent(int& sizeOfStudent, Student*& student);      //Hàm nhập thủ công danh sách sinh viên trong một lớp
-void readListStudentCourse(string path, Student* HeadStudent);
+
 void readCourseInfo(string path, CourseDetail* CurrentCourse);
 void readCourse(string path, string course, Semester sem);
 void readSemester(string path, Semester sem);
 void readYear(string path, SchoolYear* CurrentYear);
 void readClassInfo(string path, Class* CurrentClass);
-void readListStudentClass(string path, string s, Student* HeadStudent);
+void readListStudentClass(string path, string s, Student*& HeadStudent);
 void readClass(string path, string s, Class* CurrentClass);
-void readListClass(string path, string s, Class* HeadClass);
-void readAll();
+void readListClass(string path, string s, Class*& HeadClass);
+bool readStudentCourse(string path, string mssv, Student_CourseScores* CurrentStudent);
+void readListStudentCourse(string path, string list, Student_CourseScores*& HeadStudent);
+bool readEnrolledCourse(string path, CourseForEachStudent* CurrentCourse);
+void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCourse);
+void readStudentInfo(string path, Student* CurrentStudent);
+bool readStudent(string path, string s, Student* CurrentStudent);
+void readAll(SchoolYear* &HeadYear);
 
 /// <summary>
 /// Dự định
