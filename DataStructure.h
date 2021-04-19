@@ -26,6 +26,7 @@ struct Student_CourseScores {	// Dùng để lưu, cập nhật, in điểm củ
 	string socialID;	// Số CMND
 	string DateOfBirth;
 	string className;
+	
 
 	float midterm, final, total, otherMark;
 
