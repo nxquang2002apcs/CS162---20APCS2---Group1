@@ -24,7 +24,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 	CourseDetail* tmpCourse = enrolledCourse;	
 
 	//Node chạy danh sách sinh viên khóa học
-	Student* tmpCourseList = enrolledCourse->ListStudent;
+	Student_CourseScores* tmpCourseList = enrolledCourse->HeadStudent;
 
 	//Node chạy của course mỗi sinh viên
 	CourseForEachStudent* tmpEach = student->Head_of_enrolled_course;
@@ -91,23 +91,24 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpEach->detail.session1 = tmpCourse->session1;
 							tmpEach->detail.session2 = tmpCourse->session2;
 						
-							tmpEach->final = 0;
+							/*tmpEach->final = 0;
 							tmpEach->midterm = 0;
 							tmpEach->otherMark = 0;
 							tmpEach->total = 0;
+							*/
 
 							//tăng số lượng sinh viên đã enrol thành công khóa học
 							tmpCourse->enrolledStudent++;
 
 							//thêm danh sách sinh viên tham gia khóa học
-							if (tmpCourse->ListStudent == nullptr) {
-								tmpCourse->ListStudent = new Student;
-								tmpCourseList = tmpCourse->ListStudent;
+							if (tmpCourse->HeadStudent == nullptr) {
+								tmpCourse->HeadStudent = new Student_CourseScores;
+								tmpCourseList = tmpCourse->HeadStudent;
 								tmpCourseList->no = 1;
 								tmpCourseList->pPrev = nullptr;
 							}
 							else {
-								tmpCourseList->pNext = new Student;
+								tmpCourseList->pNext = new Student_CourseScores;
 								tmpCourseList->pNext->pPrev = tmpCourseList;
 								tmpCourseList->no++;
 								tmpCourseList = tmpCourseList->pNext;
@@ -117,8 +118,21 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpCourseList->lastName = student->lastName;
 							tmpCourseList->gender = student->gender;
 							tmpCourseList->SID = student->SID;
-							tmpCourseList->DateOfBirth = student->DateOfBirth;
 							tmpCourseList->pNext = nullptr;
+							tmpCourseList->midterm = 0;
+							tmpCourseList->final = 0;
+							tmpCourseList->otherMark = 0;
+							tmpCourseList->total = 0;
+							
+							//Node chay lien ket diem cua student_courseScore voi CourseForEach
+							CourseForEachStudent* tmp = tmpCourseList->point_to_an_enrolled_course_of_a_student_in_a_class;
+							while (tmp->detail.courseID != id)
+								tmp = tmp->pNext;
+
+							tmp->midterm = tmpCourseList->midterm;
+							tmp->final = tmpCourseList->final;
+							tmp->otherMark = tmpCourseList->otherMark;
+							tmp->total = tmpCourseList->total;
 
 
 							tmpEach->pNext = nullptr;

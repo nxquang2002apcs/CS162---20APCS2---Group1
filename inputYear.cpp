@@ -2,7 +2,7 @@
 
 
 //to20125001
-bool readStudentCourse(string path, Student_CourseScores* CurrentStudent) {
+bool readStudentCourse(string path, Student_CourseScores*& CurrentStudent) {
 	ifstream fin;
 	string data;
 	fin.open(path);
@@ -76,7 +76,7 @@ void readListStudentCourse(string path, string list, Student_CourseScores*& Head
 	in.close();
 };
 //tocourseinfo
-void readCourseInfo(string path, CourseDetail* CurrentCourse) {
+void readCourseInfo(string path, CourseDetail*& CurrentCourse) {
 	ifstream in;
 	string data;
 	in.open(path);
@@ -106,7 +106,7 @@ void readCourseInfo(string path, CourseDetail* CurrentCourse) {
 
 }
 //toCS161
-void readCourse(string path, string course, CourseDetail* CurrentCourse) {
+void readCourse(string path, string course, CourseDetail*& CurrentCourse) {
 	ifstream f;
 	f.open(path + course + ".txt");
 	string data;
@@ -123,7 +123,7 @@ void readCourse(string path, string course, CourseDetail* CurrentCourse) {
 	f.close();
 };
 //toLisofCourses
-void readSemester(string path, Semester sem) {
+void readSemester(string path, Semester& sem) {
 	ifstream fin;
 	string course;
 	fin.open(path + "ListOfCourses.txt");
@@ -154,7 +154,7 @@ void readSemester(string path, Semester sem) {
 	fin.close();
 }
 //to20202021
-void readYear(string path, SchoolYear* CurrentYear) {
+void readYear(string path, SchoolYear*& CurrentYear) {
 	ifstream in;
 	string num;
 	in.open(path);
@@ -218,7 +218,7 @@ void readYear(string path, SchoolYear* CurrentYear) {
 	in.close();
 }
 //toClassInfo
-void readClassInfo(string path, Class* CurrentClass) {
+void readClassInfo(string path, Class*& CurrentClass) {
 	ifstream in;
 	string data;
 	in.open(path);
@@ -237,7 +237,7 @@ void readClassInfo(string path, Class* CurrentClass) {
 	in.close();
 }
 //toCS161
-bool readEnrolledCourse(string path, CourseForEachStudent* CurrentCourse) {
+bool readEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse) {
 	ifstream fin;
 	fin.open(path);
 	string data;
@@ -307,7 +307,7 @@ void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCo
 	f.close();
 }
 //toStudentInformation
-void readStudentInfo(string path, Student* CurrentStudent) {
+void readStudentInfo(string path, Student*& CurrentStudent) {
 	ifstream f;
 	f.open(path);
 	string data;
@@ -341,7 +341,7 @@ void readStudentInfo(string path, Student* CurrentStudent) {
 	}
 };
 //to20125001
-bool readStudent(string path, string s, Student* CurrentStudent) {
+bool readStudent(string path, string s, Student*& CurrentStudent) {
 	ifstream in;
 	string data;
 	in.open(path + s + ".txt");
@@ -395,7 +395,7 @@ void readListStudentClass(string path, string s, Student*& HeadStudent) {
 	fin.close();
 }
 //to20CTT1
-void readClass(string path, string s, Class* CurrentClass) {
+void readClass(string path, string s, Class*& CurrentClass) {
 	ifstream f;
 	string data;
 	f.open(path + s + ".txt");
@@ -441,7 +441,7 @@ void readListClass(string path, string s, Class*& HeadClass) {
 	fin.close();
 }
 
-void readAll()//SchoolYear* &HeadYear) 
+void readAll(SchoolYear* &HeadYear) 
 {
 	ifstream f;
 	string path = "C:\\Users\\Administrator\\source\\repos\\Data\\Schoolyear\\";

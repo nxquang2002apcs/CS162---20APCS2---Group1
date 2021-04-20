@@ -141,21 +141,21 @@ void display_school_year_list();					// Hàm hiển thị danh sách các năm h
 void display_classes_list_of_school_year();	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
 void inputListOfStudent(int& sizeOfStudent, Student*& student);      //Hàm nhập thủ công danh sách sinh viên trong một lớp
 
-void readCourseInfo(string path, CourseDetail* CurrentCourse);
-void readCourse(string path, string course, Semester sem);
-void readSemester(string path, Semester sem);
-void readYear(string path, SchoolYear* CurrentYear);
-void readClassInfo(string path, Class* CurrentClass);
+void readCourseInfo(string path, CourseDetail*& CurrentCourse);
+void readCourse(string path, string course, CourseDetail*& CurrentCourse);
+void readSemester(string path, Semester& sem);
+void readYear(string path, SchoolYear*& CurrentYear);
+void readClassInfo(string path, Class*& CurrentClass);
 void readListStudentClass(string path, string s, Student*& HeadStudent);
-void readClass(string path, string s, Class* CurrentClass);
+void readClass(string path, string s, Class*& CurrentClass);
 void readListClass(string path, string s, Class*& HeadClass);
-bool readStudentCourse(string path, string mssv, Student_CourseScores* CurrentStudent);
+bool readStudentCourse(string path, Student_CourseScores*& CurrentStudent);
 void readListStudentCourse(string path, string list, Student_CourseScores*& HeadStudent);
-bool readEnrolledCourse(string path, CourseForEachStudent* CurrentCourse);
+bool readEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse);
 void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCourse);
-void readStudentInfo(string path, Student* CurrentStudent);
-bool readStudent(string path, string s, Student* CurrentStudent);
-void readAll();//SchoolYear* &HeadYear);
+void readStudentInfo(string path, Student*& CurrentStudent);
+bool readStudent(string path, string s, Student*& CurrentStudent);
+void readAll(SchoolYear*& HeadYear);
 
 /// <summary>
 /// Dự định
