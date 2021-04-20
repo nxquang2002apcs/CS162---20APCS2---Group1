@@ -25,8 +25,7 @@ struct Student_CourseScores {	// Dùng để lưu, cập nhật, in điểm củ
 	string gender;
 	string className;
 	
-
-	float midterm, final, total, otherMark;
+	float midterm, final, otherMark, courseGPA;   //courseGPA là điểm trung bình của môn
 
 	Student_CourseScores* pNext;
 	Student_CourseScores* pPrev;
