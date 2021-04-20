@@ -4,6 +4,7 @@
 #include<string>
 #include<iostream>
 #include<fstream>
+#include<iomanip>
 using namespace std;
 
 struct CourseForEachStudent;
@@ -24,8 +25,8 @@ struct Student_CourseScores {	// Dùng để lưu, cập nhật, in điểm củ
 	string firstName, lastName;
 	string gender;
 	string className;
-	
-	float midterm, final, otherMark, courseGPA;   //courseGPA là điểm trung bình của môn
+
+	float midterm, final, otherMark, courseGPA = 0;
 
 	Student_CourseScores* pNext;
 	Student_CourseScores* pPrev;
@@ -106,12 +107,12 @@ struct SchoolYear {
 	SchoolYear* pNext;
 };
 
-static SchoolYear* CurrentYear;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
-static Semester* CurrentSemester;		//Học kỳ hiện tại
-static SchoolYear* HeadYear;			// Vai trò như pHead cho list các năm học
-static SchoolYear* ThisYear;			//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
-static Semester* ThisSemester;		//Học kỳ mà người dùng đang truy cập đến	
-static Student* CurrentStudent;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
+extern SchoolYear* CurrentYear;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
+extern Semester* CurrentSemester;		//Học kỳ hiện tại
+extern SchoolYear* HeadYear ;			// Vai trò như pHead cho list các năm học
+extern SchoolYear* ThisYear ;			//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
+extern Semester* ThisSemester ;		//Học kỳ mà người dùng đang truy cập đến	
+extern Student* CurrentStudent;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
 
 /// <summary>
 /// Đăng nhập/Đăng ký, đăng xuất, đổi mật khẩu
@@ -127,19 +128,7 @@ void changePassword(ifstream& in, ofstream& out);
 /// </summary>
 void inputCSV(string path, Student* ListStudent, int& size);		//Nhập ds sinh viên bằng cách đọc file CSV
 
-/// <summary>
-/// Các hàm khởi tạo và đọc dữ liệu người dùng
-/// </summary>
-void create_a_new_school_year(int start_year, int end_year);		// Hàm tạo năm học mới
-void input_school_year();							// Hàm để staff nhập năm học mới
-void input_classes_for_current_year();				// Hàm tạo lớp cho năm học hiện tại
-void create_a_semester_for_year(SchoolYear*& Year, DateTime start_date, DateTime end_date, int semester_n);	// Hàm tạo học kỳ cho năm học (start_year - end_year)
-void enter_a_semester();							// Hàm để staff nhập học kỳ mới
-void delete_year_and_class();						// Hàm xóa danh sách năm học và danh sách các lớp
-void display_school_year_list();					// Hàm hiển thị danh sách các năm học
-void display_classes_list_of_school_year();	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
-void inputListOfStudent(int& sizeOfStudent, Student*& student);      //Hàm nhập thủ công danh sách sinh viên trong một lớp
-
+//Băng Trinh
 void readCourseInfo(string path, CourseDetail*& CurrentCourse);
 void readCourse(string path, string course, CourseDetail*& CurrentCourse);
 void readSemester(string path, Semester& sem);
@@ -154,7 +143,21 @@ bool readEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse);
 void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCourse);
 void readStudentInfo(string path, Student*& CurrentStudent);
 bool readStudent(string path, string s, Student*& CurrentStudent);
-void readAll(SchoolYear*& HeadYear);
+void readAll();
+
+/// <summary>
+/// Các hàm khởi tạo và đọc dữ liệu người dùng
+/// </summary>
+void create_a_new_school_year(int start_year, int end_year);		// Hàm tạo năm học mới
+void input_school_year();							// Hàm để staff nhập năm học mới
+void input_classes_for_current_year();				// Hàm tạo lớp cho năm học hiện tại
+void create_a_semester_for_year(SchoolYear*& Year, DateTime start_date, DateTime end_date, int semester_n);	// Hàm tạo học kỳ cho năm học (start_year - end_year)
+void enter_a_semester();							// Hàm để staff nhập học kỳ mới
+void delete_year_and_class();						// Hàm xóa danh sách năm học và danh sách các lớp
+void display_school_year_list();					// Hàm hiển thị danh sách các năm học
+void display_classes_list_of_school_year();	// Hàm hiển thị danh sách các lớp học của năm học (start_year - end_year)
+void inputListOfStudent(int& sizeOfStudent, Student*& student);      //Hàm nhập thủ công danh sách sinh viên trong một lớp
+
 
 /// <summary>
 /// Dự định
@@ -162,6 +165,7 @@ void readAll(SchoolYear*& HeadYear);
 //Nhật Quang
 void create_a_list_of_courses_for_currentSemester();
 void input_course_detail(CourseDetail*& HeadCourse);					//Input là nhập cả ds course, HeadCourse là pHead của list
+void delete_everything();
 
 //Hoàng Huy
 void update_course_detail(CourseDetail*& HeadCourse, string courseID);		//HeadCourse là pHead, yêu cầu đổi thông tin của course có ID cần đổi
@@ -177,7 +181,8 @@ void remove_an_enrolled_course(CourseForEachStudent*& Head_of_enrolled_course, i
 
 //Xuân Quang
 void StaffInterface();     //Giao diện làm việc của staff.
-	
+
+
 
 
 //Gia Khánh
@@ -186,6 +191,8 @@ void view_list_of_students_in_class(Class* Cls);
 void view_list_of_courses(Semester* semester);
 void view_list_of_student_in_course(CourseDetail* course);
 void view_list_of_class(SchoolYear* year);
+
+
 
 
 #endif
