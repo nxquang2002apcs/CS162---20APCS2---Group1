@@ -22,8 +22,6 @@ bool readStudentCourse(string path, Student_CourseScores* CurrentStudent) {
 			getline(fin, data);
 			CurrentStudent->className = data;
 			getline(fin, data);
-			CurrentStudent->DateOfBirth = data;
-			getline(fin, data);
 			CurrentStudent->midterm = stof(data);
 			getline(fin, data);
 			CurrentStudent->final = stof(data);
@@ -62,8 +60,7 @@ void readListStudentCourse(string path, string list, Student_CourseScores*& Head
 				}
 				else {
 					CurrentStudent->pNext = new Student_CourseScores;
-					CurrentStudent->pPrev = new Student_CourseScores;
-					CurrentStudent->pPrev->pNext = CurrentStudent;
+					CurrentStudent->pNext->pPrev = CurrentStudent;
 					CurrentStudent = CurrentStudent->pNext;
 				}
 
@@ -146,8 +143,7 @@ void readSemester(string path, Semester sem) {
 				}
 				else {
 					CurrentCourse->pNext = new CourseDetail;
-					CurrentCourse->pPrev = new CourseDetail;
-					CurrentCourse->pPrev->pNext = CurrentCourse;
+					CurrentCourse->pNext->pPrev = CurrentCourse;
 					CurrentCourse = CurrentCourse->pNext;
 				}
 				readCourse(path + course + "\\", course, CurrentCourse);
@@ -296,8 +292,7 @@ void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCo
 				}
 				else {
 					CurrentCourse->pNext = new CourseForEachStudent;
-					CurrentCourse->pPrev = new CourseForEachStudent;
-					CurrentCourse->pPrev->pNext = CurrentCourse;
+					CurrentCourse->pNext->pPrev = CurrentCourse;
 					CurrentCourse = CurrentCourse->pNext;
 				}
 				
@@ -386,8 +381,7 @@ void readListStudentClass(string path, string s, Student*& HeadStudent) {
 				}
 				else {
 					CurrentStudent->pNext = new Student;
-					CurrentStudent->pPrev = new Student;
-					CurrentStudent->pPrev->pNext = CurrentStudent;
+					CurrentStudent->pNext->pPrev = CurrentStudent;
 					CurrentStudent = CurrentStudent->pNext;
 				}
 				if (readStudent(path + data + "\\", data, CurrentStudent)) {
@@ -436,8 +430,7 @@ void readListClass(string path, string s, Class*& HeadClass) {
 				}
 				else {
 					CurrentClass->pNext = new Class;
-					CurrentClass->pPrev = new Class;
-					CurrentClass->pPrev->pNext = CurrentClass;
+					CurrentClass->pNext->pPrev = CurrentClass;
 					CurrentClass = CurrentClass->pNext;
 				}
 				readClass(path + data + "\\", data, CurrentClass);
@@ -448,7 +441,8 @@ void readListClass(string path, string s, Class*& HeadClass) {
 	fin.close();
 }
 
-void readAll(SchoolYear* &HeadYear) {
+void readAll()//SchoolYear* &HeadYear) 
+{
 	ifstream f;
 	string path = "C:\\Users\\Administrator\\source\\repos\\Data\\Schoolyear\\";
 	string schoolyear;
@@ -467,8 +461,7 @@ void readAll(SchoolYear* &HeadYear) {
 				}
 				else {
 					CurrentYear->pNext = new SchoolYear;
-					CurrentYear->pPrev = new SchoolYear;
-					CurrentYear->pPrev->pNext = CurrentYear;
+					CurrentYear->pNext->pPrev = CurrentYear;
 					CurrentYear = CurrentYear->pNext;
 				}
 

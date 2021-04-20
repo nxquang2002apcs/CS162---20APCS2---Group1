@@ -23,8 +23,6 @@ struct Student_CourseScores {	// Dùng để lưu, cập nhật, in điểm củ
 	string SID;		// MSSV
 	string firstName, lastName;
 	string gender;
-	string socialID;	// Số CMND
-	string DateOfBirth;
 	string className;
 	
 
@@ -157,7 +155,7 @@ bool readEnrolledCourse(string path, CourseForEachStudent* CurrentCourse);
 void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCourse);
 void readStudentInfo(string path, Student* CurrentStudent);
 bool readStudent(string path, string s, Student* CurrentStudent);
-void readAll(SchoolYear* &HeadYear);
+void readAll();//SchoolYear* &HeadYear);
 
 /// <summary>
 /// Dự định
