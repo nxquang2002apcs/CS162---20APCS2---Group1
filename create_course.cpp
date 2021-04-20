@@ -67,83 +67,116 @@ void create_a_list_of_courses_for_currentSemester ()
 	}
 }
 
-
-// NÈ COI ĐI ÔNG.
-
-void create_course_scores_list ( CourseDetail* & Course )	// Tạm thời hàm chỉ dùng cho 1 course, nếu cần tạo cho nhiều môn thì phải gọi nhiều lần 
+void create_course_scores_list (  )	
 {
-	Student* pCur_Student = Course -> ListStudent;
-	Student_CourseScores* pCur_Student_CourseScores = nullptr;
-
-	while ( pCur_Student != nullptr )	// Duyệt qua từng sinh viên trong CourseDetail -> ListStudent để tạo từng Student_CourseScores mới tương ứng
+	CourseDetail* pCur_semester_courses = CurrentSemester -> HeadCourse;
+	while ( pCur_semester_courses != nullptr )
 	{
-		// ---- Bắt đầu tạo -----
-		if ( Course -> Head_Student_CourseScores == nullptr )
+		Student* pCur_Student = pCur_semester_courses -> ListStudent;
+		Student_CourseScores* pCur_Student_CourseScores = nullptr;
+
+		while ( pCur_Student != nullptr )	// Duyệt qua từng sinh viên trong CourseDetail -> ListStudent để tạo từng Student_CourseScores mới tương ứng
 		{
-			Course -> Head_Student_CourseScores = new Student_CourseScores;
-			pCur_Student_CourseScores = Course -> Head_Student_CourseScores;
-			pCur_Student_CourseScores -> pPrev = nullptr;
-		}
-		else
-		{
-			pCur_Student_CourseScores -> pNext = new Student_CourseScores;
-			pCur_Student_CourseScores -> pNext -> pPrev = pCur_Student_CourseScores;
-			pCur_Student_CourseScores = pCur_Student_CourseScores -> pNext;
-		}
-
-		pCur_Student_CourseScores -> pNext = nullptr;
-		// --- Đã tạo xong -----
-
-		// --- Bắt đầu copy các Basic info từ Student vào Student_CourseScores ---
-		pCur_Student_CourseScores -> no 		= 	pCur_Student -> no;
-		pCur_Student_CourseScores -> SID 		= 	pCur_Student -> SID;
-		pCur_Student_CourseScores -> firstName 		= 	pCur_Student -> firstName;
-		pCur_Student_CourseScores -> lastName 		=	pCur_Student -> lastName;
-		pCur_Student_CourseScores -> gender 		= 	pCur_Student -> gender;
-		pCur_Student_CourseScores -> socialID		= 	pCur_Student -> socialID;
-		pCur_Student_CourseScores -> DateOfBirth 	= 	pCur_Student -> DateOfBirth;
-		// --------------------- Đã copy xong -----------------------------------
-
-		// --- Mặc định các điểm là bằng 0 ---
-		pCur_Student_CourseScores -> midterm = 0;
-		pCur_Student_CourseScores -> final = 0;
-		pCur_Student_CourseScores -> otherMark = 0;
-		pCur_Student_CourseScores -> total = 0;
-		// -----------------------------------
-
-		// --- Tìm Course này của Student trong nhánh Class của SchoolYear ---
-
-		int we_found_it = 0;
-
-		SchoolYear* pCur_year = HeadYear;;
-		while ( pCur_year != nullptr ) // Vào từng năm
-		{
-			Class* pCur_Class = pCur_year -> HeadClass;	
-			while ( pCur_Class != nullptr )	// Vào từng lớp
+			// ---- Bắt đầu tạo -----
+			if ( pCur_semester_courses -> Head_Student_CourseScores == nullptr )
 			{
-				Student* pCur_find_student_ID = pCur_Class -> HeadStudent;
-				if ( pCur_find_student_ID -> SID == pCur_Student_CourseScores -> SID )	/// Nếu thấy khớp ID
-				{
-					CourseForEachStudent* pCur_find_courseID = pCur_find_student_ID -> Head_of_enrolled_course; // Thì tìm trong danh sách enrolled course của Student đó
-
-					while ( pCur_find_courseID -> detail.courseID != Course -> courseID )	// Chắc chắn phải tìm được, vì Student này đã enroll
-							pCur_find_courseID = pCur_find_courseID -> pNext;
-
-					pCur_Student_CourseScores -> point_to_an_enrolled_course_of_a_student_in_a_class = pCur_find_courseID;
-					we_found_it = 1;
-					break;
-				}
-
-				pCur_Class = pCur_Class -> pNext;
+				pCur_semester_courses -> Head_Student_CourseScores = new Student_CourseScores;
+				pCur_Student_CourseScores = pCur_semester_courses -> Head_Student_CourseScores;
+				pCur_Student_CourseScores -> pPrev = nullptr;
+			}
+			else
+			{
+				pCur_Student_CourseScores -> pNext = new Student_CourseScores;
+				pCur_Student_CourseScores -> pNext -> pPrev = pCur_Student_CourseScores;
+				pCur_Student_CourseScores = pCur_Student_CourseScores -> pNext;
 			}
 
-			if ( we_found_it == 1 )
-				break;
+			pCur_Student_CourseScores -> pNext = nullptr;
+			// --- Đã tạo xong -----
 
-			pCur_year = pCur_year -> pNext;
+			// --- Bắt đầu copy các Basic info từ Student vào Student_CourseScores ---
+			pCur_Student_CourseScores -> no 		= 	pCur_Student -> no;
+			pCur_Student_CourseScores -> SID 		= 	pCur_Student -> SID;
+			pCur_Student_CourseScores -> firstName 		= 	pCur_Student -> firstName;
+			pCur_Student_CourseScores -> lastName 		=	pCur_Student -> lastName;
+			pCur_Student_CourseScores -> gender 		= 	pCur_Student -> gender;
+			pCur_Student_CourseScores -> socialID		= 	pCur_Student -> socialID;
+			pCur_Student_CourseScores -> DateOfBirth 	= 	pCur_Student -> DateOfBirth;
+			pCur_Student_CourseScores -> className		=	pCur_Student -> className;
+			// --------------------- Đã copy xong -----------------------------------
+
+			// --- Mặc định các điểm là bằng 0 ---
+			pCur_Student_CourseScores -> midterm = 0;
+			pCur_Student_CourseScores -> final = 0;
+			pCur_Student_CourseScores -> otherMark = 0;
+			pCur_Student_CourseScores -> total = 0;
+			// -----------------------------------
+
+			// --- Tìm Course này của Student trong nhánh Class của SchoolYear ---
+
+			Class* pCur_find_class = CurrentYear -> HeadClass;	// Tìm lớp
+			while ( pCur_find_class -> className != pCur_Student_CourseScores -> className )
+				pCur_find_class = pCur_find_class -> pNext;
+
+			Student* pCur_find_student_ID = pCur_find_class -> HeadStudent;	// Tìm sinh viên
+			while ( pCur_find_student_ID -> SID != pCur_Student_CourseScores -> SID )
+				pCur_find_student_ID = pCur_find_student_ID -> pNext;
+
+			CourseForEachStudent* pCur_student_enrolled_course = pCur_find_student_ID -> Head_of_enrolled_course;	// Tìm trong danh sách khóa học sinh viên đó đăng kí
+			while ( pCur_student_enrolled_course -> detail.courseID != pCur_semester_courses -> courseID )
+				pCur_student_enrolled_course = pCur_student_enrolled_course -> pNext;
+
+			//pCur_Student_CourseScores -> point_to_an_enrolled_course_of_a_student_in_a_class = pCur_student_enrolled_course;
+
+			pCur_Student = pCur_Student -> pNext;
 		}
 
-		pCur_Student = pCur_Student -> pNext;
+		pCur_semester_courses = pCur_semester_courses -> pNext;
 	}
 }
 
+void connect_course_scores_to_student ( )
+{
+	CourseDetail* pCur_semester_courses = CurrentSemester -> HeadCourse;	// Chạy từ đầu danh sách khóa học của học kỳ hiện tại
+	while ( pCur_semester_courses != nullptr )
+	{
+		Student_CourseScores* pCur_CourseScores = pCur_semester_courses -> Head_Student_CourseScores;	// Chạy từ đầu danh sách điểm trong khóa học đó
+		while ( pCur_CourseScores != nullptr )
+		{
+			Class* pCur_find_class = CurrentYear -> HeadClass;	// Tìm lớp sinh viên này đang học, bắt đầu từ đầu danh sách các lớp học của CurrentYear
+			
+			while (pCur_find_class != nullptr && pCur_find_class -> className != pCur_CourseScores -> className ) // bằng cách so sánh className
+				pCur_find_class = pCur_find_class -> pNext;
+
+			if ( pCur_find_class != nullptr ) // Nếu tìm thấy lớp
+			{
+				Student* pCur_find_student = pCur_find_class -> HeadStudent;	
+				while ( pCur_find_student != nullptr && pCur_find_student -> SID != pCur_CourseScores -> SID )	// thì so sánh từng SID trong lớp đó
+					pCur_find_student = pCur_find_student -> pNext;
+
+				if ( pCur_find_student != nullptr ) // Nếu tìm thấy sinh viên
+				{
+					CourseForEachStudent* pCur_enrolled_courses = pCur_find_student -> Head_of_enrolled_course; // thì tìm trong danh sách khóa học sinh viên đã đăng ký
+					while ( pCur_enrolled_courses != nullptr && pCur_enrolled_courses -> detail.courseID != pCur_semester_courses -> courseID ) // bằng cách so sánh courseID
+						pCur_enrolled_courses = pCur_enrolled_courses -> pNext;
+
+					if ( pCur_enrolled_courses != nullptr )	// Nếu tìm thấy
+					{
+						pCur_CourseScores -> point_to_an_enrolled_course_of_a_student_in_a_class = pCur_enrolled_courses;	// Nối pointer từ danh sách điểm của khóa học sang khóa học của sinh viên
+						
+						// --- Sao chép điểm qua ---    Để tiện khi sinh viên xem điểm của mình
+						pCur_enrolled_courses -> midterm 	= 	pCur_CourseScores -> midterm;
+						pCur_enrolled_courses -> final	 	= 	pCur_CourseScores -> final;
+						pCur_enrolled_courses -> otherMark	= 	pCur_CourseScores -> otherMark;
+						pCur_enrolled_courses -> total 		= 	pCur_CourseScores -> total;
+						// --------------------------------------------------------------------
+					}
+				}
+			}
+
+			pCur_CourseScores = pCur_CourseScores -> pNext;
+		}
+
+		pCur_semester_courses = pCur_semester_courses -> pNext;
+	}
+}
