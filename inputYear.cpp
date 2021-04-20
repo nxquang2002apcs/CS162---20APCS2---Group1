@@ -1,5 +1,10 @@
 #include "DataStructure.h"
-
+SchoolYear* CurrentYear = nullptr;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
+Semester* CurrentSemester = nullptr;	//Học kỳ hiện tại
+SchoolYear* HeadYear = nullptr;			// Vai trò như pHead cho list các năm học
+SchoolYear* ThisYear = nullptr;			//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
+Semester* ThisSemester = nullptr;		//Học kỳ mà người dùng đang truy cập đến	
+Student* CurrentStudent = nullptr;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
 
 //to20125001
 bool readStudentCourse(string path, Student_CourseScores*& CurrentStudent) {
@@ -47,7 +52,7 @@ void readListStudentCourse(string path, string list, Student_CourseScores*& Head
 	}
 	else {
 		Student_CourseScores* CurrentStudent = nullptr;
-		
+
 		int i = 0;
 		while (!in.eof()) {
 			getline(in, data);
@@ -64,12 +69,12 @@ void readListStudentCourse(string path, string list, Student_CourseScores*& Head
 					CurrentStudent = CurrentStudent->pNext;
 				}
 
-				if (readStudentCourse(path + data + ".txt", CurrentStudent)){
+				if (readStudentCourse(path + data + ".txt", CurrentStudent)) {
 					i++;
 					CurrentStudent->no = i;
-				}	
+				}
 				CurrentStudent->pNext = nullptr;
-				
+
 			}
 		}
 	}
@@ -112,9 +117,9 @@ void readCourse(string path, string course, CourseDetail*& CurrentCourse) {
 	string data;
 	if (!f.is_open())
 		cout << "Couldn't open file" << endl;
-	else{
+	else {
 		getline(f, data);
-		if (data!="") {
+		if (data != "") {
 			readCourseInfo(path + data + ".txt", CurrentCourse);
 			getline(f, data);
 			readListStudentCourse(path + data + "\\", data, CurrentCourse->HeadStudent);
@@ -132,7 +137,7 @@ void readSemester(string path, Semester& sem) {
 	}
 	else {
 		CourseDetail* CurrentCourse = nullptr;
-		
+
 		while (!fin.eof()) {
 			getline(fin, course);
 			if (course != "") {
@@ -295,7 +300,7 @@ void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCo
 					CurrentCourse->pNext->pPrev = CurrentCourse;
 					CurrentCourse = CurrentCourse->pNext;
 				}
-				
+
 				if (readEnrolledCourse(path + data + ".txt", CurrentCourse)) {
 					i++;
 					CurrentCourse->numberCourse = i;
@@ -373,7 +378,7 @@ void readListStudentClass(string path, string s, Student*& HeadStudent) {
 		while (!fin.eof()) {
 			getline(fin, data);
 			if (data != "") {
-				
+
 				if (HeadStudent == nullptr) {
 					HeadStudent = new Student;
 					CurrentStudent = HeadStudent;
@@ -406,7 +411,7 @@ void readClass(string path, string s, Class*& CurrentClass) {
 		if (data != "") {
 			readClassInfo(path + data + ".txt", CurrentClass);
 			getline(f, data);
-			readListStudentClass(path + data + "\\",data, CurrentClass->HeadStudent);
+			readListStudentClass(path + data + "\\", data, CurrentClass->HeadStudent);
 		}
 	}
 	f.close();
@@ -441,12 +446,12 @@ void readListClass(string path, string s, Class*& HeadClass) {
 	fin.close();
 }
 
-void readAll(SchoolYear* &HeadYear) 
+void readAll()
 {
 	ifstream f;
-	string path = "C:\\Users\\Administrator\\source\\repos\\Data\\Schoolyear\\";
+	string path = "Data\\Schoolyear\\";
 	string schoolyear;
-	
+
 	f.open(path + "Schoolyear.txt");
 	if (!f.is_open())
 		cout << "Could't open file" << endl;
