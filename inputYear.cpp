@@ -28,7 +28,7 @@ bool readStudentCourse(string path, Student_CourseScores*& CurrentStudent) {
 			getline(fin, data);
 			CurrentStudent->otherMark = stof(data);
 			getline(fin, data);
-			CurrentStudent->total = stof(data);
+			CurrentStudent->courseGPA = stof(data);
 			fin.close();
 			return true;
 		}
