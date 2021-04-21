@@ -185,14 +185,6 @@ void delete_everything ()
 		CourseDetail* pCur_course = pCur_year -> semester1.HeadCourse;  // Xóa các course của học kỳ 1
 		while ( pCur_course != nullptr )
 		{
-			Student* pCur_enrolled_student = pCur_course -> ListStudent;	// Xóa danh sách student đã đăng ký course này
-			while ( pCur_enrolled_student != nullptr )	
-			{
-				Student* delete_enrolled_student = pCur_enrolled_student;
-				pCur_enrolled_student = pCur_enrolled_student -> pNext;
-				delete delete_enrolled_student;
-			}
-
 			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;	// Xóa danh sách điểm của course này
 			while ( pCur_Student_CourseScores != nullptr )
 			{
@@ -209,14 +201,6 @@ void delete_everything ()
 		pCur_course = pCur_year -> semester2.HeadCourse;	// Của học kỳ 2, copy-paste
 		while ( pCur_course != nullptr )	
 		{
-			Student* pCur_enrolled_student = pCur_course -> ListStudent;
-			while ( pCur_enrolled_student != nullptr )	
-			{
-				Student* delete_enrolled_student = pCur_enrolled_student;
-				pCur_enrolled_student = pCur_enrolled_student -> pNext;
-				delete delete_enrolled_student;
-			}
-
 			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;
 			while ( pCur_Student_CourseScores != nullptr )
 			{
@@ -233,14 +217,6 @@ void delete_everything ()
 		pCur_course = pCur_year -> semester3.HeadCourse;	// Và học kỳ 3
 		while ( pCur_course != nullptr )
 		{
-			Student* pCur_enrolled_student = pCur_course -> ListStudent;
-			while ( pCur_enrolled_student != nullptr )
-			{
-				Student* delete_enrolled_student = pCur_enrolled_student;
-				pCur_enrolled_student = pCur_enrolled_student -> pNext;
-				delete delete_enrolled_student;
-			}
-
 			Student_CourseScores* pCur_Student_CourseScores = pCur_course -> Head_Student_CourseScores;
 			while ( pCur_Student_CourseScores != nullptr )
 			{
