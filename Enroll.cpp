@@ -122,7 +122,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpCourseList->midterm = 0;
 							tmpCourseList->final = 0;
 							tmpCourseList->otherMark = 0;
-							tmpCourseList->total = 0;
+							tmpCourseList->courseGPA = 0;
 							
 							//Node chay lien ket diem cua student_courseScore voi CourseForEach
 							CourseForEachStudent* tmp = tmpCourseList->point_to_an_enrolled_course_of_a_student_in_a_class;
@@ -132,7 +132,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmp->midterm = tmpCourseList->midterm;
 							tmp->final = tmpCourseList->final;
 							tmp->otherMark = tmpCourseList->otherMark;
-							tmp->total = tmpCourseList->total;
+							tmp->total = tmpCourseList->courseGPA;
 
 
 							tmpEach->pNext = nullptr;
