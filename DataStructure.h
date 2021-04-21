@@ -76,7 +76,7 @@ struct CourseDetail {
 struct CourseForEachStudent {
 	CourseDetail detail;
 	int numberCourse;
-	float midterm, final, total, otherMark;  //Điểm số
+	float midterm, final, otherMark, courseGPA;  //Điểm số
 
 	CourseForEachStudent* pNext;
 	CourseForEachStudent* pPrev;
