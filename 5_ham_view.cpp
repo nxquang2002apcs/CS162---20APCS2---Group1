@@ -156,3 +156,54 @@ void view_list_of_class(SchoolYear* year)
 	}
 }
 
+
+
+//Hiển thị danh sách những sinh viên đã đăng ký môn
+
+void print(float n)
+{
+	for (int i = 0; i < 10; ++i)
+		if (abs(n - (int)n - (float)i / 10) < 0.00001)
+		{
+
+			cout << setprecision(1) << fixed << n;
+			return;
+		}
+
+	cout << setprecision(2) << fixed << n;
+}
+
+void View_list_of_Enrolled_student(CourseDetail* course) {
+	if (course->HeadStudent == nullptr) {
+		cout << "No student!" << endl;
+		return;
+	}
+	Student_CourseScores* pCur = course->HeadStudent;
+
+	cout << setw(5) << left << "No";
+	cout << setw(12) << left << "Student ID";
+	cout << setw(12) << left << "First name";
+	cout << setw(17) << left << "Last name";
+	cout << setw(10) << left << "Class";
+	cout << setw(9) << left << "Midterm";
+	cout << setw(7) << left << "Final";
+	cout << setw(12) << left << "Other mark";
+	cout << "Course's GPA" << endl;
+
+	while (pCur != nullptr) {
+		cout << setw(5) << left << pCur->no;
+		cout << setw(12) << left << pCur->SID;
+		cout << setw(12) << left << pCur->firstName;
+		cout << setw(17) << left << pCur->lastName;
+		cout << setw(10) << left << pCur->className;
+		cout << setw(2) << right << " ";  print(pCur->midterm);
+		cout << setw(5) << right << " "; print(pCur->final);
+		cout << setw(5) << right << " "; print(pCur->otherMark);
+		cout << setw(9) << left << " "; print(pCur->courseGPA);
+
+		cout << endl;
+
+		pCur = pCur->pNext;
+	}
+}
+
