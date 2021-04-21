@@ -1,7 +1,7 @@
 #include "DataStructure.h"
 
 // 1 DANH SÁCH ĐIỂM BAO GỒM:
-//No, Student ID, Student First Name, Student Last Name, Midterm Mark, Final Mark
+//No, Student ID, Student First Name, Student Last Name, Gender, Class Name, Midterm Mark, Final Mark
 //Other Mark, GPA;
 
 // Nhập điểm từ file CSV vào trong hệ thống
@@ -10,7 +10,7 @@ void import_course_score_from_CSV(string path, Student_CourseScores* &head_Cours
     ifstream imfile;
     imfile.open(path);
     if (!imfile.is_open()) {
-        cout << "Could not open the file";
+        cout << "Could not open the file\n";
         return;
     }
     
@@ -30,13 +30,14 @@ void import_course_score_from_CSV(string path, Student_CourseScores* &head_Cours
         // pCur_Course_Score->pNext = nullptr;
 
         // //------------------------------------------------
-        string no, courseGPA, final, midterm, otherMark, SID, firstName, lastName;
-        getline(imfile, no, ',');                           //Lưu vào chỗ khác do không cần thiết               
-        pCur_Course_Score->no = stoi(no);
+        string no, courseGPA, final, midterm, otherMark, SID, firstName, lastName, gender, className;
+        getline(imfile, no, ',');           //Lưu vào chỗ khác do không cần thiết               
 
-        getline(imfile, pCur_Course_Score->SID, ',');       //Lưu vào chỗ khác do không cần thiết
-        getline(imfile, pCur_Course_Score->firstName, ','); //Lưu vào chỗ khác do không cần thiết
-        getline(imfile, pCur_Course_Score->lastName, ',');  //Lưu vào chỗ khác do không cần thiết
+        getline(imfile, SID, ',');          //Lưu vào chỗ khác do không cần thiết
+        getline(imfile, firstName, ',');    //Lưu vào chỗ khác do không cần thiết
+        getline(imfile, lastName, ',');     //Lưu vào chỗ khác do không cần thiết
+        getline(imfile, gender, ',');       //Lưu vào chỗ khác do không cần thiết
+        getline(imfile, className, ',');    //Lưu vào chỗ khác do không cần thiết
 
         getline(imfile, midterm, ',');                      //Import midterm
         pCur_Course_Score->midterm = stof(midterm);     
@@ -64,16 +65,16 @@ void export_course_score_to_CSV(string path, Student_CourseScores* head_Course_S
     exfile.open(path);
 
     if (!exfile.is_open()) {
-        cout << "Could not open the file";
+        cout << "Could not open the file\n";
         return;
     }
     
     //Truyền data vào file CSV
-    exfile <<"No," <<" Student ID,"<<"Student First Name,"<<"Student Last Name,"<<"Midterm Mark,"<<"Final Mark,"<<"Other Mark,"<<"GPA\n";
+    exfile <<"No,Student ID,Student First Name,Student Last Name,Gender,Class Name,Midterm Mark,Final Mark,Other Mark,GPA\n";
     while(pCur_Course_Score){
 
-        exfile << pCur_Course_Score->no <<","<< pCur_Course_Score->SID <<","<<  pCur_Course_Score->firstName<<","<< pCur_Course_Score->lastName <<",";
-        exfile << pCur_Course_Score->midterm <<","<< pCur_Course_Score->final <<","<<  pCur_Course_Score->otherMark <<","<< pCur_Course_Score->courseGPA <<"\n";
+        exfile << pCur_Course_Score->no <<","<< pCur_Course_Score->SID <<","<<  pCur_Course_Score->firstName<<","<< pCur_Course_Score->lastName <<","<<pCur_Course_Score->gender<<",";
+        exfile << pCur_Course_Score->className<<","<<pCur_Course_Score->midterm <<","<< pCur_Course_Score->final <<","<<  pCur_Course_Score->otherMark <<","<< pCur_Course_Score->courseGPA <<"\n";
 
         pCur_Course_Score = pCur_Course_Score->pNext;
     }
