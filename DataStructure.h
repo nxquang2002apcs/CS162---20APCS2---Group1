@@ -46,6 +46,7 @@ struct Student {
 	string socialID;	//Số CMND
 	float gpa;
 	DateTime DateOfBirth;
+	int numberOfCourse = 0;			//Số môn học mà sv đã đăng ký
 
 	CourseForEachStudent* Head_of_enrolled_course = nullptr;   //Linked List
 
