@@ -78,10 +78,10 @@ void create_course_scores_list (  )
 		while ( pCur_Student != nullptr )	// Duyệt qua từng sinh viên trong CourseDetail -> ListStudent để tạo từng Student_CourseScores mới tương ứng
 		{
 			// ---- Bắt đầu tạo -----
-			if ( pCur_semester_courses -> Head_Student_CourseScores == nullptr )
+			if ( pCur_semester_courses -> HeadStudent == nullptr )
 			{
-				pCur_semester_courses -> Head_Student_CourseScores = new Student_CourseScores;
-				pCur_Student_CourseScores = pCur_semester_courses -> Head_Student_CourseScores;
+				pCur_semester_courses -> HeadStudent = new Student_CourseScores;
+				pCur_Student_CourseScores = pCur_semester_courses -> HeadStudent;
 				pCur_Student_CourseScores -> pPrev = nullptr;
 			}
 			else
@@ -126,7 +126,7 @@ void create_course_scores_list (  )
 			while ( pCur_student_enrolled_course -> detail.courseID != pCur_semester_courses -> courseID )
 				pCur_student_enrolled_course = pCur_student_enrolled_course -> pNext;
 
-			//pCur_Student_CourseScores -> point_to_an_enrolled_course_of_a_student_in_a_class = pCur_student_enrolled_course;
+			// pCur_Student_CourseScores -> point_to_an_enrolled_course_of_a_student_in_a_class = pCur_student_enrolled_course;
 
 			pCur_Student = pCur_Student -> pNext;
 		}
@@ -140,7 +140,7 @@ void connect_course_scores_to_student ( )
 	CourseDetail* pCur_semester_courses = CurrentSemester -> HeadCourse;	// Chạy từ đầu danh sách khóa học của học kỳ hiện tại
 	while ( pCur_semester_courses != nullptr )
 	{
-		Student_CourseScores* pCur_CourseScores = pCur_semester_courses -> Head_Student_CourseScores;	// Chạy từ đầu danh sách điểm trong khóa học đó
+		Student_CourseScores* pCur_CourseScores = pCur_semester_courses -> HeadStudent;	// Chạy từ đầu danh sách điểm trong khóa học đó
 		while ( pCur_CourseScores != nullptr )
 		{
 			Class* pCur_find_class = CurrentYear -> HeadClass;	// Tìm lớp sinh viên này đang học, bắt đầu từ đầu danh sách các lớp học của CurrentYear
