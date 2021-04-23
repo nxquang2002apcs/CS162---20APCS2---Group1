@@ -24,6 +24,10 @@ void inputListOfStudent(int& sizeOfStudent, Student*& student){
         cin >> pCur->no;
         fflush(stdin);
 
+        cout <<"Please input your class name: ";   // Class name
+        getline(cin, pCur->className);
+        fflush(stdin);
+
         cout <<"Please input your Student ID: ";       //SID
         getline(cin, pCur->SID);
         fflush(stdin);
@@ -40,11 +44,12 @@ void inputListOfStudent(int& sizeOfStudent, Student*& student){
         getline(cin, pCur->gender);
         fflush(stdin);
 
-        cout <<"Please input your Date of Birth: ";    //DateOfBirth
+        cout <<"Please input your Date of Birth: \n";    //DateOfBirth
         cout <<"Day:";      cin >> pCur->DateOfBirth.day;
         cout <<"Month: ";   cin >> pCur->DateOfBirth.month;
         cout <<"Year: ";    cin >> pCur->DateOfBirth.year;
 
+        fflush(stdin);
         cout <<"Please input your Social ID: ";        //socialID
         getline(cin, pCur->socialID);
         fflush(stdin);
@@ -54,7 +59,7 @@ void inputListOfStudent(int& sizeOfStudent, Student*& student){
 }
 
 
-// Update course detail
+// ---------------------------------Update course detail------------------------------------------
 void update_course_detail(CourseDetail*& HeadCourse, string courseID){
     int check = 1;  //check whether user wants to update more ?
     while(check){
@@ -224,7 +229,7 @@ void update_course_detail(CourseDetail*& HeadCourse, string courseID){
     
 }		
 
-//Delete the course
+//-----------------------------Delete the course-------------------------------------------
 void delete_a_course_in_the_list(CourseDetail*& HeadCourse, string courseID){
     int check = 1;
     while(check){
@@ -260,10 +265,244 @@ void delete_a_course_in_the_list(CourseDetail*& HeadCourse, string courseID){
     }
 }
 
+//--------------------------------Display student ( chỉ dùng để test )-------------------------------------------------
+void display_student(Student* student){
+    while(student){
+        cout <<"*-------------------------------------------*\n";
+        cout <<"No:"<< student->no <<endl;
+        cout <<"SID:"<< student->SID <<endl;
+        cout <<"classname:"<< student->className <<endl;
+        cout <<"firstname:"<< student-> firstName <<endl;
+        cout <<"lastname:"<< student->lastName <<endl;
+        cout <<"gender: "<< student->gender << endl;
+        cout <<"social id: "<< student->socialID <<endl;
+        cout <<"date:"<<student->DateOfBirth.day <<"/"<< student->DateOfBirth.month <<"/"<< student->DateOfBirth.year <<endl;
+        student = student->pNext;
+        cout <<"*-------------------------------------------*\n";
+    }
+}
 
+//--------------------------------Update student profile--------------------------------------
+void update_student_profile(Student*& student, string studentID){
+    int check = 1;
+    while(check){
+        if(!student) cout <<"No student existed\n";
 
+        //Tìm học sinh:
+        Student* pCur;
+        do {
+            pCur = student;
+            fflush(stdin);
+            cout << "Enter a student ID you want to update: ";
+            getline(cin, studentID);
+            fflush(stdin);
+            while(pCur && pCur->SID != studentID)
+                pCur = pCur->pNext;
+            if(!pCur) cout <<"Sorry, we can not find this student. Please try again\n";
+        } while (!pCur);
 
-//----------------------------- USE TO TEST ---------------------------------------------
+        //If student exists, then show menu update
+        cout <<"*------------------------------------------------------------*\n";
+        cout <<"\t\tWHAT WOULD YOU LIKE TO UPDATE?\n";
+        cout <<"*------------------------------------------------------------*\n";
+        cout <<"\t1. No\t\t\t" << "2. Student's ID\n";
+        cout <<"\t3. Class name\t\t" << "4. First name\n";
+        cout <<"\t5. Last name\t\t" << "6. Gender\n";
+        cout <<"\t7. Social ID\t\t" << "8. Date of birth\n";
+
+        
+        int staff;
+        do {
+            cout <<"Staff: ";
+            cin >> staff;
+            if(staff < 1 || staff > 10) cout <<"Error. Please try again\n";
+        } while (staff < 1 || staff > 10);
+
+        Student* Cur = student;
+        switch (staff){
+            // No
+            case 1:{ 
+                do{
+                    Cur = student;
+                    int No;
+                    cout <<"New number in class: ";
+                    cin >> No;
+                    while(Cur != nullptr && Cur->no != No){
+                        Cur = Cur->pNext;
+                    }
+                    if(Cur != nullptr) cout <<"This new one is duplicated. Please try again\n";
+                    else pCur->no = No;
+                } while(Cur);
+
+                cout <<"CHANGE SUCCESSFULLY\n";
+                break;
+            }
+
+            //Student ID
+            case 2:{    
+                do{
+                Cur = student;
+                string SID;
+                fflush(stdin);
+                cout <<"New student ID: ";
+                getline(cin, SID);
+                fflush(stdin);
+                while(Cur != nullptr && Cur->SID != SID){
+                    Cur = Cur->pNext;
+                }
+                if(Cur != nullptr) cout <<"This new one is duplicated. Please try again\n";
+                else pCur->SID = SID;
+                } while(Cur);
+
+                cout <<"CHANGE SUCCESSFULLY\n";
+                break;
+            }
+
+            //Class name:
+            case 3:{    
+                do{
+                Cur = student;
+                string className;
+                fflush(stdin);
+                cout <<"New class name: ";
+                getline(cin, className);
+                fflush(stdin);
+                while(Cur != nullptr && Cur->className != className){
+                    Cur = Cur->pNext;
+                }
+                if(Cur != nullptr) cout <<"This new one is duplicated. Please try again\n";
+                else pCur->className = className;
+                } while(Cur);
+
+                cout <<"CHANGE SUCCESSFULLY\n";
+                break;
+            }   
+
+            // Firstname
+            case 4:{    
+                do{
+                Cur = student;
+                string firstName;
+                fflush(stdin);
+                cout <<"New first name: ";
+                getline(cin, firstName);
+                fflush(stdin);
+                while(Cur != nullptr && Cur->firstName != firstName){
+                    Cur = Cur->pNext;
+                }
+                if(Cur != nullptr) cout <<"This new one is duplicated. Please try again\n";
+                else pCur->firstName = firstName;
+                } while(Cur);
+
+                cout <<"CHANGE SUCCESSFULLY\n";
+                break;
+            }
+
+            // Lastname
+            case 5:{    
+                do{
+                Cur = student;
+                string lastName;
+                fflush(stdin);
+                cout <<"New last name: ";
+                getline(cin, lastName);
+                fflush(stdin);
+                while(Cur != nullptr && Cur->lastName != lastName){
+                    Cur = Cur->pNext;
+                }
+                if(Cur != nullptr) cout <<"This new one is duplicated. Please try again\n";
+                else pCur->lastName = lastName;
+                } while(Cur);
+
+                cout <<"CHANGE SUCCESSFULLY\n";
+                break;
+            }
+
+            // Gender
+            case 6:{    
+                do{
+                Cur = student;
+                string gender;
+                fflush(stdin);
+                cout <<"New gender: ";
+                getline(cin, gender);
+                fflush(stdin);
+                while(Cur != nullptr && Cur->gender != gender){
+                    Cur = Cur->pNext;
+                }
+                if(Cur != nullptr) cout <<"This new one is duplicated. Please try again\n";
+                else pCur->gender = gender;
+                } while(Cur);
+
+                cout <<"CHANGE SUCCESSFULLY\n";
+                break;
+            }
+
+            // Social ID
+            case 7:{    
+                do{
+                Cur = student;
+                string socialID;
+                fflush(stdin);
+                cout <<"New social ID: ";
+                getline(cin, socialID);
+                fflush(stdin);
+                while(Cur != nullptr && Cur->socialID != socialID){
+                    Cur = Cur->pNext;
+                }
+                if(Cur != nullptr) cout <<"This new one is duplicated. Please try again\n";
+                else pCur->socialID = socialID;
+                } while(Cur);
+
+                cout <<"CHANGE SUCCESSFULLY\n";
+                break;
+            }
+
+            // Date of birth 
+            case 8:{    
+                do{
+                Cur = student;
+                int day, month, year;
+                cout <<"New day of birth: ";
+                cout <<"Day: ";     cin >> day;
+                cout <<"Month: ";   cin >> month;
+                cout <<"Year: ";    cin >> year;
+                while(Cur != nullptr && (Cur->DateOfBirth.day != day || Cur->DateOfBirth.month != month || Cur->DateOfBirth.year != year)){
+                    Cur = Cur->pNext;
+                }
+                if(Cur != nullptr) cout <<"This new one is duplicated. Please try again\n";
+                else{
+                    pCur->DateOfBirth.day = day;
+                    pCur->DateOfBirth.month = month;
+                    pCur->DateOfBirth.year = year;
+
+                }
+                } while(Cur);
+
+                cout <<"CHANGE SUCCESSFULLY\n";
+                break;
+            }
+
+        }
+
+        //--------- Chỉ dùng để test ------
+        display_student(student);
+        //---------------------------------
+
+        // User wants to update more?
+        do {
+            cout <<"Do you want to update anything more?\n";
+            cout <<"0. NO\t\t" <<"1. YES\n";
+            cout <<"Staff: ";
+            cin >> check;
+            if(check != 0 && check != 1) cout <<"Unidentified. Please try again\n";
+        } while(check != 0 && check != 1);
+
+    }
+
+}
+
+//----------------------------- USE TO TEST ( Cũ )---------------------------------------------
 
 // void inputListOfCourse(int& size, CourseDetail* &HeadCourse){
 //     cout <<"Please input the number of courses: ";    //Create the number of students
@@ -320,14 +559,13 @@ void delete_a_course_in_the_list(CourseDetail*& HeadCourse, string courseID){
 //     }
 // }
 
-// int main(){
-//     CourseDetail* HeadCourse = nullptr;
-//     int size;
-//     inputListOfCourse(size, HeadCourse);
 
-//     string courseID;
-//     delete_a_course_in_the_list(HeadCourse, courseID);
-//     update_course_detail(HeadCourse, courseID);
+int main(){
+    Student* student = nullptr;
+    int size;
+    inputListOfStudent(size, student);
+    string courseID;
+    update_student_profile(student, courseID);
 
-//     return 0;
-// }
+    return 0;
+}
