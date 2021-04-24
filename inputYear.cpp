@@ -1,10 +1,61 @@
 #include "DataStructure.h"
+
 SchoolYear* CurrentYear = nullptr;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
-Semester* CurrentSemester = nullptr;	//Học kỳ hiện tại
+Semester* CurrentSemester = nullptr;		//Học kỳ hiện tại
 SchoolYear* HeadYear = nullptr;			// Vai trò như pHead cho list các năm học
 SchoolYear* ThisYear = nullptr;			//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
 Semester* ThisSemester = nullptr;		//Học kỳ mà người dùng đang truy cập đến	
 Student* CurrentStudent = nullptr;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
+
+
+void connect_course_scores_to_student()
+{
+	CourseDetail* pCur_semester_courses = CurrentSemester->HeadCourse;	// Chạy từ đầu danh sách khóa học của học kỳ hiện tại
+	while (pCur_semester_courses != nullptr)
+	{
+		Student_CourseScores* pCur_CourseScores = pCur_semester_courses->HeadStudent;	// Chạy từ đầu danh sách điểm trong khóa học đó
+		while (pCur_CourseScores != nullptr)
+		{
+			Class* pCur_find_class = CurrentYear->HeadClass;	// Tìm lớp sinh viên này đang học, bắt đầu từ đầu danh sách các lớp học của CurrentYear
+
+			while (pCur_find_class != nullptr && pCur_find_class->className != pCur_CourseScores->className) // bằng cách so sánh className
+				pCur_find_class = pCur_find_class->pNext;
+
+			if (pCur_find_class != nullptr) // Nếu tìm thấy lớp
+			{
+				Student* pCur_find_student = pCur_find_class->HeadStudent;
+				while (pCur_find_student != nullptr && pCur_find_student->SID != pCur_CourseScores->SID)	// thì so sánh từng SID trong lớp đó
+					pCur_find_student = pCur_find_student->pNext;
+
+				if (pCur_find_student != nullptr) // Nếu tìm thấy sinh viên
+				{
+					CourseForEachStudent* pCur_enrolled_courses = pCur_find_student->Head_of_enrolled_course; // thì tìm trong danh sách khóa học sinh viên đã đăng ký
+					while (pCur_enrolled_courses != nullptr && pCur_enrolled_courses->detail.courseID != pCur_semester_courses->courseID) // bằng cách so sánh courseID
+						pCur_enrolled_courses = pCur_enrolled_courses->pNext;
+
+					if (pCur_enrolled_courses != nullptr)	// Nếu tìm thấy
+					{
+						pCur_CourseScores->point_to_an_enrolled_course_of_a_student_in_a_class = pCur_enrolled_courses;	// Nối pointer từ danh sách điểm của khóa học sang khóa học của sinh viên
+
+						
+						// --- Sao chép điểm qua ---    Để tiện khi sinh viên xem điểm của mình
+						pCur_enrolled_courses->midterm = pCur_CourseScores->midterm;
+						pCur_enrolled_courses->final = pCur_CourseScores->final;
+						pCur_enrolled_courses->otherMark = pCur_CourseScores->otherMark;
+						pCur_enrolled_courses->courseGPA = pCur_CourseScores->courseGPA;
+						// --------------------------------------------------------------------
+						
+					}
+				}
+			}
+
+			pCur_CourseScores = pCur_CourseScores->pNext;
+		}
+
+		pCur_semester_courses = pCur_semester_courses->pNext;
+	}
+}
+
 
 //to20125001
 bool readStudentCourse(string path, Student_CourseScores*& CurrentStudent) {
@@ -269,7 +320,7 @@ bool readEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse) {
 			getline(fin, data);
 			CurrentCourse->otherMark = stof(data);
 			getline(fin, data);
-			CurrentCourse->total = stof(data);
+			CurrentCourse->courseGPA = stof(data);
 			fin.close();
 			return true;
 		}
@@ -326,8 +377,6 @@ void readStudentInfo(string path, Student*& CurrentStudent) {
 			CurrentStudent->lastName = data;
 			getline(f, data);
 			CurrentStudent->SID = data;
-			getline(f, data);
-			CurrentStudent->FirstYear = stoi(data);
 			getline(f, data);
 			CurrentStudent->className = data;
 			getline(f, data);
@@ -473,12 +522,15 @@ void readAll()
 				readYear(path + schoolyear + "\\" + schoolyear + ".txt", CurrentYear);
 				if (CurrentYear->semester1.isAvailable) {
 					readSemester(path + schoolyear + "\\" + "Semester 1\\", CurrentYear->semester1);
+					CurrentSemester = &CurrentYear->semester1;
 				}
 				if (CurrentYear->semester2.isAvailable) {
 					readSemester(path + schoolyear + "\\" + "Semester 2\\", CurrentYear->semester2);
+					CurrentSemester = &CurrentYear->semester2;
 				}
 				if (CurrentYear->semester3.isAvailable) {
 					readSemester(path + schoolyear + "\\" + "Semester 3\\", CurrentYear->semester3);
+					CurrentSemester = &CurrentYear->semester3;
 				}
 				readListClass(path + schoolyear + "\\" + "ListOfClasses\\", "ListOfClasses", CurrentYear->HeadClass);
 
@@ -487,4 +539,8 @@ void readAll()
 		}
 	}
 	f.close();
+	connect_course_scores_to_student();
 }
+
+
+
