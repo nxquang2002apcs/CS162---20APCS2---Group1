@@ -5,7 +5,10 @@
 #include<iostream>
 #include<fstream>
 #include<iomanip>
-#include<cmath>
+#include<conio.h>
+#include<Windows.h>
+
+#include "Console.h"
 using namespace std;
 
 struct CourseForEachStudent;
@@ -47,7 +50,7 @@ struct Student {
 	string socialID;	//Số CMND
 	float gpa;
 	DateTime DateOfBirth;
-	int numberOfCourse = 0;			//Số môn học mà sv đã đăng ký
+	int numberOfCourse = 0;		//Số môn học sv đã đăng ký
 
 	CourseForEachStudent* Head_of_enrolled_course = nullptr;   //Linked List
 
@@ -89,6 +92,7 @@ struct Class {
 	string formTeacherName;			//Tên giảng viên chủ nhiệm
 	Student* HeadStudent = nullptr;			//pHead trong Linked List student
 
+
 	Class* pNext;
 	Class* pPrev;
 };
@@ -109,18 +113,21 @@ struct SchoolYear {
 	SchoolYear* pNext;
 };
 
-extern SchoolYear* CurrentYear;		//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
-extern Semester* CurrentSemester;		//Học kỳ hiện tại
-extern SchoolYear* HeadYear ;			// Vai trò như pHead cho list các năm học
-extern SchoolYear* ThisYear ;			//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
-extern Semester* ThisSemester ;		//Học kỳ mà người dùng đang truy cập đến	
-extern Student* CurrentStudent;		//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
+extern SchoolYear* CurrentYear;				//Pointer để đánh dấu năm học hiện tại, tiện cho việc truy xuất thông tin
+extern Semester* CurrentSemester;			//Học kỳ hiện tại
+extern SchoolYear* HeadYear;				// Vai trò như pHead cho list các năm học
+extern SchoolYear* ThisYear;				//Năm học mà người dùng đang truy cập đến, khác với CurrentYear
+extern Semester* ThisSemester;				//Học kỳ mà người dùng đang truy cập đến	
+extern Student* CurrentStudent;				//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
+
+extern bool Available_register;		//Biến lưu trạng thái đóng mở của hệ thống đăng ký môn, true thì hệ thống mở, sv được đk môn.
+extern bool Available_scoreboard;	//Nếu scoreboard đã có, biến này trả về true, cho phép người dùng được xem scoreboard
 
 /// <summary>
 /// Đăng nhập/Đăng ký, đăng xuất, đổi mật khẩu
 /// </summary>
 void Read_Name_Pass(ifstream& in, string& username, string& password, string& userfile, string& passfile);
-void login(ifstream& in, int& role);
+bool login(ifstream& in, int& role, string& studentID);
 void signup(ifstream& in, ofstream& out, int& role);  //Role là biến quản lý vai trò người dùng: 1. student; 2. staff
 void changePassword(ifstream& in, ofstream& out);
 
@@ -172,30 +179,28 @@ void delete_everything();
 //Hoàng Huy
 void update_course_detail(CourseDetail*& HeadCourse, string courseID);		//HeadCourse là pHead, yêu cầu đổi thông tin của course có ID cần đổi
 void delete_a_course_in_the_list(CourseDetail*& HeadCourse, string courseID); //deletedCourse là node muốn xóa khỏi danh sách
+bool export_course_score_to_CSV(string path, Student_CourseScores* head_Course_Score);
+void import_course_score_from_CSV(string path, Student_CourseScores*& head_Course_Score);
 
 //Băng Trinh
 void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse);  //Thêm Course vào ds môn học của sinh viên (student), set các loại điểm về 0
 bool check(Student* student, string ses1, string ses2);
 
 //Gia Khánh
-void view_list_of_enrolled_course(Student* student);					//In ra danh sách môn học của student: student->Head_of_enrolled_course->courseDetail
+void view_list_of_enrolled_course(Student* student);			//Staff xem thì có thêm các loại điểm
+void view_list_of_enrolled_course(Student* student);			//In ra danh sách môn học của student, không có các loại điểm
 void remove_an_enrolled_course(CourseForEachStudent*& Head_of_enrolled_course, int courseID);  //Truyền vào Danh sách môn học, courseID là ID của môn muốn xóa.
-
-//Xuân Quang
-void StaffInterface();     //Giao diện làm việc của staff.
-
-
-
-
-//Gia Khánh
 void view_list_of_student_course(Student* student);
 void view_list_of_students_in_class(Class* Cls);
 void view_list_of_courses(Semester* semester);
 void view_list_of_student_in_course(CourseDetail* course);
 void view_list_of_class(SchoolYear* year);
+void print(float n);
 
 
-
+//Xuân Quang
+void StaffInterface();     //Giao diện làm việc của staff.
+void StudentInterface(string studentID);	//Giao diện làm việc của student
 
 #endif
 
