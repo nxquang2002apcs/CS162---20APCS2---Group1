@@ -1,0 +1,8 @@
+Nguyen 
+Van A
+20125001
+20CTT2
+male
+11111111 (social ID)
+01 01 2002  (Date of birth)
+0 (GPA)

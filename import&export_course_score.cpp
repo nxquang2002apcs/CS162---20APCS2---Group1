@@ -59,14 +59,14 @@ void import_course_score_from_CSV(string path, Student_CourseScores* &head_Cours
 };
 
 //Xuất điểm 1 môn từ hệ thống qua file CSV
-void export_course_score_to_CSV(string path, Student_CourseScores* head_Course_Score){
+bool export_course_score_to_CSV(string path, Student_CourseScores* head_Course_Score){
     Student_CourseScores* pCur_Course_Score = head_Course_Score; 
     ofstream exfile;
     exfile.open(path);
 
     if (!exfile.is_open()) {
         cout << "Could not open the file\n";
-        return;
+        return false;
     }
     
     //Truyền data vào file CSV
