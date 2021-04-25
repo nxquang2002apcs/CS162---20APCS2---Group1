@@ -68,7 +68,9 @@ struct CourseDetail {
 	/// 2 tiết mỗi tuần
 	/// MON / TUE / WED / THU / FRI / SAT, S1 (07:30), S2 (09:30), S3(13:30) and S4 (15:30)
 	string session1, session2;		//Ví dụ: MONS1 - Monday 7h30
-
+	
+	bool Available_scoreboard;     				//Nếu môn học đã có điểm thì set về true, không thì false.
+	
 	//Student* ListStudent = nullptr;			//Danh sách sinh viên đã đăng ký môn học
 	Student_CourseScores* HeadStudent = nullptr;
 	CourseDetail* pNext;
@@ -102,6 +104,8 @@ struct Semester {
 	DateTime startDate;				//Ngày bắt đầu học kỳ
 	DateTime endDate;				//Ngày kết thúc				
 	CourseDetail* HeadCourse = nullptr;       //pHead cảu danh sách môn học trong học kỳ này
+	
+	int numberOfCourse = 0;			//Biến đếm số môn học trong học kỳ này
 };
 
 struct SchoolYear {
@@ -121,7 +125,7 @@ extern Semester* ThisSemester;				//Học kỳ mà người dùng đang truy c�
 extern Student* CurrentStudent;				//Nếu người dùng là học sinh thì biến này sẽ đánh dấu học sinh đó
 
 extern bool Available_register;		//Biến lưu trạng thái đóng mở của hệ thống đăng ký môn, true thì hệ thống mở, sv được đk môn.
-extern bool Available_scoreboard;	//Nếu scoreboard đã có, biến này trả về true, cho phép người dùng được xem scoreboard
+extern bool Available_all_scoreboard;	//Nếu tất cả các môn đều đã có điểm, biến này trả về true, cho phép học sinh được xem scoreboard
 
 /// <summary>
 /// Đăng nhập/Đăng ký, đăng xuất, đổi mật khẩu
