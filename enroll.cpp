@@ -70,7 +70,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 
 						//check có bị trùng ca học không
 						if (check(student, tmpCourse->session1, tmpCourse->session2)) {
-
+							student->numberOfCourse++;
 							if (student->Head_of_enrolled_course == nullptr) {
 
 								student->Head_of_enrolled_course = new CourseForEachStudent;
