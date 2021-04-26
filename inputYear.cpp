@@ -333,7 +333,7 @@ bool readEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse) {
 	return false;
 }
 //toListofEnrolledCourse
-void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCourse) {
+void readListEnrolledCourse(string path, string s, Student*& CurrentStudent, CourseForEachStudent*& HeadCourse) {
 	ifstream f;
 	f.open(path + s + ".txt");
 	string data;
@@ -358,6 +358,7 @@ void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCo
 
 				if (readEnrolledCourse(path + data + ".txt", CurrentCourse)) {
 					i++;
+					CurrentStudent->numberOfCourse = i;
 					CurrentCourse->numberCourse = i;
 				}
 				CurrentCourse->pNext = nullptr;
@@ -410,7 +411,7 @@ bool readStudent(string path, string s, Student*& CurrentStudent) {
 	else {
 		getline(in, data);
 		if (data != "") {
-			readListEnrolledCourse(path + data + "\\", data, CurrentStudent->Head_of_enrolled_course);
+			readListEnrolledCourse(path + data + "\\", data, CurrentStudent, CurrentStudent->Head_of_enrolled_course);
 			getline(in, data);
 			readStudentInfo(path + data + ".txt", CurrentStudent);
 			in.close();

@@ -153,7 +153,7 @@ void readListClass(string path, string s, Class*& HeadClass);
 bool readStudentCourse(string path, Student_CourseScores*& CurrentStudent);
 void readListStudentCourse(string path, string list, Student_CourseScores*& HeadStudent);
 bool readEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse);
-void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCourse);
+void readListEnrolledCourse(string path, string s, Student*& CurrentStudent, CourseForEachStudent*& HeadCourse);
 void readStudentInfo(string path, Student*& CurrentStudent);
 bool readStudent(string path, string s, Student*& CurrentStudent);
 void readAll();
