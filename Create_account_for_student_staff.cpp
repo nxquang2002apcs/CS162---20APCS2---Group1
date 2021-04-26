@@ -19,7 +19,7 @@ void create_account_for_student(ofstream& out, Student* ListStudent)
 			out << ListStudent->SID << endl;
 			out << setfill('0') << setw(2) << ListStudent->DateOfBirth.day;
 			out << setfill('0') << setw(2) << ListStudent->DateOfBirth.month;
-			out << ListStudent->DateOfBirth.year << ListStudent->socialID << endl;
+			out << ListStudent->DateOfBirth.year << endl;
 			out.close();
 		}
 
