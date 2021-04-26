@@ -1,14 +1,8 @@
 #include "DataStructure.h"
 
 //Hàm cho phép sinh viên xóa một môn mình đã đăng ký
-//HeadCourse là danh sách môn mà sv đã đăng ký,
-//courseID là ID của môn cần xóa, không cần yêu cầu nhập vào nữa
 void remove_an_enrolled_course(CourseForEachStudent*& HeadCourse, string courseID, string studentID, Semester*& CurrentSemester){
     //1.Tìm ra course(tìm id trong course detail) cần xóa trong course for each student
-    //2.Len vào trong detail -> danh sách học sinh đăng kí môn đó
-    //->tìm ra học sinh đó và xóa nó
-    //3.Giảm số học sinh đk trong detail
-    //4.Giảm số môn đk của học sinh đó
     CourseForEachStudent* pCur_course_each_student = HeadCourse;
     while(pCur_course_each_student != nullptr && pCur_course_each_student->detail.courseID != courseID ){
         pCur_course_each_student = pCur_course_each_student->pNext;
