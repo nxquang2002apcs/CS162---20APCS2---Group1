@@ -57,7 +57,7 @@ void connect_course_scores_to_student()
 }
 
 
-//to20125001 in Course
+//to20125001
 bool readStudentCourse(string path, Student_CourseScores*& CurrentStudent) {
 	ifstream fin;
 	string data;
@@ -93,7 +93,7 @@ bool readStudentCourse(string path, Student_CourseScores*& CurrentStudent) {
 	return false;
 }
 
-//toListStudent in Course
+//toListStu
 void readListStudentCourse(string path, string list, Student_CourseScores*& HeadStudent) {
 	ifstream in;
 	in.open(path + list + ".txt");
@@ -131,7 +131,7 @@ void readListStudentCourse(string path, string list, Student_CourseScores*& Head
 	}
 	in.close();
 };
-//tocourseinfo in semester
+//tocourseinfo
 void readCourseInfo(string path, CourseDetail*& CurrentCourse) {
 	ifstream in;
 	string data;
@@ -156,12 +156,16 @@ void readCourseInfo(string path, CourseDetail*& CurrentCourse) {
 			CurrentCourse->session1 = data;
 			getline(in, data);
 			CurrentCourse->session2 = data;
+			getline(in, data);
+			if (data == "0")
+				CurrentCourse->Available_scoreboard = false;
+			else CurrentCourse->Available_scoreboard = true;
 		}
 	}
 	in.close();
 
 }
-//toCS161 in semester
+//toCS161
 void readCourse(string path, string course, CourseDetail*& CurrentCourse) {
 	ifstream f;
 	f.open(path + course + ".txt");
@@ -178,7 +182,7 @@ void readCourse(string path, string course, CourseDetail*& CurrentCourse) {
 	}
 	f.close();
 };
-//toLisofCourses in semester
+//toLisofCourses
 void readSemester(string path, Semester& sem) {
 	ifstream fin;
 	string course;
@@ -209,7 +213,7 @@ void readSemester(string path, Semester& sem) {
 	}
 	fin.close();
 }
-//to20202021 in data
+//to20202021
 void readYear(string path, SchoolYear*& CurrentYear) {
 	ifstream in;
 	string num;
@@ -273,7 +277,7 @@ void readYear(string path, SchoolYear*& CurrentYear) {
 	}
 	in.close();
 }
-//toClassInfo in list Class
+//toClassInfo
 void readClassInfo(string path, Class*& CurrentClass) {
 	ifstream in;
 	string data;
@@ -292,7 +296,7 @@ void readClassInfo(string path, Class*& CurrentClass) {
 	}
 	in.close();
 }
-//toCS161 in student in class
+//toCS161
 bool readEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse) {
 	ifstream fin;
 	fin.open(path);
@@ -328,7 +332,7 @@ bool readEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse) {
 	fin.close();
 	return false;
 }
-//toListofEnrolledCourse in student in class
+//toListofEnrolledCourse
 void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCourse) {
 	ifstream f;
 	f.open(path + s + ".txt");
@@ -362,7 +366,7 @@ void readListEnrolledCourse(string path, string s, CourseForEachStudent*& HeadCo
 	}
 	f.close();
 }
-//toStudentInformation in student in class
+//toStudentInformation
 void readStudentInfo(string path, Student*& CurrentStudent) {
 	ifstream f;
 	f.open(path);
@@ -378,8 +382,6 @@ void readStudentInfo(string path, Student*& CurrentStudent) {
 			getline(f, data);
 			CurrentStudent->SID = data;
 			getline(f, data);
-			CurrentStudent->FirstYear = stoi(data);
-			getline(f, data);
 			CurrentStudent->className = data;
 			getline(f, data);
 			CurrentStudent->gender = data;
@@ -392,11 +394,13 @@ void readStudentInfo(string path, Student*& CurrentStudent) {
 			getline(f, data);
 			CurrentStudent->DateOfBirth.year = stoi(data);
 			getline(f, data);
+			CurrentStudent->FirstYear = stoi(data);
+			getline(f, data);
 			CurrentStudent->gpa = stof(data);
 		}
 	}
 };
-//to20125001 in student in class
+//to20125001
 bool readStudent(string path, string s, Student*& CurrentStudent) {
 	ifstream in;
 	string data;
@@ -416,7 +420,7 @@ bool readStudent(string path, string s, Student*& CurrentStudent) {
 	in.close();
 	return false;
 }
-//toListStudentClass in class
+//toListStudentClass
 void readListStudentClass(string path, string s, Student*& HeadStudent) {
 	ifstream fin;
 	string data;
@@ -450,7 +454,7 @@ void readListStudentClass(string path, string s, Student*& HeadStudent) {
 	}
 	fin.close();
 }
-//to20CTT1 in list class
+//to20CTT1
 void readClass(string path, string s, Class*& CurrentClass) {
 	ifstream f;
 	string data;
@@ -467,7 +471,7 @@ void readClass(string path, string s, Class*& CurrentClass) {
 	}
 	f.close();
 }
-//toListofClass in schoolyear
+//toListofClass
 void readListClass(string path, string s, Class*& HeadClass) {
 	ifstream fin;
 	string data;
