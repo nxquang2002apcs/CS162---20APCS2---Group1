@@ -1,0 +1,7 @@
+course ID
+CourseName
+TeacherName
+credits
+numberStudent
+enrolledStudent
+session1 session2
