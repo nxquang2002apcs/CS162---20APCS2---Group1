@@ -28,7 +28,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 	CourseForEachStudent* tmpEach = student->Head_of_enrolled_course;
 
 	//Hiển thị danh sách khóa học cho sinh viên đăng kí
-	/*
+	
 	while (tmpCourse) {
 		cout << "Course ID: " << tmpCourse->courseID << endl;
 		cout << "Course Name: " << tmpCourse->courseName << endl;
@@ -38,7 +38,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 		cout << "Number of Enrolled Students: " << tmpCourse->enrolledStudent << endl;
 		cout << "Session : " << tmpCourse->session1 << endl << tmpCourse->session2 << endl << endl << endl;
 		tmpCourse = tmpCourse->pNext;
-	}*/
+	}
 	view_list_of_courses(CurrentSemester);
 
 	int i = 0;
