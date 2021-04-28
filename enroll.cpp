@@ -28,30 +28,23 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 	CourseForEachStudent* tmpEach = student->Head_of_enrolled_course;
 
 	//Hiển thị danh sách khóa học cho sinh viên đăng kí
-	
-	while (tmpCourse) {
-		cout << "Course ID: " << tmpCourse->courseID << endl;
-		cout << "Course Name: " << tmpCourse->courseName << endl;
-		cout << "Teacher Name: " << tmpCourse->teacherName << endl;
-		cout << "Number of Credits: " << tmpCourse->credits << endl;
-		cout << "Number of Students: " << tmpCourse->numberStudent << endl;
-		cout << "Number of Enrolled Students: " << tmpCourse->enrolledStudent << endl;
-		cout << "Session : " << tmpCourse->session1 << endl << tmpCourse->session2 << endl << endl << endl;
-		tmpCourse = tmpCourse->pNext;
-	}
 	view_list_of_courses(CurrentSemester);
 
 	int i = 0;
 	do {
-		char c;
-
+		int c;
 		//Check có muốn đăng kí tiếp khóa học không
-		cout << "You want to enroll a course? (YES/NO): ";
-		cout << "	1. YES			2. NO";
+		cout << "You want to enroll a course? (YES/NO): " << endl;
+		cout << "  1. YES			2. NO" << endl;;
+		cout << "User: ";
 		cin >> c;
+		while (c != 1 && c != 2) {
+			cout << "Invalid input!" << endl;
+			cout << "User: ";
+			cin >> c;
+		}
 		if (c == 2)
 			break;
-
 		else if (c == 1) {
 			cout << "Please enter Course ID to enroll: ";
 			string id;
@@ -70,7 +63,9 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 
 						//check có bị trùng ca học không
 						if (check(student, tmpCourse->session1, tmpCourse->session2)) {
-							student->numberOfCourse++;
+							while (tmpEach->pNext != nullptr)
+								tmpEach = tmpEach->pNext;
+
 							if (student->Head_of_enrolled_course == nullptr) {
 
 								student->Head_of_enrolled_course = new CourseForEachStudent;
@@ -83,12 +78,14 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 								tmpEach->pNext = new CourseForEachStudent;
 								tmpEach->pNext->pPrev = tmpEach;
 								tmpEach = tmpEach->pNext;
-								tmpEach->numberCourse++;
+								tmpEach->numberCourse = tmpEach->pPrev->numberCourse + 1;
+								student->numberOfCourse++;
 							}
 
 							//thêm khóa học cho sinh viên
 							tmpEach->detail.courseID = tmpCourse->courseID;
 							tmpEach->detail.courseName = tmpCourse->courseName;
+							tmpEach->detail.teacherName = tmpCourse->teacherName;
 							tmpEach->detail.credits = tmpCourse->credits;
 							tmpEach->detail.session1 = tmpCourse->session1;
 							tmpEach->detail.session2 = tmpCourse->session2;
@@ -103,6 +100,9 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpCourse->enrolledStudent++;
 
 							//thêm danh sách sinh viên tham gia khóa học
+							while (tmpCourseList->pNext != nullptr) {
+								tmpCourseList = tmpCourseList->pNext;
+							}
 							if (tmpCourse->HeadStudent == nullptr) {
 								tmpCourse->HeadStudent = new Student_CourseScores;
 								tmpCourseList = tmpCourse->HeadStudent;
@@ -118,6 +118,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 
 							tmpCourseList->firstName = student->firstName;
 							tmpCourseList->lastName = student->lastName;
+							tmpCourseList->className = student->className;
 							tmpCourseList->gender = student->gender;
 							tmpCourseList->SID = student->SID;
 							tmpCourseList->pNext = nullptr;
@@ -126,21 +127,24 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpCourseList->otherMark = 0;
 							tmpCourseList->courseGPA = 0;
 
+							/*
 							//Node chay lien ket diem cua student_courseScore voi CourseForEach
 							CourseForEachStudent* tmp = tmpCourseList->point_to_an_enrolled_course_of_a_student_in_a_class;
 							while (tmp->detail.courseID != id)
 								tmp = tmp->pNext;
 
-							tmp->midterm = 0;
-							tmp->final = 0;
-							tmp->otherMark = 0;
-							tmp->courseGPA = 0;
+							tmp->midterm = tmpCourseList->midterm;
+							tmp->final = tmpCourseList->final;
+							tmp->otherMark = tmpCourseList->otherMark;
+							tmp->courseGPA = tmpCourseList->courseGPA;
+							*/
 
+							tmpCourseList->point_to_an_enrolled_course_of_a_student_in_a_class = tmpEach;
 
 							tmpEach->pNext = nullptr;
 
 							cout << "Enroll Successfully." << endl;
-							cout << "You have enrolled in " << tmpEach->numberCourse << " course(s)." << endl;
+							cout << "You have enrolled in " << tmpEach->detail.courseName << endl;
 							i++;
 							break;
 						}
