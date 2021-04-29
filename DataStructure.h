@@ -158,6 +158,22 @@ void readStudentInfo(string path, Student*& CurrentStudent);
 bool readStudent(string path, string s, Student*& CurrentStudent);
 void readAll();
 
+void writeCourseInfo(string path, CourseDetail*& CurrentCourse);
+void writeCourse(string path, string course, CourseDetail*& CurrentCourse);
+void writeSemester(string path, Semester& sem);
+void writeYear(string path, SchoolYear*& CurrentYear);
+void writeClassInfo(string path, Class*& CurrentClass);
+void writeListStudentClass(string path, string s, Student*& HeadStudent);
+void writeClass(string path, string s, Class*& CurrentClass);
+void writeListClass(string path, string s, Class*& HeadClass);
+void writeStudentCourse(string path, Student_CourseScores*& CurrentStudent);
+void writeListStudentCourse(string path, string list, Student_CourseScores*& HeadStudent);
+void writeEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse);
+void writeListEnrolledCourse(string path, string s, Student*& CurrentStudent, CourseForEachStudent*& HeadCourse);
+void writeStudentInfo(string path, Student*& CurrentStudent);
+void writeStudent(string path, string s, Student*& CurrentStudent);
+void writeAll();
+
 /// <summary>
 /// Các hàm khởi tạo và đọc dữ liệu người dùng
 /// </summary>
