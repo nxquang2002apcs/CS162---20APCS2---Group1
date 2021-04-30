@@ -1165,12 +1165,13 @@ void print(float n)
 		if (abs(n - (int)n - (float)i / 10) < 0.00001)
 		{
 
-			cout << setprecision(1) << fixed << n;
+			cout << setw(4) << left << setprecision(1) << fixed << n;
 			return;
 		}
 
-	cout << setprecision(2) << fixed << n;
+	cout << setw(4) << left << setprecision(2) << fixed << n;
 }
+
 void View_list_of_Enrolled_student(CourseDetail* course) {
 	if (course->HeadStudent == nullptr) {
 		cout << "No student!" << endl;
