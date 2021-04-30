@@ -15,7 +15,7 @@ bool Read_Name_Pass(ifstream& in, string& username, string& password)
 		cout << "Username: ";
 		getline(cin, username);
 
-		path = "data\\Username_password\\" + username + ".txt";
+		path = "Data\\Username_password\\" + username + ".txt";
 
 		gotoXY(40, 10);
 		cout << "Password: ";
@@ -85,14 +85,22 @@ bool login(ifstream& in, int& role, string& studentID)
 // Function to change password
 void changePassword(ifstream& in, ofstream& out)
 {
-	string username, password, newpassword;
+	string username, password, newpassword = "1", newpassword2 = "0";
 
 	Read_Name_Pass(in, username, password);
 
-	cout << "New password: ";
-	getline(cin, newpassword);
+	while (newpassword != newpassword2)
+	{
+		cout << "New password: ";
+		getline(cin, newpassword);
+		cout << "Confirm password: ";
+		getline(cin, newpassword2);
 
-	string path = "data\\" + username + ".txt";
+		if (newpassword != newpassword2)
+			cout << "Don't match. Enter again!" << endl;
+	}
+
+	string path = "Data\\Username_password\\" + username + ".txt";
 	out.open(path);
 	if (!out.is_open())
 	{
