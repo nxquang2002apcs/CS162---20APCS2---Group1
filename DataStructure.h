@@ -1,4 +1,4 @@
-#ifndef _DATASTRUCTURE_H_
+﻿#ifndef _DATASTRUCTURE_H_
 #define _DATASTRUCTURE_H_
 #pragma warning(disable : 4996)
 #include<string>
@@ -7,6 +7,7 @@
 #include<iomanip>
 #include<conio.h>
 #include<Windows.h>
+#include <direct.h>
 
 #include "Console.h"
 using namespace std;
@@ -68,9 +69,9 @@ struct CourseDetail {
 	/// 2 tiết mỗi tuần
 	/// MON / TUE / WED / THU / FRI / SAT, S1 (07:30), S2 (09:30), S3(13:30) and S4 (15:30)
 	string session1, session2;		//Ví dụ: MONS1 - Monday 7h30
-	
+
 	bool Available_scoreboard;     				//Nếu môn học đã có điểm thì set về true, không thì false.
-	
+
 	//Student* ListStudent = nullptr;			//Danh sách sinh viên đã đăng ký môn học
 	Student_CourseScores* HeadStudent = nullptr;
 	CourseDetail* pNext;
@@ -104,7 +105,7 @@ struct Semester {
 	DateTime startDate;				//Ngày bắt đầu học kỳ
 	DateTime endDate;				//Ngày kết thúc				
 	CourseDetail* HeadCourse = nullptr;       //pHead cảu danh sách môn học trong học kỳ này
-	
+
 	int numberOfCourse = 0;			//Biến đếm số môn học trong học kỳ này
 };
 
@@ -172,7 +173,10 @@ void writeEnrolledCourse(string path, CourseForEachStudent*& CurrentCourse);
 void writeListEnrolledCourse(string path, string s, Student*& CurrentStudent, CourseForEachStudent*& HeadCourse);
 void writeStudentInfo(string path, Student*& CurrentStudent);
 void writeStudent(string path, string s, Student*& CurrentStudent);
-void writeAll();
+void writeAll(SchoolYear*& HeadYear);
+
+void GPAStudentInCourse(Student_CourseScores*& HeadStudent);
+void GPASemesterOfStudent(Student*& HeadStudent, CourseForEachStudent*& HeadCourse);
 
 /// <summary>
 /// Các hàm khởi tạo và đọc dữ liệu người dùng
