@@ -23,19 +23,23 @@ void create_a_new_school_year ( int start_year, int end_year )		// Hàm tạo n�
 	// --- Năm học mới chưa tạo học kỳ ---------
 	CurrentYear -> semester1.startDate = {};						
 	CurrentYear -> semester1.endDate = {};
-   	CurrentYear -> semester1.isAvailable = 0;
+    	CurrentYear -> semester1.isAvailable = 0;
+	CurrentYear -> semester1.HeadCourse = nullptr;
 
 	CurrentYear -> semester2.startDate = {};
 	CurrentYear -> semester2.endDate = {};
     	CurrentYear -> semester2.isAvailable = 0;
+	CurrentYear -> semester2.HeadCourse = nullptr;
 
 	CurrentYear -> semester3.startDate = {};
 	CurrentYear -> semester3.endDate = {};
-   	CurrentYear -> semester3.isAvailable = 0;
+    	CurrentYear -> semester3.isAvailable = 0;
+	CurrentYear -> semester3.HeadCourse = nullptr;
 	//-------------------------------------------
 
 	CurrentYear -> pNext = nullptr;
 }
+
 
 void input_school_year ( )		// Hàm để staff nhập năm học mới
 {

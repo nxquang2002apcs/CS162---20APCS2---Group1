@@ -1,7 +1,7 @@
 ﻿#include "DataStructure.h"
 
-bool Available_register;
-bool Available_scoreboard;
+//bool Available_register;
+bool Available_all_scoreboard;
 
 void View_list_of_year();
 bool isExisted_year(int start_year, int end_year);					//Hàm kiểm tra xem năm đó đã tồn tại hay chưa
@@ -12,7 +12,7 @@ bool go_to_detail_of_a_course(string courseID);
 bool go_to_detail_of_a_semester(int semester_n);
 bool go_to_detail_of_a_year(int startYear);
 void View_list_of_Enrolled_student(CourseDetail* course);
-void delete_a_student(Student*& HeadStudent);
+void delete_a_student(Student*& HeadStudent, int& classSize);
 //void View_list_of_courses_by_XQ();
 //void view_a_student_profile(Student* ListStudent, string studentID);
 
@@ -65,6 +65,7 @@ void input_school_year()					// Hàm để staff nhập năm học mới
 	}
 	if (isExisted_year(start_year, end_year) == false) {
 		create_a_new_school_year(start_year, end_year);
+		Update_automatically();
 	}
 	else {
 		cout << "Year is existed! Cannot create again!" << endl;
@@ -99,9 +100,8 @@ void input_classes_for_current_year()		// Hàm tạo danh sách các lớp học
 
 		cin.get();
 		cout << "Please enter the class's name: ";			getline(cin, pCur_class->className);
-		cout << "Please enter the class's number of students: ";	cin >> pCur_class->classSize;
-		cin.get();
 		cout << "Please enter the class's form teacher name: ";		getline(cin, pCur_class->formTeacherName);
+		pCur_class->classSize = 0;						//Lớp mới tạo chưa có sv
 
 		pCur_class->HeadStudent = nullptr;				// Lớp mới tạo chưa có danh sách học sinh
 
@@ -124,6 +124,7 @@ void create_a_semester_for_year(SchoolYear*& Year, DateTime start_date, DateTime
 		Year->semester1.startDate = start_date;						                // ngày bắt đầu	
 		Year->semester1.endDate = end_date;							                // ngày kết thúc
 		Year->semester1.HeadCourse = nullptr;							            // Học kỳ mới chưa tạo danh sách các môn học
+		Year->semester1.numberOfCourse = 0;											//Số môn học sẽ bằng 0
 		break;
 	}
 	case 2:		// Học kỳ 2
@@ -132,6 +133,7 @@ void create_a_semester_for_year(SchoolYear*& Year, DateTime start_date, DateTime
 		Year->semester2.startDate = start_date;
 		Year->semester2.endDate = end_date;
 		Year->semester2.HeadCourse = nullptr;
+		Year->semester2.numberOfCourse = 0;
 		break;
 	}
 	case 3:		// Học kỳ 3
@@ -140,6 +142,7 @@ void create_a_semester_for_year(SchoolYear*& Year, DateTime start_date, DateTime
 		Year->semester3.startDate = start_date;
 		Year->semester3.endDate = end_date;
 		Year->semester3.HeadCourse = nullptr;
+		Year->semester3.numberOfCourse = 0;
 		break;
 	}
 }
@@ -212,7 +215,7 @@ void enter_a_semester()			// Hàm để staff nhập ngày, tháng, năm bắt �
 	cout << "Day: ";			cin >> end_date.day;		
 	cout << "Month: ";			cin >> end_date.month;			
 	cout << "Year: ";			cin >> end_date.year;	
-	Available_scoreboard = false;
+	Available_all_scoreboard = false;
 	create_a_semester_for_year(CurrentYear, start_date, end_date, semester_n);
 }
 
@@ -663,7 +666,7 @@ void delete_a_course_in_the_list(CourseDetail*& HeadCourse, string courseID) {
 		system("pause");
 		return;
 	}
-	while (check) {
+	while (check == 1) {
 		// Searching course
 		CourseDetail* pCur;
 		do {
@@ -679,20 +682,38 @@ void delete_a_course_in_the_list(CourseDetail*& HeadCourse, string courseID) {
 
 		// Delete course
 		if (!pCur) return;
-		if (pCur->pNext) pCur->pNext->pPrev = pCur->pPrev;
-		if (pCur->pPrev) pCur->pPrev->pNext = pCur->pNext;
-		else HeadCourse = pCur->pNext;
-		delete pCur;
-		cout << "DELETE SUCCESSFULLY\n";
 
-		// Ask user wants to delete more
-		do {
-			cout << "Do you want to delete any course more?\n";
-			cout << "0. NO\t\t" << "1. YES\n";
-			cout << "Choose: ";
-			cin >> check;
-			if (check != 0 && check != 1) cout << "Unidentified. Please try again\n";
-		} while (check != 0 && check != 1);
+		int sure_delete = 1;
+		cout << "Are you sure delete the course?" << endl;
+		cout << "1. YES			2.NO" << endl;
+		cout << "User: ";
+		cin >> sure_delete;
+		while (sure_delete != 1 && sure_delete != 2) {
+			cout << "Invalid input! Please try again!" << endl;
+			cout << "User: ";
+			cin >> sure_delete;
+		}
+		if (sure_delete == 1) {
+			if (pCur->pNext) pCur->pNext->pPrev = pCur->pPrev;
+			if (pCur->pPrev) pCur->pPrev->pNext = pCur->pNext;
+			else HeadCourse = pCur->pNext;
+			delete pCur;
+			cout << "DELETE SUCCESSFULLY\n";
+
+			// Ask user wants to delete more
+			do {
+				cout << "Do you want to delete any course more?\n";
+				cout << "1. YES\t\t" << "2. NO\n";
+				cout << "Choose: ";
+				cin >> check;
+				if (check != 0 && check != 1) cout << "Invalid input! Please try again!\n";
+			} while (check != 0 && check != 1);
+		}
+		else {
+			cout << "CANCLE DELETE!";
+			_getch();
+			return;
+		}
 	}
 }
 //Input list of student
@@ -700,11 +721,14 @@ void inputListOfStudent(Class*& cls) {
 	int size = 0;
 	cout << "Enter the number of students: ";    //Khởi tạo số lượng học sinh
 	cin >> size;
-	while (size > cls->classSize) {
-		cout << "Class size is" << cls->classSize << ". Cannot exceed this size!" << endl;
-		cout << "Enter the number of student: ";
+	if (size == 0)								//Nếu số sv nhập vào là 0 thì không cần thực thi làm gì
+		return;
+	while (size < 0) {
+		cout << "Invalid input! Please try again!" << endl;
+		cout << "Enter the number of students: ";
 		cin >> size;
 	}
+	cls->classSize += size;						 //Số sv trong lớp được tăng thêm size đơn vị
 
 	int index = 1;
 	Student* pCur = cls->HeadStudent;
@@ -761,23 +785,28 @@ void inputListOfStudent(Class*& cls) {
 		cin.get();
 		cout << "Enter student's social ID: ";        //Nhập CMND
 		getline(cin, pCur->socialID);
-
+		pCur->FirstYear = CurrentYear->startYear;	//Năm nhập học của sinh viên sẽ là năm sinh viên được thêm vào danh sách
+		pCur->gpa = 0;
 	}
 	return;
 }
 //Lấy điểm từ file CSV vào hệ thống
-void import_course_score_from_CSV(string path, Student_CourseScores*& head_Course_Score) {
+bool import_course_score_from_CSV(string path, Student_CourseScores*& head_Course_Score) {
 
 	ifstream imfile;
 	imfile.open(path);
 	if (!imfile.is_open()) {
 		cout << "Could not open the file\n";
-		return;
+		_getch();
+		return false;
 	}
 
 	//Tạo các học sinh trong CourseScore
-	Student_CourseScores* pCur_Course_Score = nullptr;
-	while (!imfile.eof()) {
+	Student_CourseScores* pCur_Course_Score = head_Course_Score;
+	string headLine;
+	string no, courseGPA, final, midterm, otherMark, SID, firstName, lastName, gender, className;
+	getline(imfile, headLine);
+	while (!imfile.eof() && pCur_Course_Score != nullptr) {
 		// //-----DÙNG ĐỂ TEST(KHI KHÔNG CÓ DỮ LIỆU TRƯỚC)----
 		// if(head_Course_Score == nullptr){
 		//     head_Course_Score = new Student_CourseScores;
@@ -791,31 +820,40 @@ void import_course_score_from_CSV(string path, Student_CourseScores*& head_Cours
 		// pCur_Course_Score->pNext = nullptr;
 
 		// //------------------------------------------------
-		string no, courseGPA, final, midterm, otherMark, SID, firstName, lastName, gender, className;
+		
 		getline(imfile, no, ',');           //Lưu vào chỗ khác do không cần thiết               
-
 		getline(imfile, SID, ',');          //Lưu vào chỗ khác do không cần thiết
 		getline(imfile, firstName, ',');    //Lưu vào chỗ khác do không cần thiết
 		getline(imfile, lastName, ',');     //Lưu vào chỗ khác do không cần thiết
+		getline(imfile, gender, ',');
 		getline(imfile, className, ',');    //Lưu vào chỗ khác do không cần thiết
+	
 
 		getline(imfile, midterm, ',');                      //Import midterm
 		pCur_Course_Score->midterm = stof(midterm);
+		pCur_Course_Score->point_to_an_enrolled_course_of_a_student_in_a_class->midterm = pCur_Course_Score->midterm;  //Lưu ở 2 đầu
+		//cout << "midterm" << pCur_Course_Score->midterm << endl;
 
 		getline(imfile, final, ',');                        //Import final 
 		pCur_Course_Score->final = stof(final);
+		pCur_Course_Score->point_to_an_enrolled_course_of_a_student_in_a_class->final = stof(final);	//Lưu ở 2 đầu
+		//cout << "Final " << pCur_Course_Score->final << endl;
 
 		getline(imfile, otherMark, ',');                    //Import othrmark
 		pCur_Course_Score->otherMark = stof(otherMark);
-
+		pCur_Course_Score->point_to_an_enrolled_course_of_a_student_in_a_class->otherMark = stof(otherMark);	//Lưu ở 2 đầu
+		//cout << "Other mark " << pCur_Course_Score->otherMark << endl;
+ 
 		getline(imfile, courseGPA, '\n');                   //Import courseGpa  
 		pCur_Course_Score->courseGPA = stof(courseGPA);
+		pCur_Course_Score->point_to_an_enrolled_course_of_a_student_in_a_class->courseGPA = stof(courseGPA);	//Lưu ở 2 đầu
+		//cout << "GPA: " << pCur_Course_Score->courseGPA << endl;
 
 		pCur_Course_Score = pCur_Course_Score->pNext;
 	}
 
 	imfile.close();
-
+	return true;
 };
 //Xuất điểm 1 môn từ hệ thống qua file CSV
 bool export_course_score_to_CSV(string path, Student_CourseScores* head_Course_Score) {
@@ -825,155 +863,129 @@ bool export_course_score_to_CSV(string path, Student_CourseScores* head_Course_S
 
 	if (!exfile.is_open()) {
 		cout << "Could not open the file\n";
-		return true;
+		return false;
 	}
 
 	//Truyền data vào file CSV
 	exfile << "No,Student ID,Student First Name,Student Last Name,Gender,Class Name,Midterm Mark,Final Mark,Other Mark,GPA\n";
 	while (pCur_Course_Score) {
 
-		exfile << pCur_Course_Score->no << "," << pCur_Course_Score->SID << "," << pCur_Course_Score->firstName << "," << pCur_Course_Score->lastName << ",";
+		exfile << pCur_Course_Score->no << "," << pCur_Course_Score->SID << "," << pCur_Course_Score->firstName << "," << pCur_Course_Score->lastName << "," << pCur_Course_Score->gender << ",";
 		exfile << pCur_Course_Score->className << "," << pCur_Course_Score->midterm << "," << pCur_Course_Score->final << "," << pCur_Course_Score->otherMark << "," << pCur_Course_Score->courseGPA << "\n";
 
 		pCur_Course_Score = pCur_Course_Score->pNext;
 	}
 
 	exfile.close();
+	return true;
 }
 //Thay đổi thông tin của sv
 void update_student_profile(Student*& HeadStudent, Student*& student) {
 	int check = 1;
 	string studentID;
+	cout << "*------------------------------------------------------------*\n";
+	cout << "\t\tWHAT WOULD YOU LIKE TO UPDATE?\n";
+	cout << "*------------------------------------------------------------*\n";
+	cout << "\t1. Student's ID" << "2. First name\n";
+	cout << "\t3. Last name\t\t" << "4. Gender\n";
+	cout << "\t5. Social ID\t\t" << "6. Date of birth\n";
 	while (check) {
 
-		cout << "*------------------------------------------------------------*\n";
-		cout << "\t\tWHAT WOULD YOU LIKE TO UPDATE?\n";
-		cout << "*------------------------------------------------------------*\n";
-		cout << "\t1. No\t\t\t" << "2. Student's ID\n";
-		cout << "\t3. Class name\t\t" << "4. First name\n";
-		cout << "\t5. Last name\t\t" << "6. Gender\n";
-		cout << "\t7. Social ID\t\t" << "8. Date of birth\n";
-
 		int staff;
-		do {
+		cout << "User: ";
+		cin >> staff;
+		while (staff < 1 || staff > 10) {
+			cout << "Invalid input! Please try again!" << endl;
 			cout << "User: ";
 			cin >> staff;
-			if (staff < 1 || staff > 10) cout << "Error. Please try again\n";
-		} while (staff < 1 || staff > 10);
+		}
 
 		Student* Cur = HeadStudent;
+		string data;
 		switch (staff) {
-			// No
-		case 1: {
-			do {
-				Cur = HeadStudent;
-				int No;
-				cout << "New number in class: ";
-				cin >> No;
-				while (Cur != nullptr && Cur->no != No) {
-					Cur = Cur->pNext;
-				}
-				if (Cur != nullptr) cout << "This new one is duplicated. Please try again\n";
-				else student->no = No;
-			} while (Cur);
-
-			cout << "CHANGE SUCCESSFULLY\n";
-			break;
-		}
-
 			  //Student ID
-		case 2: {
+		case 1: 
 			do {
 				Cur = HeadStudent;
-				string SID;
-				fflush(stdin);
+				cin.get();
 				cout << "New student ID: ";
-				getline(cin, SID);
+				getline(cin, data);
 				//fflush(stdin);
-				while (Cur != nullptr && Cur->SID != SID) {
+				while (Cur != nullptr && Cur->SID != data) {
 					Cur = Cur->pNext;
 				}
 				if (Cur != nullptr) cout << "This new one is duplicated. Please try again\n";
-				else student->SID = SID;
+				else student->SID = data;
 			} while (Cur);
 
 			cout << "CHANGE SUCCESSFULLY\n";
 			break;
-		}
-
-			  //Class name:
-		case 3: {
-			string className;
-			fflush(stdin);
-			cout << "New class name: ";
-			getline(cin, className);
-			//fflush(stdin);
-
-			student->className = className;
-
-			cout << "CHANGE SUCCESSFULLY\n";
-			break;
-		}
-
 			  // Firstname
-		case 4: {
-			string firstName;
-			fflush(stdin);
+		case 2: 
+			cin.get();
 			cout << "New first name: ";
-			getline(cin, firstName);
+			getline(cin, data);
 			//fflush(stdin);
 
-			student->firstName = firstName;
+			student->firstName = data;
 
 			cout << "CHANGE SUCCESSFULLY\n";
 			break;
-		}
-
 			  // Lastname
-		case 5: {
-			string lastName;
-			fflush(stdin);
+		case 3: 
+			cin.get();
 			cout << "New last name: ";
-			getline(cin, lastName);
+			getline(cin, data);
 			//fflush(stdin);
-			student->lastName = lastName;
+			student->lastName = data;
 
 			cout << "CHANGE SUCCESSFULLY\n";
 			break;
-		}
-
 			  // Gender
-		case 6: {
-			string gender;
-			fflush(stdin);
+		case 4:
+			cin.get();
 			cout << "New gender: ";
-			getline(cin, gender);
+			getline(cin, data);
+			while (data != "male" || data != "female" || data != "MALE" || data != "FEMALE") {
+				cout << "Invalid input! Please try again!" << endl;
+				cout << "New gender: ";
+				getline(cin, data);
+			}
 			//fflush(stdin);
-			student->gender = gender;
+			student->gender = data;
 			cout << "CHANGE SUCCESSFULLY\n";
 			break;
-		}
-
 			  // Social ID
-		case 7: {
-			string socialID;
-			fflush(stdin);
+		case 5:
+			cin.get();
 			cout << "New social ID: ";
-			getline(cin, socialID);
+			getline(cin, data);
 			//fflush(stdin);
-			student->socialID = socialID;
+			student->socialID = data;
 
 			cout << "CHANGE SUCCESSFULLY\n";
 			break;
-		}
-
 			  // Date of birth 
-		case 8: {
+		case 6: 
+		{
+			cin.get();
 			int day, month, year;
 			cout << "New day of birth: ";
 			cout << "Day: ";     cin >> day;
+			while (day < 1 || day > 31) {
+				cout << "Invalid input! Please try again!" << endl;
+				cout << "Day: "; cin >> day;
+			}
 			cout << "Month: ";   cin >> month;
+			while (month < 1 || month > 12) {
+				cout << "Invalid input! Please try again!" << endl;
+				cout << "Month: "; cin >> month;
+			}
 			cout << "Year: ";    cin >> year;
+			while (year < 1900) {
+				cout << "Invalid input! Please try again!" << endl;
+				cout << "Year: "; cin >> year;
+			}
 
 			student->DateOfBirth.day = day;
 			student->DateOfBirth.month = month;
@@ -982,7 +994,6 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
 			cout << "CHANGE SUCCESSFULLY\n";
 			break;
 		}
-
 		}
 
 
@@ -1158,7 +1169,7 @@ void view_list_of_student_course(Student* student)
 		cout << endl;
 	}
 }
-//Hiển thị danh sách những sinh viên đã đăng ký môn
+//Hàm cho staff xem scoreboard của môn
 void print(float n)
 {
 	for (int i = 0; i < 10; ++i)
@@ -1171,8 +1182,16 @@ void print(float n)
 
 	cout << setw(4) << left << setprecision(2) << fixed << n;
 }
+void View_scoreboard_of_a_course(CourseDetail* course) {
+	system("cls");
+	int semester_n;
+	if (CurrentSemester == &CurrentYear->semester1) semester_n = 1;
+	else if (CurrentSemester == &CurrentYear->semester2) semester_n = 2;
+	else semester_n = 3;
 
-void View_list_of_Enrolled_student(CourseDetail* course) {
+	cout << CurrentYear->startYear << "-" << CurrentYear->endYear << " >> Semester " << semester_n << " >> " << course->courseName << " >> Scoreboard " << endl;
+	cout << "------------------------------------------------------------------------------" << endl;
+
 	if (course->HeadStudent == nullptr) {
 		cout << "No student!" << endl;
 		return;
@@ -1199,6 +1218,47 @@ void View_list_of_Enrolled_student(CourseDetail* course) {
 		cout << setw(5) << right << " "; print(pCur->final);
 		cout << setw(5) << right << " "; print(pCur->otherMark);
 		cout << setw(9) << left << " "; print(pCur->courseGPA);
+
+		cout << endl;
+
+		pCur = pCur->pNext;
+	}
+	cout << endl; 
+
+	int choice = 0;
+	cout << "0. Return" << endl;
+	cout << "User: ";
+	cin >> choice;
+
+	while (choice != 0) {
+		cout << "Invalid input! Please try again!" << endl;
+		cout << "User: ";
+		cin >> choice;
+	}
+
+	return;
+}
+//Hiển thị danh sách những sinh viên đã đăng ký môn
+void View_list_of_Enrolled_student(CourseDetail* course) {
+	if (course->HeadStudent == nullptr) {
+		cout << "No student!" << endl;
+		return;
+	}
+	Student_CourseScores* pCur = course->HeadStudent;
+
+	cout << setw(5) << left << "No";
+	cout << setw(12) << left << "Student ID";
+	cout << setw(12) << left << "First name";
+	cout << setw(17) << left << "Last name";
+	cout << setw(10) << left << "Class" << endl;
+
+
+	while (pCur != nullptr) {
+		cout << setw(5) << left << pCur->no;
+		cout << setw(12) << left << pCur->SID;
+		cout << setw(12) << left << pCur->firstName;
+		cout << setw(17) << left << pCur->lastName;
+		cout << setw(10) << left << pCur->className;
 
 		cout << endl;
 
@@ -1235,6 +1295,74 @@ void view_list_of_enrolled_course(Student* student)
 		Head_course = Head_course->pNext;
 
 		cout << endl;
+	}
+}
+//Hàm in bảng điểm của cả lớp
+void view_class_scoreboard(Class* cls)
+{
+	if (cls->HeadStudent == nullptr)
+	{
+		cout << "There are no students in the class." << endl;
+		return;
+	}
+
+	Student* headstudent = cls->HeadStudent;
+	CourseForEachStudent* headcourse;
+	CourseForEachStudent* pCur;
+	int numberOfCourse;                                           // Biến số lượng số môn học 1 sinh viên đã học
+
+	cout << "No  ";
+	cout << "First name  ";
+	cout << setw(18) << left << "Last name";
+	cout << setw(14) << left << "Student ID";
+	cout << "Number of courses  ";
+	cout << "Overall GPA  ";
+	cout << "Course ID  ";
+	cout << "Final  ";
+	cout << "Course GPA  " << endl;
+
+	while (headstudent != nullptr)
+	{
+		headcourse = headstudent->Head_of_enrolled_course;
+		pCur = headcourse;
+
+		while (pCur != nullptr && pCur->pNext != nullptr)
+			pCur = pCur->pNext;
+
+		if (pCur == nullptr)
+			numberOfCourse = 0;
+		else
+			numberOfCourse = pCur->numberCourse;
+
+		cout << setw(4) << left << headstudent->no;
+		cout << setw(12) << left << headstudent->firstName;
+		cout << setw(18) << left << headstudent->lastName;
+		cout << setw(14) << left << headstudent->SID;
+		cout << setw(9) << right << numberOfCourse;
+		cout << setw(14) << " "; print(headstudent->gpa);
+
+		if (numberOfCourse != 0)
+		{
+
+			cout << setw(5) << right << " " << setw(11) << left << headcourse->detail.courseID;
+			cout << " "; print(headcourse->final);
+			cout << setw(7) << right << " "; print(headcourse->courseGPA);
+			cout << endl;
+
+			headcourse = headcourse->pNext;
+			while (headcourse != nullptr)
+			{
+				cout << setw(80) << right << " " << setw(11) << left << headcourse->detail.courseID;
+				cout << " "; print(headcourse->final);
+				cout << setw(7) << right << " "; print(headcourse->courseGPA);
+				cout << endl;
+
+				headcourse = headcourse->pNext;
+			}
+		}
+
+		headstudent = headstudent->pNext;
+		cout << endl << endl;
 	}
 }
 
@@ -1282,8 +1410,8 @@ bool go_to_detail_of_a_course(string courseID) {
 				cout << "0. Back" << endl;
 				cout << "1. Export list of enrolled students to .CSV" << endl;
 				cout << "2. Import scoreboard of course" << endl;
-				if (Available_scoreboard == true)
-					cout << "3. View scoreboard (if scoreboard is available)" << endl;
+				if (tempCourse->Available_scoreboard == true)
+					cout << "3. View scoreboard" << endl;
 				cout << "User: ";
 				cin >> choice;
 				string path;
@@ -1299,14 +1427,23 @@ bool go_to_detail_of_a_course(string courseID) {
 					}
 					break;
 				case 2:
-					break;
-				case 3:
-					if (Available_scoreboard == true) {
-
+					path = "Data\\" + tempCourse->courseName + ".csv";
+					if (import_course_score_from_CSV(path, tempCourse->HeadStudent)) {
+						tempCourse->Available_scoreboard = true;
+						cout << "Import successfully! Course's scoreboard is available now!" << endl;
+						_getch();
 					}
 					break;
+				case 3:
+					if (tempCourse->Available_scoreboard == true) {
+						View_scoreboard_of_a_course(tempCourse);
+					}
+					break;
+				default:
+					cout << "Invalid input!" << endl;
+					cout << "User: ";
+					cin >> choice;
 				}
-
 			}
 			return true;
 		}
@@ -1498,7 +1635,7 @@ bool go_to_detail_of_a_class(string className)   {
 				cout << "2. Add student" << endl;
 				cout << "3. Delete a student" << endl;
 			}
-			if (Available_scoreboard == true) {
+			if (Available_all_scoreboard == true) {
 				cout << "4. View class's scoreboard" << endl;
 			}
 			cout << "User: ";
@@ -1520,11 +1657,11 @@ bool go_to_detail_of_a_class(string className)   {
 					inputListOfStudent(tempClass);
 				break;
 			case 3:
-				delete_a_student(tempClass->HeadStudent);
+				delete_a_student(tempClass->HeadStudent, tempClass->classSize);
 				break;
 			case 4:
-				if (Available_scoreboard == true) {
-
+				if (Available_all_scoreboard == true) {
+					view_class_scoreboard(tempClass);
 				}
 				break;  
 			default:
@@ -1636,7 +1773,7 @@ bool go_to_detail_of_a_year(int startYear) {
 }
 
 //Hàm xóa sinh viên ra khỏi danh sách
-void delete_a_student(Student*& HeadStudent) {
+void delete_a_student(Student*& HeadStudent, int& classSize) {
 	if (HeadStudent == nullptr) {
 		cout << "No existed student! Cannot delete!";
 		_getch();
@@ -1659,24 +1796,50 @@ void delete_a_student(Student*& HeadStudent) {
 			return;
 		}
 		else {
-			if (tempStudent == HeadStudent) {
-				HeadStudent = HeadStudent->pNext;
-				if(HeadStudent != nullptr) 
-					HeadStudent->pPrev = nullptr;
-				delete tempStudent;
+			int sure_delete = 1;
+			cout << "Are you sure delete the student?" << endl;
+			cout << "1. YES			2.NO" << endl;
+			cout << "User: ";
+			cin >> sure_delete;
+			while (sure_delete  != 1 && sure_delete != 2) {
+				cout << "Invalid input! Please try again!" << endl;
+				cout << "User: ";
+				cin >> sure_delete;
+			}
+			if (sure_delete == 1) {
+				if (tempStudent == HeadStudent) {
+					HeadStudent = HeadStudent->pNext;
+					if (HeadStudent != nullptr)
+						HeadStudent->pPrev = nullptr;
+					delete tempStudent;
+				}
+				else {
+					tempStudent->pPrev->pNext = tempStudent->pNext;
+					if (tempStudent->pNext != nullptr)
+						tempStudent->pNext->pPrev = tempStudent->pPrev;
+					delete tempStudent;
+				}
+				classSize--;
+				cout << "DELETE SUCCESSFULLY!" << endl;
+
+				cout << "You want to delete more? " << endl;
+				cout << "1. YES			2. NO" << endl;
+				cout << "User: ";
+				cin >> delete_more;
+				while (delete_more != 1 && delete_more != 2) {
+					cout << "Invalid input! Please try again!" << endl;
+					cout << "User: ";
+					cin >> delete_more;
+				}
 			}
 			else {
-				tempStudent->pPrev->pNext = tempStudent->pNext;
-				if(tempStudent->pNext != nullptr)
-					tempStudent->pNext->pPrev = tempStudent->pPrev;
-				delete tempStudent;
+				cout << "CANCLE DELETE!";
+				_getch();
+				return;
 			}
-			cout << "DELETE SUCCESSFULLY!" << endl;
+			
 		}
-		cout << "You want to delete more? " << endl;
-		cout << "1. YES			2. NO" << endl;
-		cout << "User: ";
-		cin >> delete_more;
+		
 	}
 }
 
@@ -1739,22 +1902,42 @@ bool delete_a_schoolyear(int startYear) {
 			return false;
 		}
 		else {
-			if (tempYear == HeadYear) {
-				HeadYear = HeadYear->pNext;
-				if(HeadYear != nullptr)
-					HeadYear->pPrev = nullptr;
-				tempYear->pNext = nullptr;
-				delete tempYear;
+			int sure_delete = 1;
+			cout << "Are you sure delete the school year?" << endl;
+			cout << "1. YES			2.NO" << endl;
+			cout << "User: ";
+			cin >> sure_delete;
+			while (sure_delete != 1 && sure_delete != 2) {
+				cout << "Invalid input! Please try again!" << endl;
+				cout << "User: ";
+				cin >> sure_delete;
 			}
-			else if (tempYear->pNext == nullptr) {
-				tempYear->pPrev->pNext = nullptr;
-				CurrentYear = CurrentYear->pPrev;
-				delete tempYear;
+
+			if (sure_delete == 1) {
+				if (tempYear == HeadYear) {
+					HeadYear = HeadYear->pNext;
+					if (HeadYear != nullptr)
+						HeadYear->pPrev = nullptr;
+					tempYear->pNext = nullptr;
+					delete tempYear;
+				}
+				else if (tempYear->pNext == nullptr) {
+					tempYear->pPrev->pNext = nullptr;
+					CurrentYear = CurrentYear->pPrev;
+					delete tempYear;
+				}
+				else {
+					tempYear->pPrev->pNext = tempYear->pNext;
+					tempYear->pNext->pPrev = tempYear->pPrev;
+					delete tempYear;
+				}
+
+				cout << "DELETE SUCCESSFULLY!";
+				_getch();
 			}
 			else {
-				tempYear->pPrev->pNext = tempYear->pNext;
-				tempYear->pNext->pPrev = tempYear->pPrev;
-				delete tempYear;
+				cout << "CANCLE DELETE!";
+				_getch();
 			}
 			return true;
 		}
@@ -1802,8 +1985,8 @@ void View_list_of_year() {
 			break;
 		case 2:
 			if (CurrentYear == nullptr) {
-				cout << "No existed year! Cannot access!" << endl;
-				system("pause");
+				cout << "No existed year! Cannot access!";
+				_getch();
 			}
 			else go_to_detail_of_a_year(CurrentYear->startYear);
 			break;
@@ -1814,8 +1997,8 @@ void View_list_of_year() {
 			cout << "Enter school year you want to delete (start year): ";
 			cin >> schoolYear;
 			if (!delete_a_schoolyear(schoolYear)) {
-				cout << "Something wrong! Cannot delete this year!" << endl;
-				system("pause");
+				cout << "Something wrong! Cannot delete this year!";
+				_getch();
 			}
 			break;
 
@@ -1836,8 +2019,6 @@ void StaffInterface() {
 		cout << "4. Exit program" << endl;
 		cout << "User: ";
 		cin >> choice;
-		if (choice == 4)
-			break;
 		switch (choice) {
 		case 1:
 			View_list_of_year();
@@ -1846,11 +2027,22 @@ void StaffInterface() {
 			go_to_detail_of_a_year(CurrentYear->startYear);
 			break;
 		case 3:
-
-			break;
-		case 4:
+			cin.get();
 			return;
+		case 4:
+			cout << endl;
+			cout << "THANK YOU FOR USING OUR PROGRAM!" << endl;
+			_getch();
+			delete_everything();
+			exit(0);
+		default:
+			cout << "Invalid input! Please try again!" << endl;
+			_getch();
 		}
 	}
 }
+
+//Hàm cho phép sinh viên xóa một môn mình đã đăng ký
+void remove_an_enrolled_course(CourseForEachStudent*& HeadCourse, string courseID);
+//HeadCourse là danh sách môn mà sv đã đăng ký, courseID là ID của môn cần xóa, không cần yêu cầu nhập vào nữa
 
