@@ -1,43 +1,33 @@
 #include "DataStructure.h"
 
-void create_a_new_school_year ( int start_year, int end_year )		// Hàm tạo năm học mới với start_year là năm bắt đầu, end_year là năm kết thúc.
+void create_a_new_school_year(int start_year, int end_year) 		// Hàm tạo năm học mới với start_year là năm bắt đầu, end_year là năm kết thúc.
 {
-	if ( HeadYear == nullptr )					// Nếu chưa có năm học nào
+	if (HeadYear == nullptr)					// Nếu chưa có năm học nào
 	{
 		HeadYear = new SchoolYear;				// thì tạo mới
-		CurrentYear = HeadYear;										
-		CurrentYear -> pPrev = nullptr;								
+		CurrentYear = HeadYear;
+		CurrentYear->pPrev = nullptr;
 	}
 	else								// Nếu có rồi
 	{
-		CurrentYear -> pNext = new SchoolYear;			// tạo năm học mới nối đuôi với năm trước đó
-		CurrentYear -> pNext -> pPrev = CurrentYear;
-		CurrentYear = CurrentYear -> pNext;			// năm được tạo mới là năm hiện tại
+		CurrentYear->pNext = new SchoolYear;			// tạo năm học mới nối đuôi với năm trước đó
+		CurrentYear->pNext->pPrev = CurrentYear;
+		CurrentYear = CurrentYear->pNext;			// năm được tạo mới là năm hiện tại
 	}
 
-	CurrentYear -> startYear = start_year;
-    	CurrentYear -> endYear = end_year;
+	CurrentYear->startYear = start_year;
+	CurrentYear->endYear = end_year;
 
-	CurrentYear -> HeadClass = nullptr;				// Năm học mới chưa tạo danh sách lớp
+	CurrentYear->HeadClass = nullptr;				// Năm học mới chưa tạo danh sách lớp
 
 	// --- Năm học mới chưa tạo học kỳ ---------
-	CurrentYear -> semester1.startDate = {};						
-	CurrentYear -> semester1.endDate = {};
-    	CurrentYear -> semester1.isAvailable = 0;
-	CurrentYear -> semester1.HeadCourse = nullptr;
-
-	CurrentYear -> semester2.startDate = {};
-	CurrentYear -> semester2.endDate = {};
-    	CurrentYear -> semester2.isAvailable = 0;
-	CurrentYear -> semester2.HeadCourse = nullptr;
-
-	CurrentYear -> semester3.startDate = {};
-	CurrentYear -> semester3.endDate = {};
-    	CurrentYear -> semester3.isAvailable = 0;
-	CurrentYear -> semester3.HeadCourse = nullptr;
+	CurrentYear->semester1.isAvailable = false;
+	CurrentYear->semester2.isAvailable = false;
+	CurrentYear->semester3.isAvailable = false;
 	//-------------------------------------------
 
-	CurrentYear -> pNext = nullptr;
+	CurrentSemester = nullptr;
+	CurrentYear->pNext = nullptr;
 }
 
 
