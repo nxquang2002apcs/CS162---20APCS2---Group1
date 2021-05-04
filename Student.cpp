@@ -76,15 +76,28 @@ void StudentInterface(string studentID) {
 		cout << user->className << " >> " << user->firstName << " " << user->lastName << endl;
 		cout << "-----------------------------" << endl;
 		cout << endl;
+		if (Available_register == true) {
+			cout << "***NOTFICATION***" << endl;
+			cout << "Course registration is active now! You can enroll new courses by choosing OPTION 3." << endl;
+			cout << endl;
+		}
+		if (Available_all_scoreboard == true) {
+			cout << "***NOTFICATION***" << endl;
+			cout << "Scoreboard is available now! You can view your scoreboard by choosing OPTION 3." << endl;
+			cout << endl;
+		}
+
 		cout << "1. View my profile" << endl;
 		cout << "2. My list of courses" << endl;
 		if (Available_register == true) {
 			cout << "3. Enroll new courses" << endl;
 		}
-		if(Available_scoreboard == true)
-			cout << "4. View my scoreboard" << endl;
+		else if(Available_all_scoreboard == true)
+			cout << "3. View my scoreboard" << endl;
+		cout << "4. Change password" << endl;
 		cout << "5. Log out" << endl;
 		cout << "6. Exit program" << endl;
+		cout << "User: ";
 		cin >> choice;
 
 		switch (choice) {
@@ -99,16 +112,22 @@ void StudentInterface(string studentID) {
 				system("cls");
 				enroll_a_course(user, CurrentSemester->HeadCourse);
 			}
-			break;
-		case 4:
-			if (Available_scoreboard == true) {
+			else if (Available_all_scoreboard == true) {
 				view_scoreboard_of_student(user);
 			}
 			break;
-		case 5:
+		case 4:
+			
 			break;
-		case 6:
+		case 5:
+			cin.get();
 			return;
+		case 6:
+			cout << endl;
+			cout << "THANK YOU FOR USING OUR PROGRAM!" << endl;
+			_getch();
+			delete_everything();
+			exit(0);
 		default: 
 			cout << "Invalid input! Please try again!";
 			_getch();
@@ -135,19 +154,14 @@ void view_my_profile(Student*& student) {
 
 		cout << endl;
 		cout << "0. Return menu" << endl;
-		cout << "1. Change my profile" << endl;
 		cout << "User: ";
 		cin >> choice;
-
-		switch (choice) {
-		case 0:
-			return;
-		case 1: 
-			break;
-		default:
+		while (choice != 0) {
 			cout << "Invalid input! Please try again!" << endl;
-			break;
+			cout << "User: ";
+			cin >> choice;
 		}
+		return;
 	}
 }
 
@@ -161,9 +175,17 @@ void go_to_my_enrolled_course(Student*& student) {
 		view_list_of_enrolled_course(student);
 		cout << endl;
 		
+		if (Available_register == true) {
+			cout << "***NOTIFICATION***" << endl;
+			cout << "Course registration is available now! You can enroll new courses by choose option 1" << endl;
+			cout << endl;
+		}
+
 		cout << "0. Return menu" << endl;
-		cout << "1. Enroll new courses" << endl;
-		cout << "2. Remove courses" << endl;
+		if (Available_register) {
+			cout << "1. Enroll new courses" << endl;
+			cout << "2. Remove courses" << endl;
+		}
 		cout << "User: ";
 		cin >> choice;
 
@@ -171,8 +193,15 @@ void go_to_my_enrolled_course(Student*& student) {
 		case 0:
 			return;
 		case 1:
+			if (Available_register) {
+				system("cls");
+				enroll_a_course(student, CurrentSemester->HeadCourse);
+			}
 			break;
 		case 2:
+			if (Available_register) {
+
+			}
 			break;
 		}
 	}
@@ -210,30 +239,23 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 	CourseForEachStudent* tmpEach = student->Head_of_enrolled_course;
 
 	//Hiển thị danh sách khóa học cho sinh viên đăng kí
-	/*
-	while (tmpCourse) {
-		cout << "Course ID: " << tmpCourse->courseID << endl;
-		cout << "Course Name: " << tmpCourse->courseName << endl;
-		cout << "Teacher Name: " << tmpCourse->teacherName << endl;
-		cout << "Number of Credits: " << tmpCourse->credits << endl;
-		cout << "Number of Students: " << tmpCourse->numberStudent << endl;
-		cout << "Number of Enrolled Students: " << tmpCourse->enrolledStudent << endl;
-		cout << "Session : " << tmpCourse->session1 << endl << tmpCourse->session2 << endl << endl << endl;
-		tmpCourse = tmpCourse->pNext;
-	}*/
 	view_list_of_courses(CurrentSemester);
 
 	int i = 0;
 	do {
-		char c;
-
+		int c;
 		//Check có muốn đăng kí tiếp khóa học không
-		cout << "You want to enroll a course? (YES/NO): ";
-		cout << "	1. YES			2. NO";
+		cout << "You want to enroll a course? (YES/NO): " << endl;
+		cout << "  1. YES			2. NO" << endl;;
+		cout << "User: ";
 		cin >> c;
+		while (c != 1 && c != 2) {
+			cout << "Invalid input!" << endl;
+			cout << "User: ";
+			cin >> c;
+		}
 		if (c == 2)
 			break;
-
 		else if (c == 1) {
 			cout << "Please enter Course ID to enroll: ";
 			string id;
@@ -252,6 +274,8 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 
 						//check có bị trùng ca học không
 						if (check(student, tmpCourse->session1, tmpCourse->session2)) {
+							while (tmpEach->pNext != nullptr)
+								tmpEach = tmpEach->pNext;
 
 							if (student->Head_of_enrolled_course == nullptr) {
 
@@ -265,12 +289,14 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 								tmpEach->pNext = new CourseForEachStudent;
 								tmpEach->pNext->pPrev = tmpEach;
 								tmpEach = tmpEach->pNext;
-								tmpEach->numberCourse++;
+								tmpEach->numberCourse = tmpEach->pPrev->numberCourse + 1;
+								student->numberOfCourse++;
 							}
 
 							//thêm khóa học cho sinh viên
 							tmpEach->detail.courseID = tmpCourse->courseID;
 							tmpEach->detail.courseName = tmpCourse->courseName;
+							tmpEach->detail.teacherName = tmpCourse->teacherName;
 							tmpEach->detail.credits = tmpCourse->credits;
 							tmpEach->detail.session1 = tmpCourse->session1;
 							tmpEach->detail.session2 = tmpCourse->session2;
@@ -285,6 +311,9 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpCourse->enrolledStudent++;
 
 							//thêm danh sách sinh viên tham gia khóa học
+							while (tmpCourseList->pNext != nullptr) {
+								tmpCourseList = tmpCourseList->pNext;
+							}
 							if (tmpCourse->HeadStudent == nullptr) {
 								tmpCourse->HeadStudent = new Student_CourseScores;
 								tmpCourseList = tmpCourse->HeadStudent;
@@ -300,6 +329,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 
 							tmpCourseList->firstName = student->firstName;
 							tmpCourseList->lastName = student->lastName;
+							tmpCourseList->className = student->className;
 							tmpCourseList->gender = student->gender;
 							tmpCourseList->SID = student->SID;
 							tmpCourseList->pNext = nullptr;
@@ -308,6 +338,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpCourseList->otherMark = 0;
 							tmpCourseList->courseGPA = 0;
 
+							/*
 							//Node chay lien ket diem cua student_courseScore voi CourseForEach
 							CourseForEachStudent* tmp = tmpCourseList->point_to_an_enrolled_course_of_a_student_in_a_class;
 							while (tmp->detail.courseID != id)
@@ -317,12 +348,14 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmp->final = tmpCourseList->final;
 							tmp->otherMark = tmpCourseList->otherMark;
 							tmp->courseGPA = tmpCourseList->courseGPA;
+							*/
 
+							tmpCourseList->point_to_an_enrolled_course_of_a_student_in_a_class = tmpEach;
 
 							tmpEach->pNext = nullptr;
 
 							cout << "Enroll Successfully." << endl;
-							cout << "You have enrolled in " << tmpEach->numberCourse << " course(s)." << endl;
+							cout << "You have enrolled in " << tmpEach->detail.courseName << endl;
 							i++;
 							break;
 						}

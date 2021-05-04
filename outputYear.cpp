@@ -28,6 +28,7 @@ void writeListStudentCourse(string path, string list, Student_CourseScores*& Hea
 			out << CurrentStudent->SID;
 		else
 			out << CurrentStudent->SID << endl;
+		
 		writeStudentCourse(path + CurrentStudent->SID + ".txt", CurrentStudent);
 		CurrentStudent = CurrentStudent->pNext;
 	}
@@ -74,11 +75,15 @@ void writeSemester(string path, Semester& sem) {
 	out.open(path + "ListOfCourses.txt");
 	CourseDetail* CurrentCourse = sem.HeadCourse;
 	while (CurrentCourse != nullptr) {
+		string tmpPATH = path;
 		if (CurrentCourse->pNext == nullptr)
 			out << CurrentCourse->courseID;
 		else
 			out << CurrentCourse->courseID << endl;
-		writeCourse(path + CurrentCourse->courseID + "\\", CurrentCourse->courseID, CurrentCourse);
+		tmpPATH += CurrentCourse->courseID;
+		const char* dir = tmpPATH.c_str();
+		_mkdir(dir);
+		writeCourse(tmpPATH + "\\", CurrentCourse->courseID, CurrentCourse);
 		CurrentCourse = CurrentCourse->pNext;
 	}
 	out.close();
@@ -186,11 +191,15 @@ void writeListStudentClass(string path, string s, Student*& HeadStudent) {
 	out.open(path + s + ".txt");
 	Student* CurrentStudent = HeadStudent;
 	while (CurrentStudent != nullptr) {
+		string tmpPATH = path;
 		if (CurrentStudent->pNext == nullptr)
 			out << CurrentStudent->SID;
 		else
 			out << CurrentStudent->SID << endl;
-		writeStudent(path + CurrentStudent->SID + "\\", CurrentStudent->SID, CurrentStudent);
+		tmpPATH += CurrentStudent->SID;
+		const char* dir = tmpPATH.c_str();
+		_mkdir(dir);
+		writeStudent(tmpPATH + "\\", CurrentStudent->SID, CurrentStudent);
 		CurrentStudent = CurrentStudent->pNext;
 	}
 	out.close();
@@ -216,18 +225,22 @@ void writeListClass(string path, string s, Class*& HeadClass) {
 
 	Class* CurrentClass = HeadClass;
 	while (CurrentClass!=nullptr){
+		string tmpPATH = path;
 		if (CurrentClass->pNext == nullptr)
 			out << CurrentClass->className;
 		else
 			out << CurrentClass->className << endl;
-		writeClass(path + CurrentClass->className + "\\", CurrentClass->className, CurrentClass);
+		tmpPATH += CurrentClass->className;
+		const char* dir = tmpPATH.c_str();
+		_mkdir(dir);
+		writeClass(tmpPATH + "\\", CurrentClass->className, CurrentClass);
 		CurrentClass = CurrentClass->pNext;
 	}
 	
 	out.close();
 }
 
-void writeAll()
+void writeAll(SchoolYear* &HeadYear)
 {
 	ofstream out;
 	string path = "C:\\Users\\User\\source\\repos\\Enroll\\Data\\Schoolyear\\";
@@ -236,26 +249,43 @@ void writeAll()
 
 	SchoolYear* CurrentYear = HeadYear;
 	while (CurrentYear != nullptr){
+		string tmpPATH = path;
 		schoolyear = to_string(CurrentYear->startYear) + to_string(CurrentYear->endYear);
 		if (CurrentYear->pNext == nullptr)
 			out << schoolyear;
 		else
 			out << schoolyear << endl;
 
-		writeYear(path + schoolyear + "\\" + schoolyear + ".txt", CurrentYear);
+		tmpPATH += schoolyear;
+		const char* dir0 = tmpPATH.c_str();
+		_mkdir(dir0);
+		writeYear(tmpPATH + "\\" + schoolyear + ".txt", CurrentYear);
+		
 		if (CurrentYear->semester1.isAvailable) {
-			writeSemester(path + schoolyear + "\\" + "Semester 1\\", CurrentYear->semester1);
+			string tmp1 = tmpPATH + "\\" + "Semester 1";
+			const char* dir1 = tmp1.c_str();
+			_mkdir(dir1);
+			writeSemester(tmp1 + "\\", CurrentYear->semester1);
 			CurrentSemester = &CurrentYear->semester1;
 		}
+		
 		if (CurrentYear->semester2.isAvailable) {
-			writeSemester(path + schoolyear + "\\" + "Semester 2\\", CurrentYear->semester2);
+			string tmp2 = tmpPATH + "\\" + "Semester 2";
+			const char* dir2 = tmp2.c_str();
+			_mkdir(dir2);
+			writeSemester(tmp2 + "\\", CurrentYear->semester2);
 			CurrentSemester = &CurrentYear->semester2;
 		}
+		
 		if (CurrentYear->semester3.isAvailable) {
-			writeSemester(path + schoolyear + "\\" + "Semester 3\\", CurrentYear->semester3);
+			string tmp3 = tmpPATH + "\\" + "Semester 3";
+			const char* dir3 = tmp3.c_str();
+			_mkdir(dir3);
+			writeSemester(tmp3 + "\\", CurrentYear->semester3);
 			CurrentSemester = &CurrentYear->semester3;
 		}
-		writeListClass(path + schoolyear + "\\" + "ListOfClasses\\", "ListOfClasses", CurrentYear->HeadClass);
+		
+		writeListClass(tmpPATH + "\\" + "ListOfClasses\\", "ListOfClasses", CurrentYear->HeadClass);
 
 		CurrentYear = CurrentYear->pNext;
 	}

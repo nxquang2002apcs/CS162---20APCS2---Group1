@@ -90,6 +90,8 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                 do {
                     Cur = HeadStudent;
                     cin.get();
+                    cout <<"The student ID before: " << student->SID<<endl;
+                    cin.get();
                     cout << "New student ID: ";
                     getline(cin, data);
                     //fflush(stdin);
@@ -97,60 +99,98 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                         Cur = Cur->pNext;
                     }
                     if (Cur != nullptr) cout << "This new one is duplicated. Please try again\n";
-                    else student->SID = data;
+                    else{
+                        int sure = 1;
+                        cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                        cout <<"User: ";    cin >> sure;
+
+                        if(sure){
+                            student->SID = data;
+                            cout << "CHANGE SUCCESSFULLY\n";
+                        }
+                    }
                 } while (Cur);
 
-                cout << "CHANGE SUCCESSFULLY\n";
                 break;
 
             // Firstname
             case 2: 
                 cin.get();
+                cout <<"The first name before: " << student->firstName <<endl;
+                cin.get();
                 cout << "New first name: ";
                 getline(cin, data);
-                //fflush(stdin);
+                
+                int sure = 1;
+                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"User: ";    cin >> sure;
 
-                student->firstName = data;
-
-                cout << "CHANGE SUCCESSFULLY\n";
+                if(sure){
+                    student->firstName = data;
+                    cout << "CHANGE SUCCESSFULLY\n";
+                }
                 break;
 
             // Lastname
             case 3: 
                 cin.get();
+                cout <<"The last name before: " << student->lastName <<endl;
+                cin.get();
                 cout << "New last name: ";
                 getline(cin, data);
-                //fflush(stdin);
-                student->lastName = data;
+                
+                int sure = 1;
+                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"User: ";    cin >> sure;
 
-                cout << "CHANGE SUCCESSFULLY\n";
+                if(sure){
+                    student->firstName = data;
+                    cout << "CHANGE SUCCESSFULLY\n";
+                }
                 break;
             
             // Gender
             case 4:
                 cin.get();
+                cout <<"The gender before: " << student->gender <<endl;
+                cin.get();
                 cout << "New gender: ";
                 getline(cin, data);
-                //fflush(stdin);
-                student->gender = data;
-                cout << "CHANGE SUCCESSFULLY\n";
+                
+                int sure = 1;
+                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"User: ";    cin >> sure;
+
+                if(sure){
+                    student->firstName = data;
+                    cout << "CHANGE SUCCESSFULLY\n";
+                }
                 break;
 
             
             // Social ID
             case 5:
                 cin.get();
+                cout <<"The social ID: " << student->socialID <<endl;
+                cin.get();
                 cout << "New social ID: ";
                 getline(cin, data);
-                //fflush(stdin);
-                student->socialID = data;
 
-                cout << "CHANGE SUCCESSFULLY\n";
+                int sure = 1;
+                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"User: ";    cin >> sure;
+
+                if(sure){
+                    student->firstName = data;
+                    cout << "CHANGE SUCCESSFULLY\n";
+                }
                 break;
             
             // Date of birth 
             case 6: 
             {
+                cin.get();
+                cout <<"The day of birth before: " <<student->DateOfBirth.day<<"/"<<student->DateOfBirth.month<<"/"<<student->DateOfBirth.year<<endl;
                 cin.get();
                 int day, month, year;
                 cout << "New day of birth: ";
@@ -158,11 +198,17 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                 cout << "Month: ";   cin >> month;
                 cout << "Year: ";    cin >> year;
 
-                student->DateOfBirth.day = day;
-                student->DateOfBirth.month = month;
-                student->DateOfBirth.year = year;
+                int sure = 1;
+                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"User: ";    cin >> sure;
 
-                cout << "CHANGE SUCCESSFULLY\n";
+                if(sure){
+                    student->DateOfBirth.day = day;
+                    student->DateOfBirth.month = month;
+                    student->DateOfBirth.year = year;
+
+                    cout << "CHANGE SUCCESSFULLY\n";
+                }
                 break;
             }
 
