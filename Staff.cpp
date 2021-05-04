@@ -1179,6 +1179,12 @@ void View_list_of_Enrolled_student(CourseDetail* course) {
 	}
 	Student_CourseScores* pCur = course->HeadStudent;
 
+	cout << char(218);
+	for (int i = 0; i < 96; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
 	cout << setw(5) << left << "No";
 	cout << setw(12) << left << "Student ID";
 	cout << setw(12) << left << "First name";
@@ -1187,24 +1193,36 @@ void View_list_of_Enrolled_student(CourseDetail* course) {
 	cout << setw(9) << left << "Midterm";
 	cout << setw(7) << left << "Final";
 	cout << setw(12) << left << "Other mark";
-	cout << "Course's GPA" << endl;
+	cout << "Course's GPA" << char(179) << endl;
+
+	cout << char(195);
+	for (int i = 0; i < 96; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
 
 	while (pCur != nullptr) {
+		cout << char(179);
 		cout << setw(5) << left << pCur->no;
 		cout << setw(12) << left << pCur->SID;
 		cout << setw(12) << left << pCur->firstName;
 		cout << setw(17) << left << pCur->lastName;
 		cout << setw(10) << left << pCur->className;
 		cout << setw(2) << right << " ";  print(pCur->midterm);
-		cout << setw(5) << right << " "; print(pCur->final);
+		cout << setw(4) << right << " "; print(pCur->final);
 		cout << setw(5) << right << " "; print(pCur->otherMark);
 		cout << setw(9) << left << " "; print(pCur->courseGPA);
-
-		cout << endl;
+		cout << "    " << char(179) << endl;
 
 		pCur = pCur->pNext;
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 96; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 }
+
+
 // Hàm in danh sách các courses student đã đăng ký
 void view_list_of_enrolled_course(Student* student)
 {
