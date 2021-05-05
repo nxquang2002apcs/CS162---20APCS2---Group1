@@ -101,7 +101,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                     if (Cur != nullptr) cout << "This new one is duplicated. Please try again\n";
                     else{
                         int sure = 1;
-                        cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                        cout <<"Are you sure?(1:yes, 0:no)\n";
                         cout <<"User: ";    cin >> sure;
 
                         if(sure){
@@ -122,7 +122,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                 getline(cin, data);
                 
                 int sure = 1;
-                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"Are you sure?(1:yes, 0:no)\n";
                 cout <<"User: ";    cin >> sure;
 
                 if(sure){
@@ -140,7 +140,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                 getline(cin, data);
                 
                 int sure = 1;
-                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"Are you sure?(1:yes, 0:no)\n";
                 cout <<"User: ";    cin >> sure;
 
                 if(sure){
@@ -158,7 +158,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                 getline(cin, data);
                 
                 int sure = 1;
-                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"Are you sure?(1:yes, 0:no)\n";
                 cout <<"User: ";    cin >> sure;
 
                 if(sure){
@@ -177,7 +177,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                 getline(cin, data);
 
                 int sure = 1;
-                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"Are you sure?(1:yes, 0:no)\n";
                 cout <<"User: ";    cin >> sure;
 
                 if(sure){
@@ -199,7 +199,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
                 cout << "Year: ";    cin >> year;
 
                 int sure = 1;
-                cout <<"Are you sure?(1: sure, 0: not sure)\n";
+                cout <<"Are you sure?(1:yes, 0:no)\n";
                 cout <<"User: ";    cin >> sure;
 
                 if(sure){
