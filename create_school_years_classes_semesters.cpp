@@ -1,43 +1,33 @@
 #include "DataStructure.h"
 
-void create_a_new_school_year ( int start_year, int end_year )		// Hàm tạo năm học mới với start_year là năm bắt đầu, end_year là năm kết thúc.
+void create_a_new_school_year(int start_year, int end_year) 		// Hàm tạo năm học mới với start_year là năm bắt đầu, end_year là năm kết thúc.
 {
-	if ( HeadYear == nullptr )					// Nếu chưa có năm học nào
+	if (HeadYear == nullptr)					// Nếu chưa có năm học nào
 	{
 		HeadYear = new SchoolYear;				// thì tạo mới
-		CurrentYear = HeadYear;										
-		CurrentYear -> pPrev = nullptr;								
+		CurrentYear = HeadYear;
+		CurrentYear->pPrev = nullptr;
 	}
 	else								// Nếu có rồi
 	{
-		CurrentYear -> pNext = new SchoolYear;			// tạo năm học mới nối đuôi với năm trước đó
-		CurrentYear -> pNext -> pPrev = CurrentYear;
-		CurrentYear = CurrentYear -> pNext;			// năm được tạo mới là năm hiện tại
+		CurrentYear->pNext = new SchoolYear;			// tạo năm học mới nối đuôi với năm trước đó
+		CurrentYear->pNext->pPrev = CurrentYear;
+		CurrentYear = CurrentYear->pNext;			// năm được tạo mới là năm hiện tại
 	}
 
-	CurrentYear -> startYear = start_year;
-    	CurrentYear -> endYear = end_year;
+	CurrentYear->startYear = start_year;
+	CurrentYear->endYear = end_year;
 
-	CurrentYear -> HeadClass = nullptr;				// Năm học mới chưa tạo danh sách lớp
+	CurrentYear->HeadClass = nullptr;				// Năm học mới chưa tạo danh sách lớp
 
 	// --- Năm học mới chưa tạo học kỳ ---------
-	CurrentYear -> semester1.startDate = {};						
-	CurrentYear -> semester1.endDate = {};
-    	CurrentYear -> semester1.isAvailable = 0;
-	CurrentYear -> semester1.HeadCourse = nullptr;
-
-	CurrentYear -> semester2.startDate = {};
-	CurrentYear -> semester2.endDate = {};
-    	CurrentYear -> semester2.isAvailable = 0;
-	CurrentYear -> semester2.HeadCourse = nullptr;
-
-	CurrentYear -> semester3.startDate = {};
-	CurrentYear -> semester3.endDate = {};
-    	CurrentYear -> semester3.isAvailable = 0;
-	CurrentYear -> semester3.HeadCourse = nullptr;
+	CurrentYear->semester1.isAvailable = false;
+	CurrentYear->semester2.isAvailable = false;
+	CurrentYear->semester3.isAvailable = false;
 	//-------------------------------------------
 
-	CurrentYear -> pNext = nullptr;
+	CurrentSemester = nullptr;
+	CurrentYear->pNext = nullptr;
 }
 
 
@@ -304,4 +294,250 @@ void display_semesters_of_school_year ( int start_year, int end_year )
 		cout << endl;
 	}
 	else cout << "Year is not found." << endl;
+}
+
+void deleteYear ( int startYear )	// Hàm dùng để delete một năm học với startYear biết sẵn
+{
+	SchoolYear* findYear = HeadYear;	// pointer findYear dùng để tìm đến năm cần delete, bắt đầu tìm từ HeadYear
+	while ( findYear != nullptr && findYear -> startYear != startYear )	// Tìm bằng cách so sánh startYear
+		findYear = findYear -> pNext;	// Nếu chưa tìm thấy, tiếp tục di chuyển tới năm tiếp theo
+	
+	if ( findYear != nullptr )	// Nếu tìm thấy
+	{
+		// ---------------- Delete trong nhánh Class -------------------
+		Class* pCurClass = findYear -> HeadClass;	// Truy cập từng lớp
+		while ( pCurClass != nullptr )
+		{
+			Student* pCurStudent = pCurClass -> HeadStudent;	// Truy cập từng sinh viên trong lớp đó
+			while ( pCurStudent != nullptr )
+			{
+				CourseForEachStudent* pCurEnrolledCourse = pCurStudent -> Head_of_enrolled_course;	// Truy cập danh sách khóa học sinh viên đã đăng ký
+				while ( pCurEnrolledCourse != nullptr )
+				{
+					CourseForEachStudent* deleteEnrolledCourse = pCurEnrolledCourse;
+					pCurEnrolledCourse = pCurEnrolledCourse -> pNext;
+					delete deleteEnrolledCourse;							// Delete từng khóa học trong danh sách đó
+				}
+
+				Student* deleteStudent = pCurStudent;
+				pCurStudent = pCurStudent -> pNext;						
+				delete deleteStudent;									// Delete từng sinh viên trong lớp
+				//cout << "Student deleted." << endl;
+			}
+
+			Class* deleteClass = pCurClass;
+			pCurClass = pCurClass -> pNext;
+			delete deleteClass;										// Và delete từng lớp trong năm
+		}
+		// -------------------------------------------------------------
+
+		// --------------- Delete trong nhánh Semester -----------------
+		CourseDetail* pCurCourse = findYear -> semester1.HeadCourse;	// Truy cập từng Course của semester 1
+		while ( pCurCourse != nullptr )
+		{
+			Student_CourseScores* pCur_CourseScores = pCurCourse -> HeadStudent;	// Truy cập vào Student_CourseScores của Course đó 
+			while ( pCur_CourseScores != nullptr )
+			{
+				Student_CourseScores* deleteCourseScores = pCur_CourseScores;
+				pCur_CourseScores = pCur_CourseScores -> pNext;
+				delete deleteCourseScores; 					// Delete từng Student_CourseScores
+			}
+
+			CourseDetail* deleteCourse = pCurCourse;
+			pCurCourse = pCurCourse -> pNext;
+			delete deleteCourse;							// Delete từng Course
+		}
+
+		// Tương tự với semester 2
+		pCurCourse = findYear -> semester2.HeadCourse;	
+		while ( pCurCourse != nullptr )
+		{
+			Student_CourseScores* pCur_CourseScores = pCurCourse -> HeadStudent; 
+			while ( pCur_CourseScores != nullptr )
+			{
+				Student_CourseScores* deleteCourseScores = pCur_CourseScores;
+				pCur_CourseScores = pCur_CourseScores -> pNext;
+				delete deleteCourseScores; 										
+			}
+
+			CourseDetail* deleteCourse = pCurCourse;
+			pCurCourse = pCurCourse -> pNext;
+			delete deleteCourse;						
+		}
+
+		// Và semester 3... chỉ là copy paste thôi
+		pCurCourse = findYear -> semester3.HeadCourse;	
+		while ( pCurCourse != nullptr )
+		{
+			Student_CourseScores* pCur_CourseScores = pCurCourse -> HeadStudent;	 
+			while ( pCur_CourseScores != nullptr )
+			{
+				Student_CourseScores* deleteCourseScores = pCur_CourseScores;
+				pCur_CourseScores = pCur_CourseScores -> pNext;
+				delete deleteCourseScores; 										
+			}
+
+			CourseDetail* deleteCourse = pCurCourse;
+			pCurCourse = pCurCourse -> pNext;
+			delete deleteCourse;					
+		}
+		// --------------------------------------------------------
+	}
+
+	else	// Nếu không tìm thấy năm cần delete, return
+	{
+		cout << "School year not found. Cannot delete." << endl;
+		return;
+	}
+	
+	//------------------ Delete node SchoolYear --------------------
+	if ( findYear -> pNext == nullptr && findYear -> pPrev == nullptr )	// Trường hợp chỉ có một SchoolYear duy nhất trong list
+	{
+		HeadYear = nullptr;
+		delete findYear;
+		return;
+	}
+
+	if ( findYear -> pPrev == nullptr )	// Trường hợp delete HeadYear
+	{
+		HeadYear = HeadYear -> pNext;	// Gán HeadYear tới năm kế sau nó. HeadYear là NULL nếu không có năm kế sau
+		HeadYear -> pPrev = nullptr;
+		delete findYear;
+	}
+	else if ( findYear -> pNext == nullptr ) // Trường hợp delete SchoolYear đứng cuối list ( CurrentYear )
+	{
+		CurrentYear = CurrentYear -> pPrev;	// Gán CurrentYear tới năm kế trước nó
+		CurrentYear -> pNext = nullptr;
+		delete findYear;
+	}
+	else	// Trường hợp delete ở giữa list
+	{
+		findYear -> pPrev -> pNext = findYear -> pNext;
+		findYear -> pNext -> pPrev = findYear -> pPrev;
+		delete findYear;
+	}
+	// --------------------------------------------------------------
+}
+
+void deleteClass ( int startYear, string className )	// Hàm delete một Class với className và startYear biết sẵn
+{
+	SchoolYear* findYear = HeadYear; // pointer findYear dùng để tìm đến năm mà lớp cần delete đang nằm
+	while ( findYear != nullptr && findYear -> startYear != startYear )	// Tìm bằng cách so sánh startYear
+		findYear = findYear -> pNext;	// Nếu chưa tìm thấy, tiếp tục di chuyển tới năm tiếp theo
+
+	if ( findYear != nullptr )	// Nếu tìm thấy năm học
+	{
+		Class* findClass = findYear -> HeadClass;	// Tìm đến lớp cần delete trong năm học đó
+		while ( findClass != nullptr && findClass -> className != className )	// Bằng cách so sánh className
+			findClass = findClass -> pNext;
+		
+		if ( findClass != nullptr )	// Nếu tìm thấy lớp cần delete
+		{
+			//------------ Delete mọi thứ bên trong Class --------------
+			Student* pCurStudent = findClass -> HeadStudent;	// Truy cập từng sinh viên trong lớp dó
+			while ( pCurStudent != nullptr )
+			{
+				CourseForEachStudent* pCurEnrolledCourse = pCurStudent -> Head_of_enrolled_course; // Truy cập danh sách khóa học sinh viên đã đăng kí
+				while ( pCurEnrolledCourse != nullptr)
+				{
+					CourseForEachStudent* deleteEnrolledCourse = pCurEnrolledCourse;
+					pCurEnrolledCourse = pCurEnrolledCourse -> pNext;
+					delete deleteEnrolledCourse;					// Delete từng khóa học sinh viên đã đăng kí
+				}
+
+				Student* deleteStudent = pCurStudent;
+				pCurStudent = pCurStudent -> pNext;
+				delete deleteStudent;						// Delete từng sinh viên trong lớp đó
+			}
+			// ---------------------------------------------------------
+
+			// ------------------ Delete node Class --------------------
+			if ( findClass -> pNext == nullptr && findClass -> pPrev == nullptr )	// Trường hợp chỉ có một lớp duy nhất trong SchoolYear
+			{
+				findYear -> HeadClass = nullptr;
+				delete findClass;
+				return;
+			}
+
+			if ( findClass -> pPrev == nullptr )	// Trường hợp xóa HeadClass
+			{
+				findYear -> HeadClass = findClass -> pNext;	// Lớp kế sau nó được gán là HeadClass
+				findYear -> HeadClass -> pPrev = nullptr;
+				delete findClass;
+			}
+			else if ( findClass -> pNext == nullptr )	// Trường hợp delete Class đứng cuối list
+			{
+				findClass -> pPrev -> pNext = nullptr;
+				delete findClass;
+			}
+			else	// Trường hợp Class đứng giữa
+			{
+				findClass -> pNext -> pPrev = findClass -> pPrev;
+				findClass -> pPrev -> pNext = findClass -> pNext;
+				delete findClass;
+			}
+			// -----------------------------------------------------------
+
+		}
+		else	// Nếu không tìm thấy Class cần delete, return
+		{
+			cout << "Class not found. Cannot delete." << endl;
+			return;
+		}
+	}
+	else
+	{
+		cout << "Class not found. Cannot delete." << endl;
+		return;
+	}
+}
+
+void deleteStudent ( Class* & tmpClass, string SID )	// Hàm delete một Student với SID biết sẵn, tmpClass là lớp mà sinh viên đang học
+{
+	Student* findStudent = tmpClass -> HeadStudent;	// pointer findStudent dùng để tìm đến Student cần xóa
+	while ( findStudent != nullptr && findStudent -> SID != SID )	// bằng cách so sánh SID
+		findStudent = findStudent -> pNext;
+
+	if ( findStudent != nullptr )	// Nếu tìm thấy
+	{
+		CourseForEachStudent* pCurEnrolledCourse = findStudent -> Head_of_enrolled_course;	// Truy cập vào danh sách khóa học sinh viên đã đăng kí
+		while ( pCurEnrolledCourse != nullptr )
+		{
+			CourseForEachStudent* deleteEnrolledCourse = pCurEnrolledCourse;
+			pCurEnrolledCourse = pCurEnrolledCourse -> pNext;
+			delete deleteEnrolledCourse;	// Xóa từng khóa học đã đăng kí
+		}
+
+		// ------------------- Delete node Student -----------------------
+		if ( findStudent -> pPrev == nullptr && findStudent -> pNext == nullptr )	// Trường hợp chỉ có một Student duy nhất trong Class
+		{
+			tmpClass -> HeadStudent = nullptr;
+			delete findStudent;
+			return;
+		}
+
+		if ( findStudent -> pPrev == nullptr )	// Trường hợp xóa HeadStudent
+		{
+			tmpClass -> HeadStudent = findStudent -> pNext;	// HeadStudent được gán cho Student kế sau
+			tmpClass -> HeadStudent -> pPrev = nullptr;
+			delete findStudent;
+		}
+		else if ( findStudent -> pNext == nullptr )	// Trường hợp xóa Student đứng cuối list
+		{
+			findStudent -> pPrev -> pNext = nullptr;
+			delete findStudent;
+		}
+		else	// Trường hợp Student đứng giữa list
+		{
+			findStudent -> pPrev -> pNext = findStudent -> pNext;
+			findStudent -> pNext -> pPrev = findStudent -> pPrev;
+			delete findStudent;
+		}
+		// -----------------------------------------------------------------
+	}
+	else // Nếu không tìm thấy Student
+	{
+		cout << "Student not found. Cannot delete." << endl;
+		return;
+	}
 }
