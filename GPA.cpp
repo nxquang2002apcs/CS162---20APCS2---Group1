@@ -9,18 +9,18 @@ void GPAStudentInCourse(Student_CourseScores*& HeadStudent) {
 	}
 }
 
-void GPASemesterOfStudent(Student*& HeadStudent, CourseForEachStudent*& HeadCourse) {
+void GPASemesterOfStudent(Student*& HeadStudent) {
 	Student* CurrentStudent = HeadStudent;
 	while (CurrentStudent != nullptr) {
 		float total = 0;
 		int credits = 0;
-		CourseForEachStudent* CurrentCourse = HeadCourse;
+		CourseForEachStudent* CurrentCourse = CurrentStudent->Head_of_enrolled_course;
 		while (CurrentCourse != nullptr) {
 			credits += CurrentCourse->detail.credits;
 			total += CurrentCourse->courseGPA;
 			CurrentCourse = CurrentCourse->pNext;
 		}
-		CurrentStudent->gpa = float(total / credits);
+		CurrentStudent->gpa = (float) (total / credits);
 		CurrentStudent = CurrentStudent->pNext;
 	}
 }
