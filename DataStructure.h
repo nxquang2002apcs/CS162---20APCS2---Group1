@@ -176,7 +176,7 @@ void writeStudent(string path, string s, Student*& CurrentStudent);
 void writeAll(SchoolYear*& HeadYear);
 
 void GPAStudentInCourse(Student_CourseScores*& HeadStudent);
-void GPASemesterOfStudent(Student*& HeadStudent, CourseForEachStudent*& HeadCourse);
+void GPASemesterOfStudent(Student*& HeadStudent);
 
 /// <summary>
 /// Các hàm khởi tạo và đọc dữ liệu người dùng
