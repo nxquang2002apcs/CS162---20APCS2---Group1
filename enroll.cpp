@@ -21,11 +21,7 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 	//node chạy course system
 	CourseDetail* tmpCourse = enrolledCourse;
 
-	//Node chạy danh sách sinh viên khóa học
-	Student_CourseScores* tmpCourseList = enrolledCourse->HeadStudent;
-
-	//Node chạy của course mỗi sinh viên
-	CourseForEachStudent* tmpEach = student->Head_of_enrolled_course;
+	
 
 	//Hiển thị danh sách khóa học cho sinh viên đăng kí
 	view_list_of_courses(CurrentSemester);
@@ -57,14 +53,18 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 
 				//check có trùng ID không
 				if (tmpCourse->courseID.compare(id) == 0) {
+					//Node chạy danh sách sinh viên khóa học
+					Student_CourseScores* tmpCourseList = tmpCourse->HeadStudent;
+
+					//Node chạy của course mỗi sinh viên
+					CourseForEachStudent* tmpEach = student->Head_of_enrolled_course;
 
 					//check course còn slot không
 					if (tmpCourse->enrolledStudent < tmpCourse->numberStudent) {
 
 						//check có bị trùng ca học không
 						if (check(student, tmpCourse->session1, tmpCourse->session2)) {
-							while (tmpEach->pNext != nullptr)
-								tmpEach = tmpEach->pNext;
+							
 
 							if (student->Head_of_enrolled_course == nullptr) {
 
@@ -75,6 +75,8 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 
 							}
 							else {
+								while (tmpEach->pNext != nullptr)
+									tmpEach = tmpEach->pNext;
 								tmpEach->pNext = new CourseForEachStudent;
 								tmpEach->pNext->pPrev = tmpEach;
 								tmpEach = tmpEach->pNext;
@@ -89,20 +91,16 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpEach->detail.credits = tmpCourse->credits;
 							tmpEach->detail.session1 = tmpCourse->session1;
 							tmpEach->detail.session2 = tmpCourse->session2;
-
-							/*tmpEach->final = 0;
 							tmpEach->midterm = 0;
+							tmpEach->final = 0;
 							tmpEach->otherMark = 0;
-							tmpEach->total = 0;
-							*/
+							tmpEach->courseGPA = 0;
 
 							//tăng số lượng sinh viên đã enrol thành công khóa học
 							tmpCourse->enrolledStudent++;
 
 							//thêm danh sách sinh viên tham gia khóa học
-							while (tmpCourseList->pNext != nullptr) {
-								tmpCourseList = tmpCourseList->pNext;
-							}
+							
 							if (tmpCourse->HeadStudent == nullptr) {
 								tmpCourse->HeadStudent = new Student_CourseScores;
 								tmpCourseList = tmpCourse->HeadStudent;
@@ -110,10 +108,13 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 								tmpCourseList->pPrev = nullptr;
 							}
 							else {
+								while (tmpCourseList->pNext != nullptr) {
+									tmpCourseList = tmpCourseList->pNext;
+								}
 								tmpCourseList->pNext = new Student_CourseScores;
 								tmpCourseList->pNext->pPrev = tmpCourseList;
-								tmpCourseList->no++;
 								tmpCourseList = tmpCourseList->pNext;
+								tmpCourseList->no = tmpCourseList->pPrev->no + 1;
 							}
 
 							tmpCourseList->firstName = student->firstName;
@@ -121,27 +122,16 @@ void enroll_a_course(Student*& student, CourseDetail*& enrolledCourse) {
 							tmpCourseList->className = student->className;
 							tmpCourseList->gender = student->gender;
 							tmpCourseList->SID = student->SID;
-							tmpCourseList->pNext = nullptr;
 							tmpCourseList->midterm = 0;
 							tmpCourseList->final = 0;
 							tmpCourseList->otherMark = 0;
 							tmpCourseList->courseGPA = 0;
 
-							/*
-							//Node chay lien ket diem cua student_courseScore voi CourseForEach
-							CourseForEachStudent* tmp = tmpCourseList->point_to_an_enrolled_course_of_a_student_in_a_class;
-							while (tmp->detail.courseID != id)
-								tmp = tmp->pNext;
-
-							tmp->midterm = tmpCourseList->midterm;
-							tmp->final = tmpCourseList->final;
-							tmp->otherMark = tmpCourseList->otherMark;
-							tmp->courseGPA = tmpCourseList->courseGPA;
-							*/
-
 							tmpCourseList->point_to_an_enrolled_course_of_a_student_in_a_class = tmpEach;
 
+
 							tmpEach->pNext = nullptr;
+							tmpCourseList->pNext = nullptr;
 
 							cout << "Enroll Successfully." << endl;
 							cout << "You have enrolled in " << tmpEach->detail.courseName << endl;
