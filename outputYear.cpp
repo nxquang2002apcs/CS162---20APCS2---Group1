@@ -66,7 +66,10 @@ void writeCourse(string path, string course, CourseDetail*& CurrentCourse) {
 	writeCourseInfo(path + data + ".txt", CurrentCourse);
 	data = "List Student";
 	out << data;
-	writeListStudentCourse(path + data + "\\", data, CurrentCourse->HeadStudent);
+	path = path + data;
+	const char* dir = path.c_str();
+	_mkdir(dir);
+	writeListStudentCourse(path + "\\", data, CurrentCourse->HeadStudent);
 	out.close();
 };
 //toLisofCourses
@@ -214,7 +217,10 @@ void writeClass(string path, string s, Class*& CurrentClass) {
 	writeClassInfo(path + data + ".txt", CurrentClass);
 	data = "List Student";
 	out << data;
-	writeListStudentClass(path + data + "\\", data, CurrentClass->HeadStudent);
+	path = path + data;
+	const char* dir = path.c_str();
+	_mkdir(dir);
+	writeListStudentClass(path + "\\", data, CurrentClass->HeadStudent);
 	
 	out.close();
 }
