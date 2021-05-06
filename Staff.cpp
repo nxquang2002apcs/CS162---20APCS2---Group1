@@ -13,6 +13,7 @@ bool go_to_detail_of_a_semester(int semester_n);
 bool go_to_detail_of_a_year(int startYear);
 void View_list_of_Enrolled_student(CourseDetail* course);
 void delete_a_student(Student*& HeadStudent, int& classSize);
+bool Check_all_scoreboard_available();								//Hàm check xem tất cả các môn đều đã có bảng điểm hết hay chưa
 //void View_list_of_courses_by_XQ();
 //void view_a_student_profile(Student* ListStudent, string studentID);
 
@@ -491,35 +492,39 @@ void update_course_detail(CourseDetail*& HeadCourse, string courseID) {
 		system("pause");
 		return;
 	}
-	while (check) {
-		// Searching course
-		CourseDetail* pCur;
-		do {
-			pCur = HeadCourse;
-			fflush(stdin);
-			while (pCur && pCur->courseID != courseID)
-				pCur = pCur->pNext;
-			if (!pCur) {
-				cout << "Sorry, we can not find this course. Please try again\n";
-				check = false;
-			}
-		} while (!pCur);
 
-		cout << "*------------------------------------------------------------*\n";
-		cout << "\t\tWHAT WOULD YOU LIKE TO UPDATE?\n";
-		cout << "*------------------------------------------------------------*\n";
-		cout << "\t1. Course ID\t\t" << "2. Course's name\n";
-		cout << "\t3. Teacher's name\t" << "4. Credit\n";
-		cout << "\t5. Session 1\t\t" << "6. Session 2\n";
-		cout << "\t\t7. Number of student\n";
+	// Searching course
+	CourseDetail* pCur = HeadCourse;
+	while (pCur != nullptr && pCur->courseID != courseID)
+		pCur = pCur->pNext;
+	if (pCur == nullptr) {
+		cout << "Course is unavailable! Cannot update!";
+		_getch();
+		return;
+	}
 
+	cout << "*------------------------------------------------------------*\n";
+	cout << "\t\tWHAT WOULD YOU LIKE TO UPDATE?\n";
+	cout << "*------------------------------------------------------------*\n";
+	cout << "\t0. Cancle update" << endl;
+	cout << "\t1. Course ID\t\t" << "2. Course's name\n";
+	cout << "\t3. Teacher's name\t" << "4. Credit\n";
+	cout << "\t5. Session 1\t\t" << "6. Session 2\n";
+	cout << "\t\t7. Number of student\n";
+
+	while (check == 1) {
 		// Choose something to update
 		int choose;
 		do {
-			cout << "Choose: ";
+			cout << "User: ";
 			cin >> choose;
 			cin.get();
-			if (choose < 1 || choose > 7) cout << "Error. Please try again\n";
+			if (choose == 0) {
+				cout << "CANCLE UPDATE!";
+				_getch();
+				return;
+			}
+			if (choose < 1 || choose > 7) cout << "Invalid input. Please try again\n";
 		} while (choose < 1 || choose > 7);
 
 		CourseDetail* Cur = HeadCourse;
@@ -648,13 +653,13 @@ void update_course_detail(CourseDetail*& HeadCourse, string courseID) {
 
 		}
 		// User wants to update more?
+		cout << "Do you want to update anything more?\n";
+		cout << " 1. YES            2. NO" << endl;
 		do {
-			cout << "Do you want to update anything more?\n";
-			cout << "0. NO\t\t" << "1. YES\n";
-			cout << "Choose: ";
+			cout << "User: ";
 			cin >> check;
-			if (check != 0 && check != 1) cout << "Unidentified. Please try again...\n";
-		} while (check != 0 && check != 1);
+			if (check != 2 && check != 1) cout << "Invalid input! Please try again...\n";
+		} while (check != 2 && check != 1);
 	}
 
 }
@@ -798,7 +803,7 @@ bool import_course_score_from_CSV(string path, Student_CourseScores*& head_Cours
 	if (!imfile.is_open()) {
 		cout << "Could not open the file\n";
 		_getch();
-		return false;
+		return false;	
 	}
 
 	//Tạo các học sinh trong CourseScore
@@ -843,11 +848,6 @@ bool import_course_score_from_CSV(string path, Student_CourseScores*& head_Cours
 		pCur_Course_Score->otherMark = stof(otherMark);
 		pCur_Course_Score->point_to_an_enrolled_course_of_a_student_in_a_class->otherMark = stof(otherMark);	//Lưu ở 2 đầu
 		//cout << "Other mark " << pCur_Course_Score->otherMark << endl;
- 
-		getline(imfile, courseGPA, '\n');                   //Import courseGpa  
-		pCur_Course_Score->courseGPA = stof(courseGPA);
-		pCur_Course_Score->point_to_an_enrolled_course_of_a_student_in_a_class->courseGPA = stof(courseGPA);	//Lưu ở 2 đầu
-		//cout << "GPA: " << pCur_Course_Score->courseGPA << endl;
 
 		pCur_Course_Score = pCur_Course_Score->pNext;
 	}
@@ -867,11 +867,11 @@ bool export_course_score_to_CSV(string path, Student_CourseScores* head_Course_S
 	}
 
 	//Truyền data vào file CSV
-	exfile << "No,Student ID,Student First Name,Student Last Name,Gender,Class Name,Midterm Mark,Final Mark,Other Mark,GPA\n";
+	exfile << "No,Student ID,Student First Name,Student Last Name,Gender,Class Name,Midterm Mark,Final Mark,Other Mark\n";
 	while (pCur_Course_Score) {
 
 		exfile << pCur_Course_Score->no << "," << pCur_Course_Score->SID << "," << pCur_Course_Score->firstName << "," << pCur_Course_Score->lastName << "," << pCur_Course_Score->gender << ",";
-		exfile << pCur_Course_Score->className << "," << pCur_Course_Score->midterm << "," << pCur_Course_Score->final << "," << pCur_Course_Score->otherMark << "," << pCur_Course_Score->courseGPA << "\n";
+		exfile << pCur_Course_Score->className << "," << pCur_Course_Score->midterm << "," << pCur_Course_Score->final << "," << pCur_Course_Score->otherMark << "\n";
 
 		pCur_Course_Score = pCur_Course_Score->pNext;
 	}
@@ -886,14 +886,20 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
 	cout << "*------------------------------------------------------------*\n";
 	cout << "\t\tWHAT WOULD YOU LIKE TO UPDATE?\n";
 	cout << "*------------------------------------------------------------*\n";
-	cout << "\t1. Student's ID" << "2. First name\n";
+	cout << "\t0. Cancle update" << endl;
+	cout << "\t1. Student's ID\t\t" << "2. First name\n";
 	cout << "\t3. Last name\t\t" << "4. Gender\n";
 	cout << "\t5. Social ID\t\t" << "6. Date of birth\n";
-	while (check) {
+	while (check == 1) {
 
 		int staff;
 		cout << "User: ";
 		cin >> staff;
+		if (staff == 0) {
+			cout << "CANCLE UPDATE!";
+			_getch();
+			return;
+		}
 		while (staff < 1 || staff > 10) {
 			cout << "Invalid input! Please try again!" << endl;
 			cout << "User: ";
@@ -914,11 +920,11 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
 				while (Cur != nullptr && Cur->SID != data) {
 					Cur = Cur->pNext;
 				}
-				if (Cur != nullptr) cout << "This new one is duplicated. Please try again\n";
+				if (Cur != nullptr) cout << "This new one is duplicated. Please try again!\n";
 				else student->SID = data;
 			} while (Cur);
 
-			cout << "CHANGE SUCCESSFULLY\n";
+			cout << "CHANGE SUCCESSFULLY!\n";
 			break;
 			  // Firstname
 		case 2: 
@@ -926,10 +932,8 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
 			cout << "New first name: ";
 			getline(cin, data);
 			//fflush(stdin);
-
 			student->firstName = data;
-
-			cout << "CHANGE SUCCESSFULLY\n";
+			cout << "CHANGE SUCCESSFULLY!\n";
 			break;
 			  // Lastname
 		case 3: 
@@ -939,7 +943,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
 			//fflush(stdin);
 			student->lastName = data;
 
-			cout << "CHANGE SUCCESSFULLY\n";
+			cout << "CHANGE SUCCESSFULLY!\n";
 			break;
 			  // Gender
 		case 4:
@@ -953,7 +957,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
 			}
 			//fflush(stdin);
 			student->gender = data;
-			cout << "CHANGE SUCCESSFULLY\n";
+			cout << "CHANGE SUCCESSFULLY!\n";
 			break;
 			  // Social ID
 		case 5:
@@ -963,7 +967,7 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
 			//fflush(stdin);
 			student->socialID = data;
 
-			cout << "CHANGE SUCCESSFULLY\n";
+			cout << "CHANGE SUCCESSFULLY!\n";
 			break;
 			  // Date of birth 
 		case 6: 
@@ -991,20 +995,21 @@ void update_student_profile(Student*& HeadStudent, Student*& student) {
 			student->DateOfBirth.month = month;
 			student->DateOfBirth.year = year;
 
-			cout << "CHANGE SUCCESSFULLY\n";
+			cout << "CHANGE SUCCESSFULLY!\n";
 			break;
 		}
 		}
 
 
 		// User wants to update more?
+		cout << "Do you want to update anything more?\n";
+		cout << " 1. YES           2.NO" << endl;
 		do {
-			cout << "Do you want to update anything more?\n";
-			cout << "0. NO\t\t" << "1. YES\n";
-			cout << "Staff: ";
+			cout << "User: ";
 			cin >> check;
-			if (check != 0 && check != 1) cout << "Invalid input. Please try again\n";
-		} while (check != 0 && check != 1);
+			if (check != 2 && check != 1)
+				cout << "Invalid input. Please try again\n";
+		} while (check != 2 && check != 1);
 
 	}
 
@@ -1198,54 +1203,6 @@ void View_scoreboard_of_a_course(CourseDetail* course) {
 	}
 	Student_CourseScores* pCur = course->HeadStudent;
 
-	cout << setw(5) << left << "No";
-	cout << setw(12) << left << "Student ID";
-	cout << setw(12) << left << "First name";
-	cout << setw(17) << left << "Last name";
-	cout << setw(10) << left << "Class";
-	cout << setw(9) << left << "Midterm";
-	cout << setw(7) << left << "Final";
-	cout << setw(12) << left << "Other mark";
-	cout << "Course's GPA" << endl;
-
-	while (pCur != nullptr) {
-		cout << setw(5) << left << pCur->no;
-		cout << setw(12) << left << pCur->SID;
-		cout << setw(12) << left << pCur->firstName;
-		cout << setw(17) << left << pCur->lastName;
-		cout << setw(10) << left << pCur->className;
-		cout << setw(2) << right << " ";  print(pCur->midterm);
-		cout << setw(5) << right << " "; print(pCur->final);
-		cout << setw(5) << right << " "; print(pCur->otherMark);
-		cout << setw(9) << left << " "; print(pCur->courseGPA);
-
-		cout << endl;
-
-		pCur = pCur->pNext;
-	}
-	cout << endl;
-
-	int choice = 0;
-	cout << "0. Return" << endl;
-	cout << "User: ";
-	cin >> choice;
-
-	while (choice != 0) {
-		cout << "Invalid input! Please try again!" << endl;
-		cout << "User: ";
-		cin >> choice;
-	}
-
-	return;
-}
-//Hiển thị danh sách những sinh viên đã đăng ký môn
-void View_list_of_Enrolled_student(CourseDetail* course) {
-	if (course->HeadStudent == nullptr) {
-		cout << "No student!" << endl;
-		return;
-	}
-	Student_CourseScores* pCur = course->HeadStudent;
-
 	cout << char(218);
 	for (int i = 0; i < 96; ++i)
 		cout << char(196);
@@ -1287,9 +1244,48 @@ void View_list_of_Enrolled_student(CourseDetail* course) {
 	for (int i = 0; i < 96; ++i)
 		cout << char(196);
 	cout << char(217) << endl;
+	cout << endl; 
+
+	int choice = 0;
+	cout << "0. Return" << endl;
+	cout << "User: ";
+	cin >> choice;
+
+	while (choice != 0) {
+		cout << "Invalid input! Please try again!" << endl;
+		cout << "User: ";
+		cin >> choice;
+	}
+
+	return;
 }
+//Hiển thị danh sách những sinh viên đã đăng ký môn
+void View_list_of_Enrolled_student(CourseDetail* course) {
+	if (course->HeadStudent == nullptr) {
+		cout << "No student!" << endl;
+		return;
+	}
+	Student_CourseScores* pCur = course->HeadStudent;
+
+	cout << setw(5) << left << "No";
+	cout << setw(12) << left << "Student ID";
+	cout << setw(12) << left << "First name";
+	cout << setw(17) << left << "Last name";
+	cout << setw(10) << left << "Class" << endl;
 
 
+	while (pCur != nullptr) {
+		cout << setw(5) << left << pCur->no;
+		cout << setw(12) << left << pCur->SID;
+		cout << setw(12) << left << pCur->firstName;
+		cout << setw(17) << left << pCur->lastName;
+		cout << setw(10) << left << pCur->className;
+
+		cout << endl;
+
+		pCur = pCur->pNext;
+	}
+}
 // Hàm in danh sách các courses student đã đăng ký
 void view_list_of_enrolled_course(Student* student)
 {
@@ -1325,6 +1321,10 @@ void view_list_of_enrolled_course(Student* student)
 //Hàm in bảng điểm của cả lớp
 void view_class_scoreboard(Class* cls)
 {
+	system("cls");
+	cout << CurrentYear->startYear << "-" << CurrentYear->endYear << " >> Class " << cls->className << " >> " << "Class scoreboard" << endl;
+	cout << "---------------------------------------------" << endl;
+
 	if (cls->HeadStudent == nullptr)
 	{
 		cout << "There are no students in the class." << endl;
@@ -1389,6 +1389,18 @@ void view_class_scoreboard(Class* cls)
 		headstudent = headstudent->pNext;
 		cout << endl << endl;
 	}
+
+	int user;
+	cout << "0. Return" << endl;
+	cout << "User: ";
+	cin >> user;
+	while (user != 0) {
+		cout << "Invalid input! Please try again!" << endl;
+		cout << "User: ";
+		cin >> user;
+	}
+
+	return;
 }
 
 
@@ -1431,6 +1443,12 @@ bool go_to_detail_of_a_course(string courseID) {
 				cout << "List of enrolled students: " << endl;
 				View_list_of_Enrolled_student(tempCourse);
 
+				if (tempCourse->Available_scoreboard == true) {
+					cout << endl;
+					cout << "*** NOTIFICATION ***" << endl;
+					cout << "Course's scoreboard is available now. To view scoreboard, choose OPTION 3." << endl;
+				}
+
 				cout << endl;
 				cout << "0. Back" << endl;
 				cout << "1. Export list of enrolled students to .CSV" << endl;
@@ -1455,7 +1473,16 @@ bool go_to_detail_of_a_course(string courseID) {
 					path = "Data\\" + tempCourse->courseName + ".csv";
 					if (import_course_score_from_CSV(path, tempCourse->HeadStudent)) {
 						tempCourse->Available_scoreboard = true;
+						GPAStudentInCourse(tempCourse->HeadStudent);
 						cout << "Import successfully! Course's scoreboard is available now!" << endl;
+						if (Check_all_scoreboard_available() == true) {
+							Available_all_scoreboard = true;
+							Class* CurClass = CurrentYear->HeadClass;
+							while (CurClass != nullptr) {
+								GPASemesterOfStudent(CurClass->HeadStudent);
+								CurClass = CurClass->pNext;
+							}
+						}
 						_getch();
 					}
 					break;
@@ -1505,6 +1532,12 @@ bool go_to_detail_of_a_semester(int semester_n) {
 			cout << "List of courses: " << endl;
 			//View_list_of_courses_by_XQ();
 			view_list_of_courses(ThisSemester);
+
+			if (Available_all_scoreboard) {
+				cout << endl;
+				cout << "*** NOTIFICATION ***" << endl;
+				cout << "All scoreboards are available now! Now you can view class's scoreboard, course's scoreboard and student's scoreboard." << endl;
+			}
 
 			int choice = 0;
 			cout << endl;
@@ -1557,12 +1590,14 @@ bool go_to_detail_of_a_semester(int semester_n) {
 				if (ThisSemester == CurrentSemester && ThisYear == CurrentYear) {
 					if (Available_register == false) {
 						Available_register = true;
-						cout << "Course registration session is active now!";
+						cout << endl;
+						cout << "Course registration session is ACTIVE now!";
 						_getch();
 					}
 					else {
 						Available_register = false;
-						cout << "Course registration session is close now!";
+						cout << endl;
+						cout << "Course registration session is CLOSE now!";
 						_getch();
 					}
 				}
@@ -1612,6 +1647,9 @@ bool go_to_detail_of_a_student(Student*& HeadStudent, string studentID) {
 			if (ThisYear == CurrentYear) {
 				cout << "1. Update student's profile" << endl;
 			}
+			if (Available_all_scoreboard == true) {
+				cout << "2. View student's scoreboard" << endl;
+			}
 			cout << "User: ";
 			cin >> choice;
 			switch (choice) {
@@ -1621,6 +1659,17 @@ bool go_to_detail_of_a_student(Student*& HeadStudent, string studentID) {
 				if (ThisYear == CurrentYear) {
 					update_student_profile(HeadStudent, tempStudent);
 				}
+				break;
+			case 2: 
+				/*
+				if (Available_all_scoreboard) {
+					view_scoreboard_of_student(tempStudent);
+				}*/
+				view_scoreboard_of_student(tempStudent);
+				break;
+			default: 
+				cout << "Invalid input! Please try again!";
+				break;
 			}
 		}
 	}
@@ -1653,6 +1702,12 @@ bool go_to_detail_of_a_class(string className)   {
 			cout << "List of student: " << endl;
 			view_list_of_students_in_class(tempClass);
 
+			if (Available_all_scoreboard) {
+				cout << endl;
+				cout << "*** NOTIFICATION ***" << endl;
+				cout << "Class scoreboard is available now. To view, choose OPTION 4" << endl;
+			}
+
 			cout << endl;
 			cout << "0. Back" << endl;
 			cout << "1. View a student" << endl;
@@ -1678,8 +1733,39 @@ bool go_to_detail_of_a_class(string className)   {
 				go_to_detail_of_a_student(tempClass->HeadStudent, studentID);
 				break;
 			case 2:
-				if (ThisYear == CurrentYear)
-					inputListOfStudent(tempClass);
+				if (ThisYear == CurrentYear) {
+					int way = 1;
+					cout << "0. Cancle" << endl;
+					cout << "1. Input from keyboard" << endl;
+					cout << "2. Import from .csv file" << endl;
+					cout << "User: ";
+					cin >> way;
+					while (way < 0 || way > 2) {
+						cout << "Invalid input. Please try again!" << endl;
+						cout << "User: ";
+						cin >> way;
+					}
+					if (way == 0) {
+						cout << "CANCLE ADDITION!";
+						_getch();
+						break;
+					}
+					else if (way == 1) {						//Nhập tay
+						inputListOfStudent(tempClass);
+					}
+					else {										//Nhập từ CSV
+						string path;
+						cout << "Please enter file name: ";
+						cin.get();
+						getline(cin, path);
+						if (input_list_of_students_from_CSV("Data\\" + path + ".csv", tempClass->HeadStudent, tempClass->classSize)) {
+							cout << "IMPORT SUCCESSFULLY!";
+							_getch();
+						}
+					}
+					
+				}
+					
 				break;
 			case 3:
 				delete_a_student(tempClass->HeadStudent, tempClass->classSize);
@@ -1980,6 +2066,21 @@ bool isExisted_year(int start_year, int end_year) {
 		return false;
 	return true;									//Năm học đã được tạo rồi
 }
+//Hàm check xem tất cả các môn đều đã có bảng điểm hết hay chưa	
+bool Check_all_scoreboard_available() {
+	if (CurrentSemester->HeadCourse == nullptr)
+		return false;
+	CourseDetail* CurCourse = CurrentSemester->HeadCourse;
+
+	while (CurCourse != nullptr) {
+		if (CurCourse->Available_scoreboard == false)
+			return false;
+
+		CurCourse = CurCourse->pNext;
+	}
+	if (CurCourse == nullptr)
+		return true;
+}
 
 void View_list_of_year() {
 	while (true) {
@@ -2056,12 +2157,13 @@ void StaffInterface() {
 			return;
 		case 4:
 			cout << endl;
-			cout << "THANK YOU FOR USING OUR PROGRAM!" << endl;
+			cout << "THANK YOU FOR USING OUR PROGRAM!";
 			_getch();
+			writeAll(HeadYear);
 			delete_everything();
 			exit(0);
 		default:
-			cout << "Invalid input! Please try again!" << endl;
+			cout << "Invalid input! Please try again!";
 			_getch();
 		}
 	}
