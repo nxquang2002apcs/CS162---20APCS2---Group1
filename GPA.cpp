@@ -17,7 +17,7 @@ void GPASemesterOfStudent(Student*& HeadStudent) {
 		CourseForEachStudent* CurrentCourse = CurrentStudent->Head_of_enrolled_course;
 		while (CurrentCourse != nullptr) {
 			credits += CurrentCourse->detail.credits;
-			total += CurrentCourse->courseGPA;
+			total += CurrentCourse->courseGPA * CurrentCourse->detail.credits;
 			CurrentCourse = CurrentCourse->pNext;
 		}
 		CurrentStudent->gpa = (float) (total / credits);
