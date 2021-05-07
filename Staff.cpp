@@ -1052,16 +1052,28 @@ void view_list_of_students_in_class(Class* cls)
 	}
 	Student* pHead = cls->HeadStudent;
 
+	cout << char(218);
+	for (int i = 0; i < 78; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
 	cout << setw(5) << left << "No";
 	cout << setw(12) << left << "Student ID";
 	cout << setw(12) << left << "First name";
 	cout << setw(17) << left << "Last name";
 	cout << setw(8) << left << "Gender";
 	cout << setw(15) << left << "Date of Birth";
-	cout << "Social ID" << endl;
+	cout << setw(9) << left << "Social ID" << char(179) << endl;
+
+	cout << char(195);
+	for (int i = 0; i < 78; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
 
 	while (pHead)
 	{
+		cout << char(179);
 		cout << setw(5) << left << pHead->no;
 		cout << setw(12) << left << pHead->SID;
 		cout << setw(12) << left << pHead->firstName;
@@ -1071,10 +1083,16 @@ void view_list_of_students_in_class(Class* cls)
 		cout << setfill('0') << setw(2) << right << pHead->DateOfBirth.month << "/";
 		cout << setfill('0') << setw(2) << right << pHead->DateOfBirth.year;
 		cout << setfill(' ') << setw(5) << right << " ";
-		cout << pHead->socialID << endl;
+		cout << setw(9) << left << pHead->socialID;
+		cout << char(179) << endl;
 
 		pHead = pHead->pNext;
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 78; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 	return;
 }
 // Hàm cho staff xem danh sách các môn học trong 1 học kỳ
@@ -1082,20 +1100,33 @@ void view_list_of_courses(Semester* semester)
 {
 	CourseDetail* pHead = semester->HeadCourse;
 
-	cout << "   " << setw(12) << left << "Course ID";
+	cout << char(218);
+	for (int i = 0; i < 184; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
+	cout << setw(5) << left << "No";
+	cout << setw(12) << left << "Course ID";
 	cout << setw(35) << "Course Name";
 	cout << setw(20) << left << "Lecturer Name";
 	cout << "Number of credits   ";
 	cout << "Maximum number of students in the course   ";
 	cout << "Number of students enrolled  ";
 	cout << "Session 1  ";
-	cout << "Session 2" << endl;
+	cout << "Session 2" << char(179) << endl;
 
 	int i = 1; // Số thứ tự
 
+	cout << char(195);
+	for (int i = 0; i < 184; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
+
 	while (pHead)
 	{
-		cout << i << ". ";
+		cout << char(179);
+		cout << setw(5) << i;
 		cout << setw(12) << left << pHead->courseID;
 		cout << setw(35) << left << pHead->courseName;
 		cout << setw(17) << left << pHead->teacherName;
@@ -1103,14 +1134,19 @@ void view_list_of_courses(Semester* semester)
 		cout << setw(32) << right << pHead->numberStudent;
 		cout << setw(36) << right << pHead->enrolledStudent;
 		cout << setw(21) << right << pHead->session1;
-		cout << setw(11) << right << pHead->session2 << endl;
+		cout << setw(11) << right << pHead->session2;
+		cout << "  " << char(179) << endl;
 
 		pHead = pHead->pNext;
 		++i;
-
-		cout << endl;
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 184; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 }
+
 // Hàm cho staff xem danh sách các lớp trong 1 năm
 void view_list_of_class(SchoolYear* year)
 {
@@ -1118,26 +1154,47 @@ void view_list_of_class(SchoolYear* year)
 		cout << "No existed class!" << endl;
 		return;
 	}
-	cout << setw(15) << left << "   Class Name";
+
+	cout << char(218);
+	for (int i = 0; i < 66; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
+	cout << setw(5) << left << "No";
+	cout << setw(15) << left << "Class Name";
 	cout << setw(21) << left << "Number of students";
-	cout << "Form teacher" << endl;
+	cout << setw(25) << left << "Form teacher" << char(179) << endl;
 
 	Class* pHead = year->HeadClass;
 
 	int i = 1; // Số thứ tự
 
+	cout << char(195);
+	for (int i = 0; i < 66; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
+
 	while (pHead)
 	{
-		cout << i << ". ";
-		cout << setw(12) << left << pHead->className;
+		cout << char(179);
+		cout << setw(5) << left << i;
+		cout << setw(15) << left << pHead->className;
 		cout << setw(10) << right << pHead->classSize;
 		cout << setw(11) << right << " ";
-		cout << pHead->formTeacherName << endl;
+		cout << setw(25) << left << pHead->formTeacherName;  // Truong Thuy Tuong Khanh
+		cout << char(179) << endl;
 
 		pHead = pHead->pNext;
 		++i;
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 66; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 }
+
 //Hàm cho student xem danh sách các môn học họ sẽ học trong học kỳ
 void view_list_of_student_course(Student* student)
 {
@@ -1146,6 +1203,12 @@ void view_list_of_student_course(Student* student)
 		return;
 	}
 
+	cout << char(218);
+	for (int i = 0; i < 182; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
 	cout << "   " << setw(12) << left << "Course ID";
 	cout << setw(35) << "Course Name";
 	cout << setw(20) << left << "Lecturer Name";
@@ -1153,12 +1216,18 @@ void view_list_of_student_course(Student* student)
 	cout << "Maximum number of students in the course   ";
 	cout << "Number of students enrolled  ";
 	cout << "Session 1  ";
-	cout << "Session 2" << endl;
+	cout << "Session 2" << char(179) << endl;
+
+	cout << char(195);
+	for (int i = 0; i < 182; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
 
 	CourseForEachStudent* Head_course = student->Head_of_enrolled_course;
 
 	while (Head_course)
 	{
+		cout << char(179);
 		cout << Head_course->numberCourse << ". ";
 		cout << setw(12) << left << Head_course->detail.courseID;
 		cout << setw(35) << left << Head_course->detail.courseName;
@@ -1167,13 +1236,18 @@ void view_list_of_student_course(Student* student)
 		cout << setw(32) << right << Head_course->detail.numberStudent;
 		cout << setw(36) << right << Head_course->detail.enrolledStudent;
 		cout << setw(21) << right << Head_course->detail.session1;
-		cout << setw(11) << right << Head_course->detail.session2 << endl;
+		cout << setw(11) << right << Head_course->detail.session2;
+		cout << "  " << char(179) << endl;
 
 		Head_course = Head_course->pNext;
-
-		cout << endl;
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 182; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 }
+
 //Hàm cho staff xem scoreboard của môn
 void print(float n)
 {
@@ -1267,25 +1341,49 @@ void View_list_of_Enrolled_student(CourseDetail* course) {
 	}
 	Student_CourseScores* pCur = course->HeadStudent;
 
+	cout << char(218);
+	for (int i = 0; i < 96; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
 	cout << setw(5) << left << "No";
 	cout << setw(12) << left << "Student ID";
 	cout << setw(12) << left << "First name";
 	cout << setw(17) << left << "Last name";
-	cout << setw(10) << left << "Class" << endl;
+	cout << setw(10) << left << "Class";
+	cout << setw(9) << left << "Midterm";
+	cout << setw(7) << left << "Final";
+	cout << setw(12) << left << "Other mark";
+	cout << "Course's GPA" << char(179) << endl;
 
+	cout << char(195);
+	for (int i = 0; i < 96; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
 
 	while (pCur != nullptr) {
+		cout << char(179);
 		cout << setw(5) << left << pCur->no;
 		cout << setw(12) << left << pCur->SID;
 		cout << setw(12) << left << pCur->firstName;
 		cout << setw(17) << left << pCur->lastName;
 		cout << setw(10) << left << pCur->className;
-
-		cout << endl;
+		cout << setw(2) << right << " ";  print(pCur->midterm);
+		cout << setw(4) << right << " "; print(pCur->final);
+		cout << setw(5) << right << " "; print(pCur->otherMark);
+		cout << setw(9) << left << " "; print(pCur->courseGPA);
+		cout << "    " << char(179) << endl;
 
 		pCur = pCur->pNext;
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 96; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 }
+
 // Hàm in danh sách các courses student đã đăng ký
 void view_list_of_enrolled_course(Student* student)
 {
@@ -1294,30 +1392,47 @@ void view_list_of_enrolled_course(Student* student)
 		return;
 	}
 
+	cout << char(218);
+	for (int i = 0; i < 114; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
 	cout << "   " << setw(12) << left << "Course ID";
 	cout << setw(35) << "Course Name";
 	cout << setw(20) << left << "Lecturer Name";
 	cout << "Number of credits   ";
 	cout << setw(15) << "Session 1  ";
-	cout << setw(8) << "Session 2" << endl;
+	cout << setw(8) << "Session 2" << char(179) << endl;
+
+	cout << char(195);
+	for (int i = 0; i < 114; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
 
 	CourseForEachStudent* Head_course = student->Head_of_enrolled_course;
 
 	while (Head_course)
 	{
+		cout << char(179);
 		cout << Head_course->numberCourse << ". ";
 		cout << setw(12) << left << Head_course->detail.courseID;
 		cout << setw(35) << left << Head_course->detail.courseName;
 		cout << setw(17) << left << Head_course->detail.teacherName;
 		cout << setw(13) << right << Head_course->detail.credits;
-		cout << setw(15) << right << Head_course->detail.session1;
-		cout << setw(15) << right << Head_course->detail.session2 << endl;
+		cout << setw(17) << right << Head_course->detail.session1;
+		cout << setw(15) << right << Head_course->detail.session2;
+		cout << "  " << char(179) << endl;
 
 		Head_course = Head_course->pNext;
-
-		cout << endl;
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 114; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 }
+
 //Hàm in bảng điểm của cả lớp
 void view_class_scoreboard(Class* cls)
 {
@@ -1336,6 +1451,12 @@ void view_class_scoreboard(Class* cls)
 	CourseForEachStudent* pCur;
 	int numberOfCourse;                                           // Biến số lượng số môn học 1 sinh viên đã học
 
+	cout << char(218);
+	for (int i = 0; i < 108; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
 	cout << "No  ";
 	cout << "First name  ";
 	cout << setw(18) << left << "Last name";
@@ -1344,7 +1465,12 @@ void view_class_scoreboard(Class* cls)
 	cout << "Overall GPA  ";
 	cout << "Course ID  ";
 	cout << "Final  ";
-	cout << "Course GPA  " << endl;
+	cout << "Course GPA" << char(179) << endl;
+
+	cout << char(195);
+	for (int i = 0; i < 108; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
 
 	while (headstudent != nullptr)
 	{
@@ -1359,6 +1485,7 @@ void view_class_scoreboard(Class* cls)
 		else
 			numberOfCourse = pCur->numberCourse;
 
+		cout << char(179);
 		cout << setw(4) << left << headstudent->no;
 		cout << setw(12) << left << headstudent->firstName;
 		cout << setw(18) << left << headstudent->lastName;
@@ -1366,29 +1493,41 @@ void view_class_scoreboard(Class* cls)
 		cout << setw(9) << right << numberOfCourse;
 		cout << setw(14) << " "; print(headstudent->gpa);
 
-		if (numberOfCourse != 0)
-		{
+		if (numberOfCourse == 0)
+			cout << setw(33) << right << " " << char(179) << endl;
 
+		else
+		{
 			cout << setw(5) << right << " " << setw(11) << left << headcourse->detail.courseID;
 			cout << " "; print(headcourse->final);
 			cout << setw(7) << right << " "; print(headcourse->courseGPA);
-			cout << endl;
+			cout << " " << char(179) << endl;
 
 			headcourse = headcourse->pNext;
 			while (headcourse != nullptr)
 			{
+				cout << char(179);
 				cout << setw(80) << right << " " << setw(11) << left << headcourse->detail.courseID;
 				cout << " "; print(headcourse->final);
 				cout << setw(7) << right << " "; print(headcourse->courseGPA);
-				cout << endl;
+				cout << " " << char(179) << endl;
 
 				headcourse = headcourse->pNext;
 			}
 		}
 
 		headstudent = headstudent->pNext;
-		cout << endl << endl;
+		if (headstudent != nullptr)
+		{
+			cout << char(179) << setw(108) << right << " " << char(179) << endl;
+			cout << char(179) << setw(108) << right << " " << char(179) << endl;
+		}
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 108; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 
 	int user;
 	cout << "0. Return" << endl;
@@ -1402,6 +1541,7 @@ void view_class_scoreboard(Class* cls)
 
 	return;
 }
+
 
 
 /// <summary>
