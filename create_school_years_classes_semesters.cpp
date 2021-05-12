@@ -541,3 +541,73 @@ void deleteStudent ( Class* & tmpClass, string SID )	// Hàm delete một Studen
 		return;
 	}
 }
+
+void deleteEnrolledCourse ( Student* & student, string courseID )
+{
+	CourseDetail* pCurCourse = CurrentSemester -> HeadCourse;
+	while ( pCurCourse -> courseID != courseID && pCurCourse != nullptr )	// Tìm đến Course cần delete
+		pCurCourse = pCurCourse -> pNext;
+
+	if ( pCurCourse == nullptr )	// Nếu không tìm thấy
+	{
+		cout << "Course not found. Cannot delete." << endl;
+		return;
+	}
+	else	// Nếu tìm thấy
+	{
+		Student_CourseScores* pCurStudent = pCurCourse -> HeadStudent;
+		while ( pCurStudent -> SID != student -> SID && pCurStudent != nullptr )	// Tìm đến Student_CourseScores của sinh viên trong Course vừa tìm được
+			pCurStudent = pCurStudent -> pNext;
+
+		if ( pCurStudent == nullptr )	// Nếu không tìm thấy, có thể sinh viên chưa đăng ký môn này
+		{
+			cout << "The student may not has enrolled this course. Delete failed." << endl;
+			return;
+		}
+		else	// Nếu tìm thấy, bắt đầu delete
+		{
+			CourseForEachStudent* deleteEnrolled = pCurStudent -> point_to_an_enrolled_course_of_a_student_in_a_class;	// Delete CourseForEachStudent của sinh viên
+			if ( deleteEnrolled -> pPrev == nullptr )	// Trường hợp delete Head_of_enrolled_course
+			{
+				student -> Head_of_enrolled_course = deleteEnrolled -> pNext;	// Chuyển Head_of_enrolled_course sang node kế tiếp
+
+				if ( student -> Head_of_enrolled_course != nullptr )	// Nếu node kế tiếp tồn tại
+					student -> Head_of_enrolled_course -> pPrev = nullptr;	// Set pPrev của node đó về nullptr
+
+				delete deleteEnrolled;
+			}
+			else	// Trường hợp đứng giữa hoặc cuối
+			{
+				deleteEnrolled -> pPrev -> pNext = deleteEnrolled -> pNext;	// Nối lại các node
+
+				if ( deleteEnrolled -> pNext != nullptr )	// Nếu không phải là node cuối cùng
+					deleteEnrolled -> pNext -> pPrev = deleteEnrolled -> pPrev;
+
+				delete deleteEnrolled;
+			}
+
+			// Delete Student_CourseScores
+
+			if ( pCurStudent -> pPrev == nullptr )	// Trường hợp delete HeadStudent
+			{
+				pCurCourse -> HeadStudent = pCurStudent -> pNext;	// Chuyển HeadStudent sang node kế tiếp
+
+				if ( pCurCourse -> HeadStudent != nullptr )	// Nếu node kế tiếp tồn tại
+					pCurCourse -> HeadStudent -> pPrev = nullptr;	// Set pPrev của node đó về nullpter
+
+				delete pCurStudent;
+				return;
+			}
+			else	// Trường hợp đứng giữa hoặc đứng cuối
+			{
+				pCurStudent -> pPrev -> pNext = pCurStudent -> pNext;	// Nối lại các node
+
+				if ( pCurStudent -> pNext != nullptr )	// Nếu không phải là node cuối cùng
+					pCurStudent -> pNext -> pPrev = pCurStudent -> pPrev;
+
+				delete pCurStudent;
+				return;
+			}
+		}
+	}
+} 
