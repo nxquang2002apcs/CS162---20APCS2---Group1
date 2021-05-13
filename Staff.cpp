@@ -1126,7 +1126,7 @@ void view_list_of_courses(Semester* semester)
 	while (pHead)
 	{
 		cout << char(179);
-		cout << setw(5) << i;
+		cout << setw(5) << left << i;
 		cout << setw(12) << left << pHead->courseID;
 		cout << setw(35) << left << pHead->courseName;
 		cout << setw(17) << left << pHead->teacherName;
