@@ -250,14 +250,35 @@ void display_school_year_list()
 		cout << "No existed year!" << endl;
 	}
 	else {
+
+		cout << char(218);
+		for (int i = 0; i < 26; ++i)
+			cout << char(196);
+		cout << char(191) << endl;
+
+		cout << char(179) << "   List of school years   " << char(179) << endl;
+
+		cout << char(195);
+		for (int i = 0; i < 26; ++i)
+			cout << char(196);
+		cout << char(180) << endl;
+
 		int index = 1;
 		SchoolYear* pCur = HeadYear;
 		while (pCur != nullptr)
 		{
-			//cout << "This is the list of school year: " << endl;
-			cout << char(175) << " " << pCur->startYear << "-" << pCur->endYear << endl;
+			cout << char(179);
+			cout << setw(5) << left << index;
+			cout << "    " << pCur->startYear << "-" << pCur->endYear << setw(8) << " " << char(179) << endl;
 			pCur = pCur->pNext;
+			++index;
 		}
+
+		cout << char(192);
+		for (int i = 0; i < 26; ++i)
+			cout << char(196);
+		cout << char(217) << endl;
+
 		cout << endl;
 	}
 }
