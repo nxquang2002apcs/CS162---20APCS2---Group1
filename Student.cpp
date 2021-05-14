@@ -12,6 +12,12 @@ void view_scoreboard_of_student(Student* student)
 		return;
 	}
 
+	cout << char(218);
+	for (int i = 0; i < 157; ++i)
+		cout << char(196);
+	cout << char(191) << endl;
+
+	cout << char(179);
 	cout << "   " << setw(12) << left << "Course ID";
 	cout << setw(35) << "Course Name";
 	cout << setw(20) << left << "Lecturer Name";
@@ -21,12 +27,18 @@ void view_scoreboard_of_student(Student* student)
 	cout << setw(9) << left << "Midterm";
 	cout << setw(7) << left << "Final";
 	cout << setw(12) << left << "Other mark";
-	cout << "Course's GPA" << endl;
+	cout << "Course's GPA" << char(179) << endl;
+
+	cout << char(195);
+	for (int i = 0; i < 157; ++i)
+		cout << char(196);
+	cout << char(180) << endl;
 
 	CourseForEachStudent* Head_course = student->Head_of_enrolled_course;
 
 	while (Head_course)
 	{
+		cout << char(179);
 		cout << Head_course->numberCourse << ". ";
 		cout << setw(12) << left << Head_course->detail.courseID;
 		cout << setw(35) << left << Head_course->detail.courseName;
@@ -35,14 +47,20 @@ void view_scoreboard_of_student(Student* student)
 		cout << setw(15) << right << Head_course->detail.session1;
 		cout << setw(15) << right << Head_course->detail.session2;
 		cout << setw(9) << right << " ";  print(Head_course->midterm);
-		cout << setw(5) << right << " "; print(Head_course->final);
+		cout << setw(4) << right << " "; print(Head_course->final);
 		cout << setw(6) << right << " "; print(Head_course->otherMark);
-		cout << setw(11) << left << " "; print(Head_course->courseGPA);
+		cout << setw(9) << right << " "; print(Head_course->courseGPA);
+		cout << setw(3) << right << " " << char(179);
 
 		Head_course = Head_course->pNext;
 
 		cout << endl;
 	}
+
+	cout << char(192);
+	for (int i = 0; i < 157; ++i)
+		cout << char(196);
+	cout << char(217) << endl;
 }
 
 //Tìm đến sinh viên có ID trùng với mật khẩu đăng nhập
