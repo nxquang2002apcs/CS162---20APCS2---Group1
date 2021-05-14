@@ -221,3 +221,60 @@ void create_connection ( CourseDetail* &course, string StudentID, string classNa
 		}
 	}
 }
+void updateStudentResult(CourseDetail*& course, string studentID)
+{
+	int userChoice = 1;
+	Student_CourseScores* pCurStudent = course->HeadStudent;
+	while (pCurStudent != nullptr && pCurStudent->SID != studentID)
+		pCurStudent = pCurStudent->pNext;
+
+	if (pCurStudent == nullptr)
+	{
+		cout << "Student not found!" << endl;
+		return;
+	}
+	else
+	{
+		while (userChoice != 0)
+		{
+			cout << "What would you like to update?" << endl;
+			cout << "1. Midterm" << endl;
+			cout << "2. Final" << endl;
+			cout << "3. Other marks" << endl;
+			cout << "0. Abort" << endl;
+			cout << "User:";
+
+			cin >> userChoice;
+			switch (userChoice)
+			{
+			case 1:
+			{
+				cout << "Miterm = " << pCurStudent->midterm << " -> " << "Midterm = ";
+				cin >> pCurStudent->midterm;
+				break;
+			}
+			case 2:
+			{
+				cout << "Final = " << pCurStudent->final << " -> " << "Final = ";
+				cin >> pCurStudent->final;
+				break;
+			}
+			case 3:
+			{
+				cout << "Other marks = " << pCurStudent->otherMark << " -> " << "Other marks = ";
+				cin >> pCurStudent->otherMark;
+				break;
+			}
+			default:
+				continue;
+			}
+		}
+
+		// Applies to CourseForEachStudent
+
+		CourseForEachStudent* pCopy = pCurStudent->point_to_an_enrolled_course_of_a_student_in_a_class;
+		pCopy->midterm = pCurStudent->midterm;
+		pCopy->final = pCurStudent->final;
+		pCopy->otherMark = pCurStudent->otherMark;
+	}
+}
